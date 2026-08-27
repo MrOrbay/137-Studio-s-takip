@@ -95,24 +95,18 @@
 
     .header-user-info { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 4px; font-size: 14px; gap: 8px; }
 
+    .notif-badge-btn {
+      position: relative; background: rgba(255,255,255,0.15); border: none; width: 34px; height: 34px;
+      border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .notif-badge-count {
+      position: absolute; top: -2px; right: -2px; background: #ef4444; color: white;
+      font-size: 10px; font-weight: bold; padding: 2px 5px; border-radius: 10px; min-width: 16px; text-align: center;
+    }
+
     .container { padding: 1rem; max-width: 1400px; margin: 0 auto; }
     .page { display: none; }
     .page.active { display: block; }
-
-    .pwa-fixed-wrapper {
-      position: fixed; bottom: 15px; right: 15px; z-index: 999;
-      display: flex; align-items: center; background: var(--accent); color: var(--white);
-      border-radius: 30px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); padding: 2px;
-    }
-    .pwa-fixed-btn {
-      background: transparent; border: none; padding: 8px 12px; font-weight: bold; cursor: pointer; color: white;
-      display: flex; align-items: center; gap: 6px; font-size: 12px; width: auto; margin: 0;
-    }
-    .pwa-close-btn {
-      background: rgba(255,255,255,0.2); border: none; border-radius: 50%; width: 22px; height: 22px;
-      color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;
-      margin-right: 4px; font-size: 11px; width: auto; padding: 0;
-    }
 
     .kanban-board { 
       display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px; -webkit-overflow-scrolling: touch;
@@ -131,7 +125,7 @@
     
     .task-card {
       background: var(--white); padding: 12px; border-radius: 8px; margin-bottom: 10px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-left: 4px solid var(--navy); position: relative;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-left: 4px solid var(--navy); position: relative; cursor: pointer;
     }
     .task-card h4 { margin-bottom: 4px; font-size: 15px; word-break: break-word; }
     .task-card p { font-size: 12px; color: #64748b; margin-bottom: 6px; }
@@ -176,33 +170,59 @@
       justify-content: center; align-items: center; z-index: 9999; padding: 15px;
     }
     .modal-content {
-      background: var(--white); padding: 20px; border-radius: 12px; max-width: 520px; width: 100%;
+      background: var(--white); padding: 20px; border-radius: 12px; max-width: 550px; width: 100%;
       max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); border: 1px solid var(--border);
     }
+
+    .comment-box {
+      background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; margin-top: 10px;
+    }
+    .comment-item {
+      background: white; border: 1px solid #e2e8f0; padding: 8px 12px; border-radius: 6px; margin-bottom: 8px; font-size: 13px;
+    }
+    .comment-item .author { font-weight: bold; color: var(--navy); margin-bottom: 2px; display: flex; justify-content: space-between; }
+    .comment-item .time { font-size: 11px; color: #94a3b8; font-weight: normal; }
+    .comment-item img.chat-gif-img { max-width: 100%; max-height: 180px; border-radius: 8px; margin-top: 4px; display: block; }
+
+    /* Emoji & GIF Picker Kutusu */
+    .media-picker-bar { display: flex; gap: 6px; margin: 4px 0; }
+    .media-picker-btn { width: auto; padding: 4px 10px; font-size: 12px; background: #e2e8f0; color: var(--navy); border-radius: 6px; }
+    .picker-popover {
+      display: none; background: white; border: 1px solid var(--border); border-radius: 8px;
+      padding: 8px; margin-bottom: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .emoji-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; font-size: 18px; text-align: center; }
+    .emoji-grid span { cursor: pointer; border-radius: 4px; padding: 2px; }
+    .emoji-grid span:hover { background: #f1f5f9; }
+    
+    .giphy-results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; max-height: 150px; overflow-y: auto; margin-top: 6px; }
+    .giphy-results-grid img { width: 100%; height: 70px; object-fit: cover; border-radius: 4px; cursor: pointer; }
+
+    /* Canlı Mesajlaşma Widget */
+    #chat-widget {
+      position: fixed; bottom: 0; right: 15px; z-index: 9000; width: 330px; max-width: 90vw;
+      background: var(--white); border-radius: 12px 12px 0 0; box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+      border: 1px solid var(--border); border-bottom: none; overflow: hidden; transition: 0.3s ease;
+    }
+    #chat-header {
+      background: var(--navy); color: white; padding: 10px 14px; font-weight: bold; font-size: 14px;
+      display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+    }
+    #chat-body { display: none; height: 380px; flex-direction: column; background: #f8fafc; }
+    #chat-body.active { display: flex; }
+    #chat-messages { flex: 1; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+    .chat-msg { max-width: 80%; padding: 8px 12px; border-radius: 12px; font-size: 13px; line-height: 1.4; word-break: break-word; }
+    .chat-msg.me { align-self: flex-end; background: var(--navy); color: white; border-bottom-right-radius: 2px; }
+    .chat-msg.other { align-self: flex-start; background: #e2e8f0; color: var(--text); border-bottom-left-radius: 2px; }
+    .chat-msg .sender-name { font-size: 10px; opacity: 0.8; margin-bottom: 2px; font-weight: bold; }
+    .chat-msg img.chat-gif-img { max-width: 100%; max-height: 140px; border-radius: 8px; margin-top: 4px; display: block; }
 
     .color-picker-grid { display: flex; gap: 10px; margin: 10px 0; flex-wrap: wrap; }
     .color-picker-option { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
     .color-picker-option.selected { border-color: var(--navy); transform: scale(1.15); }
-
-    .guide-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-bottom: 10px; text-align: left; }
-    .guide-box h4 { color: var(--navy); margin-bottom: 4px; font-size: 14px; }
-    .guide-box ul { padding-left: 18px; font-size: 13px; color: #475569; }
-
-    .fc-header-toolbar { flex-wrap: wrap; gap: 6px; }
-    .fc-toolbar-chunk { font-size: 12px; }
-    .fc-button { padding: 4px 8px !important; font-size: 12px !important; }
-    .fc-event { cursor: pointer; padding: 3px 6px; font-size: 12px; }
-    .fc-event-holiday { background-color: #ef4444 !important; border-color: #dc2626 !important; color: white !important; }
   </style>
 </head>
 <body>
-
-  <div class="pwa-fixed-wrapper" id="pwa-floating-bar">
-    <button class="pwa-fixed-btn" onclick="openPwaGuide()">
-      <span>📲</span> Uygulama Yükle
-    </button>
-    <button class="pwa-close-btn" onclick="dismissPwaBar()" title="Kapat">✕</button>
-  </div>
 
   <div id="login-screen">
     <div class="login-card">
@@ -236,7 +256,11 @@
       
       <div class="header-user-info">
         <span id="user-display" style="font-weight: bold;"></span>
-        <div style="display:flex; gap:6px;">
+        <div style="display:flex; gap:6px; align-items:center;">
+          <button class="notif-badge-btn" onclick="openNotifModal()" title="Bildirimler">
+            🔔
+            <span class="notif-badge-count" id="notif-count" style="display:none;">0</span>
+          </button>
           <button onclick="openProfileModal()" style="width: auto; background: var(--accent); padding: 6px 12px; font-size: 12px; border-radius: 20px;">👤 Profil</button>
           <button onclick="logout()" style="width: auto; background: #ef4444; padding: 6px 12px; font-size: 12px; border-radius: 20px;">Çıkış</button>
         </div>
@@ -389,13 +413,62 @@
     </div>
   </div>
 
+  <!-- Canlı Mesajlaşma Widget'ı -->
+  <div id="chat-widget">
+    <div id="chat-header" onclick="toggleChatWidget()">
+      <span>💬 Ekip Mesajları</span>
+      <span id="chat-toggle-icon">▲</span>
+    </div>
+    <div id="chat-body">
+      <div style="padding: 8px; border-bottom: 1px solid var(--border);">
+        <select id="chat-target-user" onchange="loadChatMessages()" style="padding: 6px; font-size: 13px; margin:0;">
+          <option value="">Kişi Seçin...</option>
+        </select>
+      </div>
+
+      <div id="chat-messages"></div>
+
+      <!-- Chat Emoji & GIF Kutuları -->
+      <div id="chat-emoji-popover" class="picker-popover">
+        <div class="emoji-grid" id="chat-emoji-grid"></div>
+      </div>
+      <div id="chat-giphy-popover" class="picker-popover">
+        <input type="text" id="chat-giphy-search" placeholder="Giphy'de GIF ara..." style="padding:6px; font-size:12px; margin:0;" oninput="searchGiphy(this.value, 'chat-giphy-results')">
+        <div class="giphy-results-grid" id="chat-giphy-results"></div>
+      </div>
+
+      <div style="padding: 6px; background: white; border-top: 1px solid var(--border);">
+        <div class="media-picker-bar">
+          <button class="media-picker-btn" onclick="togglePicker('chat-emoji-popover')">😀 Emoji</button>
+          <button class="media-picker-btn" onclick="togglePicker('chat-giphy-popover')">👾 GIF</button>
+        </div>
+        <div style="display: flex; gap: 4px;">
+          <input type="text" id="chat-input" placeholder="Mesaj yazın..." style="margin:0; padding:8px; font-size:13px;" onkeypress="if(event.key==='Enter') sendChatMessage()">
+          <button onclick="sendChatMessage()" style="width: auto; padding: 8px 12px; margin:0; font-size:13px; background:var(--accent);">Gönder</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bildirim Kutusu Modalı -->
+  <div id="notif-modal" class="modal">
+    <div class="modal-content">
+      <h3 style="color: var(--navy); margin-bottom: 12px; font-size: 16px;">🔔 Etiketlenme ve Bildirimleriniz</h3>
+      <div id="notif-list-container" style="max-height:350px; overflow-y:auto;"></div>
+      <div style="margin-top:15px; display:flex; justify-content:flex-end;">
+        <button onclick="closeNotifModal()" style="width:auto; padding:8px 16px;">Kapat</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Görev Detay & Yorum Modalı -->
   <div id="modal" class="modal">
     <div class="modal-content">
-      <h3 id="modal-title" style="color: var(--navy); margin-bottom: 12px; font-size: 17px;"></h3>
-      <div id="modal-desc" style="margin-bottom: 15px; font-size: 14px; line-height: 1.6; color: var(--text);"></div>
+      <h3 id="modal-title" style="color: var(--navy); margin-bottom: 10px; font-size: 17px;"></h3>
+      <div id="modal-desc" style="margin-bottom: 15px; font-size: 14px; line-height: 1.5; color: var(--text);"></div>
       
-      <div style="margin-bottom: 15px;">
-        <label style="font-size: 13px; font-weight: bold; color: var(--navy);">Görev Durumu / Statü:</label>
+      <div style="margin-bottom: 12px;">
+        <label style="font-size: 13px; font-weight: bold; color: var(--navy);">Statü Değiştir:</label>
         <select id="modal-status-select" onchange="changeTaskStatusFromModal()" style="margin-top:4px;">
           <option value="todo">Yapılacaklar</option>
           <option value="inprogress">Yapımdakiler</option>
@@ -404,7 +477,40 @@
         </select>
       </div>
 
-      <div id="modal-actions" style="display:flex; gap:8px; flex-wrap:wrap;">
+      <!-- Yorum / Revize Ekleme Alanı -->
+      <div class="comment-box">
+        <h4 style="font-size:13px; color:var(--navy); margin-bottom:6px;">💬 Yorumlar ve Revize Notları</h4>
+        <div id="modal-comments-list" style="max-height:180px; overflow-y:auto; margin-bottom:8px;"></div>
+        
+        <div style="display:flex; flex-direction:column; gap:4px;">
+          <div class="dropdown-checkbox-container">
+            <div class="dropdown-btn" onclick="toggleCommentAssigneeDropdown()" style="padding:8px; font-size:12px;">
+              <span id="comment-dropdown-btn-text">Kişileri Etiketle (Opsiyonel)</span>
+              <span>▼</span>
+            </div>
+            <div class="dropdown-list" id="comment-assignee-checkbox-list"></div>
+          </div>
+
+          <!-- Yorum Emoji & GIF Kutuları -->
+          <div id="comment-emoji-popover" class="picker-popover">
+            <div class="emoji-grid" id="comment-emoji-grid"></div>
+          </div>
+          <div id="comment-giphy-popover" class="picker-popover">
+            <input type="text" id="comment-giphy-search" placeholder="Giphy'de GIF ara..." style="padding:6px; font-size:12px; margin:0;" oninput="searchGiphy(this.value, 'comment-giphy-results')">
+            <div class="giphy-results-grid" id="comment-giphy-results"></div>
+          </div>
+
+          <div class="media-picker-bar">
+            <button class="media-picker-btn" onclick="togglePicker('comment-emoji-popover')">😀 Emoji</button>
+            <button class="media-picker-btn" onclick="togglePicker('comment-giphy-popover')">👾 GIF</button>
+          </div>
+
+          <textarea id="task-comment-input" placeholder="Revize detayları veya yorum yazın..." style="min-height:50px; font-size:13px;"></textarea>
+          <button onclick="addTaskComment()" style="background:var(--accent); font-size:12px; padding:8px;">Yorum / Revize Ekle</button>
+        </div>
+      </div>
+
+      <div id="modal-actions" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:15px;">
         <button onclick="closeModal()">Kapat</button>
       </div>
     </div>
@@ -467,43 +573,6 @@
     </div>
   </div>
 
-  <div id="pwa-guide-modal" class="modal">
-    <div class="modal-content">
-      <h3 style="color: var(--navy); margin-bottom: 12px; font-size: 16px;">Uygulama Olarak Ekleme Rehberi</h3>
-      <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">Cihazınıza göre aşağıdaki adımları uygulayın:</p>
-      
-      <div id="direct-install-btn-container" style="display:none; margin-bottom:12px;">
-        <button onclick="installPWA()" style="background:var(--accent);">Otomatik Uygulama Olarak Yükle</button>
-      </div>
-
-      <div class="guide-box">
-        <h4>📱 iOS (iPhone / iPad - Safari)</h4>
-        <ul>
-          <li>Safari alt menüsündeki <b>Paylaş (⎋)</b> ikonuna dokunun.</li>
-          <li>Açılan listede <b>"Ana Ekrana Ekle"</b> seçeneğini seçin.</li>
-        </ul>
-      </div>
-
-      <div class="guide-box">
-        <h4>🤖 Android (Chrome / Edge)</h4>
-        <ul>
-          <li>Sağ üstteki <b>Üç Nokta (⋮)</b> menüsüne dokunun.</li>
-          <li><b>"Uygulamayı Yükle"</b> veya <b>"Ana Ekrana Ekle"</b> seçeneğine tıklayın.</li>
-        </ul>
-      </div>
-
-      <div class="guide-box">
-        <h4>💻 Windows & Mac</h4>
-        <ul>
-          <li><b>Chrome/Edge:</b> Adres çubuğundaki <b>Yükle (💻↓)</b> ikonuna tıklayın.</li>
-          <li><b>Mac Safari:</b> Üst menüden <b>Dosya > Dock'a Ekle</b> seçeneğini seçin.</li>
-        </ul>
-      </div>
-
-      <button onclick="closePwaGuide()">Kapat</button>
-    </div>
-  </div>
-
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyB-ySCSJxm_4jFOnTRaEiyrmowUOyy1A3E",
@@ -518,18 +587,23 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
+    const GIPHY_API_KEY = "dc6zaTOxFJmzC"; // Public Giphy Key
+
     let users = { 'Zorbay': '15241524' };
     let userColors = {};
     let clients = {};
     let currentUser = null;
     let tasks = [];
     let archive = [];
+    let notifications = [];
+    let chats = {};
     let calendarInstance = null;
     let clientCalendarInstance = null;
     let activeClientId = null;
     let activeModalTaskId = null;
-    let deferredPrompt = null;
     let selectedProfileColor = '#2563eb';
+
+    const popularEmojis = ["😀", "😂", "😍", "👍", "👎", "🎉", "🔥", "🚀", "❤️", "🙌", "✅", "❌", "📌", "🎬", "🎨", "📝"];
 
     const availableColors = [
       '#2563eb', '#7c3aed', '#db2777', '#059669', '#d97706', 
@@ -538,10 +612,7 @@
     ];
 
     function getUserColor(username) {
-      if (userColors && userColors[username]) {
-        return userColors[username];
-      }
-      return '#2563eb';
+      return userColors && userColors[username] ? userColors[username] : '#2563eb';
     }
 
     const turkishHolidays = [
@@ -556,29 +627,14 @@
       { title: "🇹🇷 30 Ağustos Zafer Bayramı", date: "2026-08-30" },
       { title: "🇹🇷 29 Ekim Cumhuriyet Bayramı", date: "2026-10-29" },
       { title: "🇹🇷 10 Kasım Atatürk'ü Anma Günü", date: "2026-11-10" },
-      { title: "👩‍🏫 24 Kasım Öğretmenler Günü", date: "2026-11-24" },
-      { title: "🕌 Ramazan Bayramı Arife", date: "2026-03-19" },
-      { title: "🕌 Ramazan Bayramı 1. Gün", date: "2026-03-20" },
-      { title: "🕌 Ramazan Bayramı 2. Gün", date: "2026-03-21" },
-      { title: "🕌 Ramazan Bayramı 3. Gün", date: "2026-03-22" },
-      { title: "🕌 Kurban Bayramı Arife", date: "2026-05-26" },
-      { title: "🕌 Kurban Bayramı 1. Gün", date: "2026-05-27" },
-      { title: "🕌 Kurban Bayramı 2. Gün", date: "2026-05-28" },
-      { title: "🕌 Kurban Bayramı 3. Gün", date: "2026-05-29" },
-      { title: "🕌 Kurban Bayramı 4. Gün", date: "2026-05-30" },
-      { title: "✨ Berat Kandili", date: "2026-02-02" },
-      { title: "✨ Kadir Gecesi", date: "2026-03-15" },
-      { title: "✨ Mevlid Kandili", date: "2026-08-24" }
+      { title: "👩‍🏫 24 Kasım Öğretmenler Günü", date: "2026-11-24" }
     ];
 
+    // Firebase Listeners
     db.ref('users').on('value', (snapshot) => {
-      const val = snapshot.val();
-      if (val) {
-        users = val;
-      } else {
-        db.ref('users').set(users);
-      }
+      users = snapshot.val() || { 'Zorbay': '15241524' };
       populateAssignees();
+      populateChatUsers();
       checkRememberedUser();
       if (currentUser && document.getElementById('page-admin').classList.contains('active')) renderAdminPanel();
     });
@@ -602,11 +658,21 @@
       tasks = val ? (Array.isArray(val) ? val : Object.values(val)) : [];
       if (currentUser) {
         renderTasks();
+        if (activeModalTaskId) renderTaskComments(activeModalTaskId);
         if (document.getElementById('page-calendar').classList.contains('active')) renderCalendar();
-        if (activeClientId && document.getElementById('client-social-calendar-section').style.display !== 'none') {
-          renderClientCalendar(activeClientId);
-        }
-        checkScheduledNotifications();
+      }
+    });
+
+    db.ref('notifications').on('value', (snapshot) => {
+      const val = snapshot.val();
+      notifications = val ? (Array.isArray(val) ? val : Object.values(val)) : [];
+      if (currentUser) renderNotifications();
+    });
+
+    db.ref('chats').on('value', (snapshot) => {
+      chats = snapshot.val() || {};
+      if (currentUser && document.getElementById('chat-body').classList.contains('active')) {
+        loadChatMessages();
       }
     });
 
@@ -616,45 +682,53 @@
       if (currentUser && document.getElementById('page-archive').classList.contains('active')) renderArchive();
     });
 
-    if ('Notification' in window && Notification.permission !== 'granted') {
-      Notification.requestPermission();
-    }
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      document.getElementById('direct-install-btn-container').style.display = 'block';
+    document.addEventListener('DOMContentLoaded', () => {
+      initEmojiGrids();
     });
 
-    document.addEventListener('click', (e) => {
-      const container1 = document.querySelector('#page-kanban .dropdown-checkbox-container');
-      const container2 = document.querySelector('#client-social-calendar-section .dropdown-checkbox-container');
-      const container3 = document.querySelector('#edit-modal .dropdown-checkbox-container');
-      
-      if (container1 && !container1.contains(e.target)) document.getElementById('assignee-checkbox-list').style.display = 'none';
-      if (container2 && !container2.contains(e.target)) document.getElementById('social-assignee-checkbox-list').style.display = 'none';
-      if (container3 && !container3.contains(e.target)) document.getElementById('edit-assignee-checkbox-list').style.display = 'none';
-    });
+    function initEmojiGrids() {
+      const chatGrid = document.getElementById('chat-emoji-grid');
+      const commentGrid = document.getElementById('comment-emoji-grid');
 
-    function dismissPwaBar() {
-      document.getElementById('pwa-floating-bar').style.display = 'none';
+      if (chatGrid) {
+        chatGrid.innerHTML = popularEmojis.map(e => `<span onclick="insertEmoji('${e}', 'chat-input')">${e}</span>`).join('');
+      }
+      if (commentGrid) {
+        commentGrid.innerHTML = popularEmojis.map(e => `<span onclick="insertEmoji('${e}', 'task-comment-input')">${e}</span>`).join('');
+      }
     }
 
-    function openPwaGuide() {
-      document.getElementById('pwa-guide-modal').style.display = 'flex';
+    function togglePicker(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.style.display = el.style.display === 'block' ? 'none' : 'block';
     }
 
-    function closePwaGuide() {
-      document.getElementById('pwa-guide-modal').style.display = 'none';
+    function insertEmoji(emoji, targetInputId) {
+      const input = document.getElementById(targetInputId);
+      if (input) input.value += emoji;
     }
 
-    function installPWA() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(() => {
-          deferredPrompt = null;
-          closePwaGuide();
+    function searchGiphy(query, resultsContainerId) {
+      if (!query.trim()) return;
+      fetch(`https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${encodeURIComponent(query)}&limit=9`)
+        .then(res => res.json())
+        .then(data => {
+          const container = document.getElementById(resultsContainerId);
+          if (!container || !data.data) return;
+          container.innerHTML = data.data.map(g => `
+            <img src="${g.images.fixed_height_small.url}" onclick="selectGiphy('${g.images.fixed_height.url}', '${resultsContainerId}')">
+          `).join('');
         });
+    }
+
+    function selectGiphy(url, containerId) {
+      if (containerId === 'chat-giphy-results') {
+        sendChatMessage(url);
+        togglePicker('chat-giphy-popover');
+      } else if (containerId === 'comment-giphy-results') {
+        addTaskComment(url);
+        togglePicker('comment-giphy-popover');
       }
     }
 
@@ -665,16 +739,12 @@
       const rememberLabel = document.getElementById('remember-me-label');
 
       if (mode === 'login') {
-        loginBtn.classList.add('active');
-        regBtn.classList.remove('active');
-        actionBtn.innerText = 'Giriş Yap';
-        actionBtn.setAttribute('onclick', 'login()');
+        loginBtn.classList.add('active'); regBtn.classList.remove('active');
+        actionBtn.innerText = 'Giriş Yap'; actionBtn.setAttribute('onclick', 'login()');
         rememberLabel.style.display = 'flex';
       } else {
-        regBtn.classList.add('active');
-        loginBtn.classList.remove('active');
-        actionBtn.innerText = 'Kayıt Ol';
-        actionBtn.setAttribute('onclick', 'register()');
+        regBtn.classList.add('active'); loginBtn.classList.remove('active');
+        actionBtn.innerText = 'Kayıt Ol'; actionBtn.setAttribute('onclick', 'register()');
         rememberLabel.style.display = 'none';
       }
     }
@@ -686,12 +756,7 @@
 
       if (savedUser && savedPass) {
         const matchedUser = Object.keys(users).find(u => u.toLowerCase() === savedUser.toLowerCase());
-        if (matchedUser && users[matchedUser] === savedPass) {
-          executeLogin(matchedUser);
-        } else {
-          localStorage.removeItem('137_remembered_user');
-          localStorage.removeItem('137_remembered_pass');
-        }
+        if (matchedUser && users[matchedUser] === savedPass) executeLogin(matchedUser);
       }
     }
 
@@ -709,8 +774,9 @@
 
       populateAssignees();
       populateClientDropdowns();
+      populateChatUsers();
       renderTasks();
-      checkScheduledNotifications();
+      renderNotifications();
     }
 
     function login() {
@@ -724,38 +790,11 @@
         if (remember) {
           localStorage.setItem('137_remembered_user', matchedUser);
           localStorage.setItem('137_remembered_pass', inputPass);
-        } else {
-          localStorage.removeItem('137_remembered_user');
-          localStorage.removeItem('137_remembered_pass');
         }
         executeLogin(matchedUser);
       } else {
         alert('Hatalı kullanıcı adı veya şifre!');
       }
-    }
-
-    function register() {
-      const inputUser = document.getElementById('username').value.trim();
-      const inputPass = document.getElementById('password').value.trim();
-
-      if (!inputUser || !inputPass) {
-        alert('Kullanıcı adı ve şifre zorunludur!');
-        return;
-      }
-
-      const existingUser = Object.keys(users).find(u => u.toLowerCase() === inputUser.toLowerCase());
-      if (existingUser) {
-        alert('Bu kullanıcı adı zaten alınmış!');
-        return;
-      }
-
-      users[inputUser] = inputPass;
-      userColors[inputUser] = availableColors[Math.floor(Math.random() * availableColors.length)];
-      saveUsers();
-      saveUserColors();
-      alert('Kayıt başarılı! Giriş yapabilirsiniz.');
-      toggleAuthMode('login');
-      document.getElementById('password').value = '';
     }
 
     function logout() {
@@ -764,15 +803,11 @@
       localStorage.removeItem('137_remembered_pass');
       document.getElementById('app').style.display = 'none';
       document.getElementById('login-screen').style.display = 'flex';
-      document.getElementById('username').value = '';
-      document.getElementById('password').value = '';
-      switchTab('kanban');
     }
 
     function switchTab(tab) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-      
       document.getElementById(`page-${tab}`).classList.add('active');
       document.getElementById(`btn-${tab}`).classList.add('active');
 
@@ -782,169 +817,236 @@
       if (tab === 'admin') renderAdminPanel();
     }
 
-    function openProfileModal() {
+    function createNotification(targetUser, message, linkTaskId = null) {
+      const newNotif = {
+        id: Date.now().toString() + Math.random().toString(36).substring(2, 5),
+        targetUser, message, linkTaskId, sender: currentUser,
+        date: new Date().toISOString(), read: false
+      };
+      notifications.push(newNotif);
+      db.ref('notifications').set(notifications);
+    }
+
+    function renderNotifications() {
       if (!currentUser) return;
-      document.getElementById('profile-username-input').value = currentUser;
-      document.getElementById('profile-password-input').value = users[currentUser] || '';
-      
-      selectedProfileColor = getUserColor(currentUser);
-      renderColorPicker();
-      
-      document.getElementById('profile-modal').style.display = 'flex';
+      const userNotifs = notifications.filter(n => n.targetUser === currentUser).reverse();
+      const unreadCount = userNotifs.filter(n => !n.read).length;
+
+      const badgeEl = document.getElementById('notif-count');
+      if (unreadCount > 0) {
+        badgeEl.innerText = unreadCount;
+        badgeEl.style.display = 'inline-block';
+      } else {
+        badgeEl.style.display = 'none';
+      }
+
+      const container = document.getElementById('notif-list-container');
+      if (userNotifs.length === 0) {
+        container.innerHTML = '<p style="font-size:13px; color:#64748b;">Henüz bildiriminiz yok.</p>';
+        return;
+      }
+
+      container.innerHTML = userNotifs.map(n => `
+        <div style="padding:10px; border-bottom:1px solid #e2e8f0; background:${n.read ? '#fff' : '#eff6ff'}; font-size:13px; cursor:${n.linkTaskId ? 'pointer' : 'default'};" onclick="clickNotification('${n.id}', '${n.linkTaskId}')">
+          <div style="font-weight:bold; color:var(--navy);">${n.sender} tarafından:</div>
+          <div style="margin:2px 0;">${n.message}</div>
+          <div style="font-size:10px; color:#94a3b8;">${new Date(n.date).toLocaleString('tr-TR')}</div>
+        </div>
+      `).join('');
     }
 
-    function closeProfileModal() {
-      document.getElementById('profile-modal').style.display = 'none';
-    }
-
-    function renderColorPicker() {
-      const container = document.getElementById('profile-color-picker');
-      container.innerHTML = '';
-
-      availableColors.forEach(color => {
-        const div = document.createElement('div');
-        div.className = `color-picker-option ${color === selectedProfileColor ? 'selected' : ''}`;
-        div.style.backgroundColor = color;
-        div.onclick = () => {
-          selectedProfileColor = color;
-          renderColorPicker();
-        };
-        container.appendChild(div);
+    function openNotifModal() {
+      renderNotifications();
+      notifications.forEach(n => {
+        if (n.targetUser === currentUser) n.read = true;
       });
+      db.ref('notifications').set(notifications);
+      document.getElementById('notif-modal').style.display = 'flex';
     }
 
-    function saveProfileChanges() {
-      const newUsername = document.getElementById('profile-username-input').value.trim();
-      const newPassword = document.getElementById('profile-password-input').value.trim();
+    function closeNotifModal() { document.getElementById('notif-modal').style.display = 'none'; }
 
-      if (!newUsername || !newPassword) {
-        alert('Kullanıcı adı ve şifre boş bırakılamaz!');
+    function clickNotification(notifId, taskId) {
+      closeNotifModal();
+      if (taskId) openTaskModal(taskId);
+    }
+
+    function renderTaskComments(taskId) {
+      const task = tasks.find(t => t.id === taskId);
+      const container = document.getElementById('modal-comments-list');
+      if (!task || !task.comments || task.comments.length === 0) {
+        container.innerHTML = '<p style="font-size:12px; color:#94a3b8;">Henüz yorum veya revize notu eklenmemiş.</p>';
         return;
       }
 
-      const oldUsername = currentUser;
+      container.innerHTML = task.comments.map(c => {
+        let tagsHTML = c.tagged && c.tagged.length > 0 ? `<span style="font-size:10px; color:var(--accent);"> (@${c.tagged.join(', @')})</span>` : '';
+        let gifHTML = c.gifUrl ? `<img src="${c.gifUrl}" class="chat-gif-img">` : '';
+        return `
+          <div class="comment-item">
+            <div class="author">
+              <span>${c.author}${tagsHTML}</span>
+              <span class="time">${new Date(c.date).toLocaleString('tr-TR')}</span>
+            </div>
+            ${c.text ? `<div>${c.text.replace(/\n/g, '<br>')}</div>` : ''}
+            ${gifHTML}
+          </div>
+        `;
+      }).join('');
+    }
 
-      if (newUsername.toLowerCase() !== oldUsername.toLowerCase() && users[newUsername]) {
-        alert('Bu kullanıcı adı başka bir kullanıcı tarafından kullanılıyor!');
+    function addTaskComment(gifUrl = null) {
+      if (!activeModalTaskId) return;
+      const text = document.getElementById('task-comment-input').value.trim();
+      const taggedUsers = getSelectedAssignees('#comment-assignee-checkbox-list');
+
+      if (!text && !gifUrl) {
+        alert('Lütfen bir yorum yazın veya GIF seçin!');
         return;
       }
 
-      delete users[oldUsername];
-      users[newUsername] = newPassword;
+      const task = tasks.find(t => t.id === activeModalTaskId);
+      if (!task) return;
 
-      delete userColors[oldUsername];
-      userColors[newUsername] = selectedProfileColor;
+      if (!task.comments) task.comments = [];
 
-      tasks.forEach(task => {
-        if (task.creator === oldUsername) task.creator = newUsername;
-        if (task.assignees) {
-          task.assignees = task.assignees.map(u => u === oldUsername ? newUsername : u);
+      task.comments.push({
+        id: Date.now().toString(),
+        author: currentUser,
+        text: text,
+        gifUrl: gifUrl || null,
+        tagged: taggedUsers,
+        date: new Date().toISOString()
+      });
+
+      db.ref('tasks').set(tasks);
+
+      taggedUsers.forEach(u => {
+        if (u !== currentUser) {
+          createNotification(u, `"${task.title}" görevindeki bir yorumda sizi etiketledi: "${text || 'GIF'}"`, task.id);
         }
       });
 
-      if (localStorage.getItem('137_remembered_user')) {
-        localStorage.setItem('137_remembered_user', newUsername);
-        localStorage.setItem('137_remembered_pass', newPassword);
+      document.getElementById('task-comment-input').value = '';
+      document.querySelectorAll('#comment-assignee-checkbox-list input[type="checkbox"]').forEach(cb => cb.checked = false);
+      updateCommentDropdownText();
+      renderTaskComments(activeModalTaskId);
+    }
+
+    function toggleChatWidget() {
+      const chatBody = document.getElementById('chat-body');
+      const icon = document.getElementById('chat-toggle-icon');
+      if (chatBody.classList.contains('active')) {
+        chatBody.classList.remove('active'); icon.innerText = '▲';
+      } else {
+        chatBody.classList.add('active'); icon.innerText = '▼';
+        loadChatMessages();
+      }
+    }
+
+    function populateChatUsers() {
+      const select = document.getElementById('chat-target-user');
+      if (!select) return;
+      select.innerHTML = '<option value="">Sohbet Edilecek Kişi...</option>';
+      Object.keys(users).forEach(u => {
+        if (u !== currentUser) select.appendChild(new Option(u, u));
+      });
+    }
+
+    function getChatRoomId(u1, u2) {
+      return [u1, u2].sort().join('_');
+    }
+
+    function loadChatMessages() {
+      const targetUser = document.getElementById('chat-target-user').value;
+      const container = document.getElementById('chat-messages');
+      if (!targetUser) {
+        container.innerHTML = '<p style="font-size:12px; color:#94a3b8; text-align:center;">Lütfen bir kullanıcı seçin.</p>';
+        return;
       }
 
-      currentUser = newUsername;
-      document.getElementById('user-display').innerText = `Kullanıcı: ${currentUser}`;
+      const roomId = getChatRoomId(currentUser, targetUser);
+      const roomMsgs = chats[roomId] || [];
 
-      saveUsers();
-      saveUserColors();
-      saveData();
-      populateAssignees();
-      closeProfileModal();
+      container.innerHTML = roomMsgs.map(m => `
+        <div class="chat-msg ${m.sender === currentUser ? 'me' : 'other'}">
+          <div class="sender-name">${m.sender}</div>
+          ${m.text ? `<div>${m.text}</div>` : ''}
+          ${m.gifUrl ? `<img src="${m.gifUrl}" class="chat-gif-img">` : ''}
+        </div>
+      `).join('');
 
-      alert('Profil bilgileriniz ve takvim renginiz başarıyla güncellendi.');
+      container.scrollTop = container.scrollHeight;
     }
 
-    function toggleAssigneeDropdown() {
-      const list = document.getElementById('assignee-checkbox-list');
-      list.style.display = list.style.display === 'block' ? 'none' : 'block';
-    }
+    function sendChatMessage(gifUrl = null) {
+      const targetUser = document.getElementById('chat-target-user').value;
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
 
-    function toggleSocialAssigneeDropdown() {
-      const list = document.getElementById('social-assignee-checkbox-list');
-      list.style.display = list.style.display === 'block' ? 'none' : 'block';
-    }
+      if (!targetUser || (!text && !gifUrl)) return;
 
-    function toggleEditAssigneeDropdown() {
-      const list = document.getElementById('edit-assignee-checkbox-list');
-      list.style.display = list.style.display === 'block' ? 'none' : 'block';
-    }
+      const roomId = getChatRoomId(currentUser, targetUser);
+      if (!chats[roomId]) chats[roomId] = [];
 
-    function populateAssignees() {
-      const mainList = document.getElementById('assignee-checkbox-list');
-      const socialList = document.getElementById('social-assignee-checkbox-list');
-      const editList = document.getElementById('edit-assignee-checkbox-list');
-      
-      mainList.innerHTML = '';
-      socialList.innerHTML = '';
-      editList.innerHTML = '';
-
-      Object.keys(users).forEach(u => {
-        const l1 = document.createElement('label');
-        l1.innerHTML = `<input type="checkbox" value="${u}" onchange="updateDropdownText()"> ${u}`;
-        mainList.appendChild(l1);
-
-        const l2 = document.createElement('label');
-        l2.innerHTML = `<input type="checkbox" value="${u}" onchange="updateSocialDropdownText()"> ${u}`;
-        socialList.appendChild(l2);
-
-        const l3 = document.createElement('label');
-        l3.innerHTML = `<input type="checkbox" value="${u}" onchange="updateEditDropdownText()"> ${u}`;
-        editList.appendChild(l3);
+      chats[roomId].push({
+        sender: currentUser,
+        text: text,
+        gifUrl: gifUrl || null,
+        date: new Date().toISOString()
       });
 
-      updateDropdownText();
-      updateSocialDropdownText();
-      updateEditDropdownText();
+      db.ref('chats').set(chats);
+      createNotification(targetUser, `Sana mesaj gönderdi: "${text || 'GIF'}"`);
+      input.value = '';
+      loadChatMessages();
+    }
+
+    function toggleAssigneeDropdown() { document.getElementById('assignee-checkbox-list').style.display = document.getElementById('assignee-checkbox-list').style.display === 'block' ? 'none' : 'block'; }
+    function toggleSocialAssigneeDropdown() { document.getElementById('social-assignee-checkbox-list').style.display = document.getElementById('social-assignee-checkbox-list').style.display === 'block' ? 'none' : 'block'; }
+    function toggleEditAssigneeDropdown() { document.getElementById('edit-assignee-checkbox-list').style.display = document.getElementById('edit-assignee-checkbox-list').style.display === 'block' ? 'none' : 'block'; }
+    function toggleCommentAssigneeDropdown() { document.getElementById('comment-assignee-checkbox-list').style.display = document.getElementById('comment-assignee-checkbox-list').style.display === 'block' ? 'none' : 'block'; }
+
+    function populateAssignees() {
+      const lists = [
+        { id: 'assignee-checkbox-list', fn: updateDropdownText },
+        { id: 'social-assignee-checkbox-list', fn: updateSocialDropdownText },
+        { id: 'edit-assignee-checkbox-list', fn: updateEditDropdownText },
+        { id: 'comment-assignee-checkbox-list', fn: updateCommentDropdownText }
+      ];
+
+      lists.forEach(item => {
+        const el = document.getElementById(item.id);
+        if (!el) return;
+        el.innerHTML = '';
+        Object.keys(users).forEach(u => {
+          const l = document.createElement('label');
+          l.innerHTML = `<input type="checkbox" value="${u}" onchange="${item.fn.name}()"> ${u}`;
+          el.appendChild(l);
+        });
+        item.fn();
+      });
+    }
+
+    function updateDropdownText() { document.getElementById('dropdown-btn-text').innerText = getSelectedAssignees('#assignee-checkbox-list').length === 0 ? 'Kişileri Etiketle (Seçiniz)' : getSelectedAssignees('#assignee-checkbox-list').join(', '); }
+    function updateSocialDropdownText() { document.getElementById('social-dropdown-btn-text').innerText = getSelectedAssignees('#social-assignee-checkbox-list').length === 0 ? 'Sorumluları Etiketle' : getSelectedAssignees('#social-assignee-checkbox-list').join(', '); }
+    function updateEditDropdownText() { document.getElementById('edit-dropdown-btn-text').innerText = getSelectedAssignees('#edit-assignee-checkbox-list').length === 0 ? 'Kişileri Etiketle' : getSelectedAssignees('#edit-assignee-checkbox-list').join(', '); }
+    function updateCommentDropdownText() { document.getElementById('comment-dropdown-btn-text').innerText = getSelectedAssignees('#comment-assignee-checkbox-list').length === 0 ? 'Kişileri Etiketle (Opsiyonel)' : getSelectedAssignees('#comment-assignee-checkbox-list').join(', '); }
+
+    function getSelectedAssignees(selector) {
+      return Array.from(document.querySelectorAll(`${selector} input[type="checkbox"]:checked`)).map(cb => cb.value);
     }
 
     function populateClientDropdowns() {
-      const taskCompanySelect = document.getElementById('task-company-select');
-      const editCompanySelect = document.getElementById('edit-task-company-select');
-
-      if (!taskCompanySelect || !editCompanySelect) return;
-
-      taskCompanySelect.innerHTML = '<option value="">Marka Seçiniz (İsteğe bağlı)</option>';
-      editCompanySelect.innerHTML = '<option value="">Marka Seçiniz (İsteğe bağlı)</option>';
-
+      const d1 = document.getElementById('task-company-select');
+      const d2 = document.getElementById('edit-task-company-select');
+      if (!d1 || !d2) return;
+      d1.innerHTML = '<option value="">Marka Seçiniz (İsteğe bağlı)</option>';
+      d2.innerHTML = '<option value="">Marka Seçiniz (İsteğe bağlı)</option>';
       Object.values(clients).forEach(client => {
-        const opt1 = document.createElement('option');
-        opt1.value = client.name;
-        opt1.textContent = client.name;
-        taskCompanySelect.appendChild(opt1);
-
-        const opt2 = document.createElement('option');
-        opt2.value = client.name;
-        opt2.textContent = client.name;
-        editCompanySelect.appendChild(opt2);
+        d1.appendChild(new Option(client.name, client.name));
+        d2.appendChild(new Option(client.name, client.name));
       });
-    }
-
-    function updateDropdownText() {
-      const checkedBoxes = document.querySelectorAll('#assignee-checkbox-list input[type="checkbox"]:checked');
-      const selectedNames = Array.from(checkedBoxes).map(cb => cb.value);
-      document.getElementById('dropdown-btn-text').innerText = selectedNames.length === 0 ? 'Kişileri Etiketle (Seçiniz)' : selectedNames.join(', ');
-    }
-
-    function updateSocialDropdownText() {
-      const checkedBoxes = document.querySelectorAll('#social-assignee-checkbox-list input[type="checkbox"]:checked');
-      const selectedNames = Array.from(checkedBoxes).map(cb => cb.value);
-      document.getElementById('social-dropdown-btn-text').innerText = selectedNames.length === 0 ? 'Sorumluları Etiketle' : selectedNames.join(', ');
-    }
-
-    function updateEditDropdownText() {
-      const checkedBoxes = document.querySelectorAll('#edit-assignee-checkbox-list input[type="checkbox"]:checked');
-      const selectedNames = Array.from(checkedBoxes).map(cb => cb.value);
-      document.getElementById('edit-dropdown-btn-text').innerText = selectedNames.length === 0 ? 'Kişileri Etiketle' : selectedNames.join(', ');
-    }
-
-    function getSelectedAssignees(selector) {
-      const checkedBoxes = document.querySelectorAll(`${selector} input[type="checkbox"]:checked`);
-      return Array.from(checkedBoxes).map(cb => cb.value);
     }
 
     function createTask() {
@@ -955,29 +1057,21 @@
       const description = document.getElementById('task-desc').value;
       const isIndependent = document.getElementById('task-is-independent').checked;
 
-      if (!title.trim()) {
-        alert('Çalışma adı zorunludur!');
-        return;
-      }
+      if (!title.trim()) { alert('Çalışma adı zorunludur!'); return; }
 
       const newTask = {
-        id: Date.now().toString(),
-        title,
-        company: company || '',
+        id: Date.now().toString(), title, company: company || '',
         assignees: assignees.length > 0 ? assignees : [currentUser],
-        description: description || '',
-        creator: currentUser,
-        datetime: datetime || null,
-        status: 'todo',
-        isIndependent: isIndependent,
-        isSocialPost: false
+        description: description || '', creator: currentUser,
+        datetime: datetime || null, status: 'todo',
+        isIndependent, isSocialPost: false, comments: []
       };
 
       tasks.push(newTask);
       saveData();
 
       assignees.forEach(u => {
-        if (u !== currentUser) sendNotification(`Yeni Görev Etiketlendi!`, `${currentUser} sizi "${title}" görevine etiketledi.`);
+        if (u !== currentUser) createNotification(u, `Sizi "${title}" görevine etiketledi.`, newTask.id);
       });
 
       document.getElementById('task-title').value = '';
@@ -990,14 +1084,8 @@
     }
 
     function renderTasks() {
-      ['todo', 'inprogress', 'revision', 'done'].forEach(col => {
-        document.getElementById(`col-${col}`).innerHTML = '';
-      });
-
-      const userTasks = tasks.filter(t => 
-        t.creator === currentUser || 
-        (t.assignees && t.assignees.includes(currentUser))
-      );
+      ['todo', 'inprogress', 'revision', 'done'].forEach(col => document.getElementById(`col-${col}`).innerHTML = '');
+      const userTasks = tasks.filter(t => t.creator === currentUser || (t.assignees && t.assignees.includes(currentUser)));
 
       userTasks.forEach(task => {
         const card = document.createElement('div');
@@ -1005,42 +1093,36 @@
         card.draggable = true;
         card.ondragstart = (e) => e.dataTransfer.setData('text/plain', task.id);
         
-        let badgesHTML = '';
-        if (task.assignees) {
-          task.assignees.forEach(u => {
-            badgesHTML += `<span class="user-badge" style="background:${getUserColor(u)}">${u}</span>`;
-          });
-        }
+        let badgesHTML = (task.assignees || []).map(u => `<span class="user-badge" style="background:${getUserColor(u)}">${u}</span>`).join('');
+        const commentCount = task.comments ? task.comments.length : 0;
 
         card.onclick = () => openTaskModal(task.id);
-        
         card.innerHTML = `
           ${task.company ? `<span class="company-tag">🏷️ ${task.company}</span>` : ''}
           ${task.isIndependent ? `<span class="independent-tag">📌 Bağımsız Proje</span>` : ''}
           <h4>${task.title}</h4>
           <div style="margin:4px 0;">${badgesHTML}</div>
           ${task.datetime ? `<p style="color:var(--accent);">📅 ${new Date(task.datetime).toLocaleString('tr-TR')}</p>` : ''}
-          <span class="tag">${task.status.toUpperCase()}</span>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+            <span class="tag">${task.status.toUpperCase()}</span>
+            ${commentCount > 0 ? `<span style="font-size:11px; color:#64748b;">💬 ${commentCount}</span>` : ''}
+          </div>
         `;
-
         const targetCol = document.getElementById(`col-${task.status}`);
         if (targetCol) targetCol.appendChild(card);
       });
     }
 
     function allowDrop(ev) { ev.preventDefault(); }
-
     function drop(ev, targetStatus) {
       ev.preventDefault();
       const taskId = ev.dataTransfer.getData('text/plain');
       const taskIndex = tasks.findIndex(t => t.id === taskId);
-
       if (taskIndex !== -1) {
         if (targetStatus === 'done') {
           const completedTask = tasks.splice(taskIndex, 1)[0];
           completedTask.completedDate = new Date().toISOString();
           archive.push(completedTask);
-          alert('Görev onaylandı ve Arşiv bölümüne aktarıldı.');
         } else {
           tasks[taskIndex].status = targetStatus;
         }
@@ -1051,50 +1133,16 @@
     function renderCalendar() {
       const calendarEl = document.getElementById('calendar');
       if (calendarInstance) calendarInstance.destroy();
-
-      // Bağımsız projeler takvimde gösterilmez
       const userTasks = tasks.filter(t => t.datetime && !t.isIndependent);
 
-      const taskEvents = userTasks.map(t => {
-        const primaryAssignee = t.assignees && t.assignees.length > 0 ? t.assignees[0] : t.creator;
-        const color = getUserColor(primaryAssignee);
-
-        return {
-          id: t.id,
-          title: `${t.company ? '['+t.company+'] ' : ''}${t.title} (${t.assignees ? t.assignees.join(', ') : t.creator})`,
-          start: t.datetime,
-          backgroundColor: color,
-          borderColor: color,
-          textColor: '#ffffff'
-        };
-      });
-
-      const holidayEvents = turkishHolidays.map((h, i) => ({
-        id: `holiday-${i}`,
-        title: h.title,
-        start: h.date,
-        allDay: true,
-        className: 'fc-event-holiday'
-      }));
-
-      const initialViewMode = window.innerWidth < 768 ? 'listWeek' : 'listMonth';
-
       calendarInstance = new FullCalendar.Calendar(calendarEl, {
-        initialView: initialViewMode,
-        locale: 'tr',
-        headerToolbar: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'listWeek,dayGridMonth'
-        },
-        events: [...taskEvents, ...holidayEvents],
-        eventClick: function(info) {
-          if (info.event.id.startsWith('holiday-')) {
-            showModal(info.event.title, `<b>Tür:</b> Resmi / Dini Bayram veya Özel Gün<br><b>Tarih:</b> ${info.event.start.toLocaleDateString('tr-TR')}`);
-            return;
-          }
-          openTaskModal(info.event.id);
-        }
+        initialView: window.innerWidth < 768 ? 'listWeek' : 'listMonth', locale: 'tr',
+        headerToolbar: { left: 'prev,next today', center: 'title', right: 'listWeek,dayGridMonth' },
+        events: [...userTasks.map(t => ({
+          id: t.id, title: `${t.company ? '['+t.company+'] ' : ''}${t.title}`,
+          start: t.datetime, backgroundColor: getUserColor(t.assignees?.[0] || t.creator), borderColor: getUserColor(t.assignees?.[0] || t.creator)
+        })), ...turkishHolidays.map((h, i) => ({ id: `holiday-${i}`, title: h.title, start: h.date, allDay: true, className: 'fc-event-holiday' }))],
+        eventClick: (info) => { if (!info.event.id.startsWith('holiday-')) openTaskModal(info.event.id); }
       });
       calendarInstance.render();
     }
@@ -1104,35 +1152,23 @@
       if (!task) return;
 
       activeModalTaskId = taskId;
-
-      let badgesHTML = '';
-      if (task.assignees) {
-        task.assignees.forEach(u => {
-          badgesHTML += `<span class="user-badge" style="background:${getUserColor(u)}">${u}</span>`;
-        });
-      }
-
-      const descHTML = `
-        ${task.company ? `<b>Marka:</b> ${task.company}<br>` : ''}
-        ${task.isIndependent ? `<b>Tür:</b> 📌 Bağımsız Proje (Takvim dışı)<br>` : ''}
-        <b>Etiketlenen Kişiler:</b> ${badgesHTML || 'Belirtilmedi'}<br>
-        <b>Oluşturan:</b> ${task.creator}<br>
-        <b>Tarih:</b> ${task.datetime ? new Date(task.datetime).toLocaleString('tr-TR') : 'Belirtilmedi'}<br>
-        <hr style="margin:10px 0; border:0; border-top:1px solid #e2e8f0;">
-        <b>Açıklama:</b><br>${task.description ? task.description.replace(/\n/g, '<br>') : 'Açıklama girilmemiş.'}
-      `;
+      let badgesHTML = (task.assignees || []).map(u => `<span class="user-badge" style="background:${getUserColor(u)}">${u}</span>`).join('');
 
       document.getElementById('modal-title').innerText = task.title;
-      document.getElementById('modal-desc').innerHTML = descHTML;
+      document.getElementById('modal-desc').innerHTML = `
+        ${task.company ? `<b>Marka:</b> ${task.company}<br>` : ''}
+        ${task.isIndependent ? `<b>Tür:</b> 📌 Bağımsız Proje<br>` : ''}
+        <b>Sorumlular:</b> ${badgesHTML || 'Belirtilmedi'}<br>
+        <b>Açıklama:</b><br>${task.description ? task.description.replace(/\n/g, '<br>') : 'Açıklama girilmemiş.'}
+      `;
       document.getElementById('modal-status-select').value = task.status || 'todo';
+      renderTaskComments(taskId);
 
-      const actionsDiv = document.getElementById('modal-actions');
-      actionsDiv.innerHTML = `
+      document.getElementById('modal-actions').innerHTML = `
         <button onclick="openEditModal('${task.id}')" style="background:var(--accent);">Düzenle</button>
         <button onclick="deleteTask('${task.id}')" style="background:#ef4444;">Sil</button>
         <button onclick="closeModal()" style="background:#64748b;">Kapat</button>
       `;
-
       document.getElementById('modal').style.display = 'flex';
     }
 
@@ -1146,7 +1182,6 @@
           const completedTask = tasks.splice(taskIndex, 1)[0];
           completedTask.completedDate = new Date().toISOString();
           archive.push(completedTask);
-          alert('Görev onaylandı ve Arşiv bölümüne aktarıldı.');
           closeModal();
         } else {
           tasks[taskIndex].status = newStatus;
@@ -1172,13 +1207,10 @@
         cb.checked = task.assignees && task.assignees.includes(cb.value);
       });
       updateEditDropdownText();
-
       document.getElementById('edit-modal').style.display = 'flex';
     }
 
-    function closeEditModal() {
-      document.getElementById('edit-modal').style.display = 'none';
-    }
+    function closeEditModal() { document.getElementById('edit-modal').style.display = 'none'; }
 
     function saveTaskEdit() {
       const id = document.getElementById('edit-task-id').value;
@@ -1186,10 +1218,7 @@
       if (taskIndex === -1) return;
 
       const title = document.getElementById('edit-task-title').value;
-      if (!title.trim()) {
-        alert('Çalışma adı zorunludur!');
-        return;
-      }
+      if (!title.trim()) { alert('Çalışma adı zorunludur!'); return; }
 
       const newStatus = document.getElementById('edit-task-status-select').value;
       const isIndependent = document.getElementById('edit-task-is-independent').checked;
@@ -1204,7 +1233,6 @@
         completedTask.isIndependent = isIndependent;
         completedTask.completedDate = new Date().toISOString();
         archive.push(completedTask);
-        alert('Görev onaylandı ve Arşiv bölümüne aktarıldı.');
       } else {
         const task = tasks[taskIndex];
         task.title = title;
@@ -1218,7 +1246,6 @@
 
       saveData();
       closeEditModal();
-      alert('Görev başarıyla güncellendi.');
     }
 
     function deleteTask(taskId) {
@@ -1231,15 +1258,9 @@
 
     function renderClients() {
       const tbody = document.getElementById('client-table-body');
-      tbody.innerHTML = '';
-
-      if (Object.keys(clients).length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3">Henüz marka eklenmemiş.</td></tr>';
-        return;
-      }
-
+      tbody.innerHTML = Object.keys(clients).length === 0 ? '<tr><td colspan="3">Henüz marka eklenmemiş.</td></tr>' : '';
+      if (Object.keys(clients).length === 0) return;
       const isAdmin = currentUser && currentUser.toLowerCase() === 'zorbay';
-
       Object.entries(clients).forEach(([id, client]) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -1257,12 +1278,7 @@
     function addClient() {
       const name = document.getElementById('client-name-input').value.trim();
       const contact = document.getElementById('client-contact-input').value.trim();
-
-      if (!name) {
-        alert('Marka adı zorunludur!');
-        return;
-      }
-
+      if (!name) { alert('Marka adı zorunludur!'); return; }
       const id = 'client_' + Date.now();
       clients[id] = { id, name, contact };
       saveClients();
@@ -1272,24 +1288,11 @@
     }
 
     function deleteClient(id) {
-      if (!currentUser || currentUser.toLowerCase() !== 'zorbay') {
-        alert('Marka silme yetkisi yalnızca Admin kullanıcısına aittir!');
-        return;
-      }
-
-      const client = clients[id];
-      if (!client) return;
-
-      if (confirm(`"${client.name}" markasını ve bağlı tüm paylaşım takvimini silmek istediğinize emin misiniz?`)) {
+      if (!currentUser || currentUser.toLowerCase() !== 'zorbay') return;
+      if (confirm(`Markayı silmek istediğinize emin misiniz?`)) {
         tasks = tasks.filter(t => t.clientId !== id);
         delete clients[id];
-        saveClients();
-        saveData();
-        renderClients();
-        if (activeClientId === id) {
-          document.getElementById('client-social-calendar-section').style.display = 'none';
-          activeClientId = null;
-        }
+        saveClients(); saveData(); renderClients();
       }
     }
 
@@ -1297,248 +1300,109 @@
       const client = clients[id];
       if (!client) return;
       activeClientId = id;
-
       document.getElementById('selected-client-title').innerText = `📢 ${client.name} - Sosyal Medya Paylaşım Takvimi`;
       document.getElementById('client-social-calendar-section').style.display = 'block';
-
       renderClientCalendar(id);
     }
 
     function createSocialPost() {
       if (!activeClientId) return;
       const client = clients[activeClientId];
-
       const title = document.getElementById('social-post-title').value;
       const datetime = document.getElementById('social-post-date').value;
       const assignees = getSelectedAssignees('#social-assignee-checkbox-list');
       const description = document.getElementById('social-post-desc').value;
 
-      if (!title.trim() || !datetime) {
-        alert('Paylaşım başlığı ve tarihi zorunludur!');
-        return;
-      }
+      if (!title.trim() || !datetime) { alert('Başlık ve tarih zorunludur!'); return; }
 
       const newTask = {
-        id: Date.now().toString(),
-        title: `[Paylaşım] ${title}`,
-        company: client.name,
-        clientId: activeClientId,
+        id: Date.now().toString(), title: `[Paylaşım] ${title}`,
+        company: client.name, clientId: activeClientId,
         assignees: assignees.length > 0 ? assignees : [currentUser],
-        description: description || '',
-        creator: currentUser,
-        datetime: datetime,
-        status: 'todo',
-        isIndependent: false,
-        isSocialPost: true
+        description: description || '', creator: currentUser, datetime: datetime,
+        status: 'todo', isIndependent: false, isSocialPost: true, comments: []
       };
 
       tasks.push(newTask);
       saveData();
-
-      assignees.forEach(u => {
-        if (u !== currentUser) sendNotification(`Paylaşım Görevi Etiketlendi!`, `${client.name} için "${title}" paylaşım görevine etiketlendiniz.`);
-      });
-
-      document.getElementById('social-post-title').value = '';
-      document.getElementById('social-post-date').value = '';
-      document.getElementById('social-post-desc').value = '';
-      document.querySelectorAll('#social-assignee-checkbox-list input[type="checkbox"]').forEach(cb => cb.checked = false);
-      updateSocialDropdownText();
-
       renderClientCalendar(activeClientId);
     }
 
     function renderClientCalendar(clientId) {
       const calendarEl = document.getElementById('client-calendar');
       if (clientCalendarInstance) clientCalendarInstance.destroy();
-
-      // Bağımsız olanlar marka takviminde de gösterilmez
       const clientTasks = tasks.filter(t => t.clientId === clientId && t.datetime && !t.isIndependent);
-      const events = clientTasks.map(t => ({
-        id: t.id,
-        title: `${t.title} (${t.assignees ? t.assignees.join(', ') : ''})`,
-        start: t.datetime,
-        backgroundColor: '#8b5cf6',
-        borderColor: '#7c3aed'
-      }));
 
       clientCalendarInstance = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        locale: 'tr',
-        headerToolbar: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,listMonth'
-        },
-        events: events,
-        eventClick: function(info) {
-          openTaskModal(info.event.id);
-        }
+        initialView: 'dayGridMonth', locale: 'tr',
+        headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,listMonth' },
+        events: clientTasks.map(t => ({ id: t.id, title: t.title, start: t.datetime, backgroundColor: '#8b5cf6', borderColor: '#7c3aed' })),
+        eventClick: (info) => openTaskModal(info.event.id)
       });
       clientCalendarInstance.render();
     }
 
-    function checkScheduledNotifications() {
-      if (!currentUser || Notification.permission !== 'granted') return;
-
-      const now = new Date();
-      const todayStr = now.toISOString().split('T')[0];
-
-      tasks.forEach(t => {
-        if (t.isSocialPost && t.datetime && t.assignees && t.assignees.includes(currentUser)) {
-          const postDateStr = t.datetime.split('T')[0];
-          const notifKey = `notif_post_${t.id}_${todayStr}`;
-          if (postDateStr === todayStr && !localStorage.getItem(notifKey)) {
-            sendNotification('📢 Bugünkü Sosyal Medya Paylaşımı!', `${t.company} için bugün paylaşılacak içerik: "${t.title}"`);
-            localStorage.setItem(notifKey, 'sent');
-          }
-        }
-      });
-
-      const dateIn2Days = new Date();
-      dateIn2Days.setDate(now.getDate() + 2);
-      const str2Days = dateIn2Days.toISOString().split('T')[0];
-
-      const dateIn7Days = new Date();
-      dateIn7Days.setDate(now.getDate() + 7);
-      const str7Days = dateIn7Days.toISOString().split('T')[0];
-
-      turkishHolidays.forEach(h => {
-        if (h.date === todayStr) {
-          const keyToday = `notif_holiday_today_${h.date}`;
-          if (!localStorage.getItem(keyToday)) {
-            sendNotification('🇹🇷 Bugün Özel Gün!', `${h.title}`);
-            localStorage.setItem(keyToday, 'sent');
-          }
-        }
-        if (h.date === str2Days) {
-          const key2 = `notif_holiday_2days_${h.date}`;
-          if (!localStorage.getItem(key2)) {
-            sendNotification('🗓️ Yaklaşan Özel Gün Hatırlatması!', `2 gün sonra: ${h.title}`);
-            localStorage.setItem(key2, 'sent');
-          }
-        }
-        if (h.date === str7Days) {
-          const key7 = `notif_holiday_7days_${h.date}`;
-          if (!localStorage.getItem(key7)) {
-            sendNotification('🗓️ 1 Hafta Kaldı!', `1 hafta sonra: ${h.title}`);
-            localStorage.setItem(key7, 'sent');
-          }
-        }
-      });
-    }
-
-    setInterval(checkScheduledNotifications, 600000);
-
     function renderArchive() {
-      const archiveContainer = document.getElementById('archive-list');
-      archiveContainer.innerHTML = '';
-
-      if (archive.length === 0) {
-        archiveContainer.innerHTML = '<p>Henüz tamamlanmış görev yok.</p>';
-        return;
-      }
+      const container = document.getElementById('archive-list');
+      container.innerHTML = archive.length === 0 ? '<p>Henüz tamamlanmış görev yok.</p>' : '';
+      if (archive.length === 0) return;
 
       const groups = {};
       archive.forEach(item => {
-        const date = new Date(item.completedDate);
-        const monthYear = date.toLocaleString('tr-TR', { month: 'long', year: 'numeric' });
+        const monthYear = new Date(item.completedDate).toLocaleString('tr-TR', { month: 'long', year: 'numeric' });
         if (!groups[monthYear]) groups[monthYear] = [];
         groups[monthYear].push(item);
       });
 
       for (const [month, items] of Object.entries(groups)) {
-        const monthDiv = document.createElement('div');
-        monthDiv.className = 'archive-month';
         const pdfContainerId = `pdf-content-${month.replace(/\s+/g, '-')}`;
-        
-        let tableHTML = `
+        container.innerHTML += `
           <div id="${pdfContainerId}">
-            <div class="archive-month-header">
-              <h4>${month} Tamamlanmış Görev Listesi</h4>
-              <button onclick="exportPDF('${pdfContainerId}', '${month}')">Tamamlanmış Görev Listesi (PDF İndir)</button>
+            <div class="archive-month-header" style="margin-top:15px;">
+              <h4>${month} Tamamlanmış Görevler</h4>
+              <button onclick="exportPDF('${pdfContainerId}', '${month}')" style="width:auto; padding:4px 10px;">PDF İndir</button>
             </div>
             <div class="table-responsive">
               <table>
-                <thead>
-                  <tr>
-                    <th>Çalışma Adı</th>
-                    <th>Marka</th>
-                    <th>Sorumlular</th>
-                    <th>Oluşturan</th>
-                    <th>Tamamlanma Tarihi</th>
-                  </tr>
-                </thead>
+                <thead><tr><th>Çalışma Adı</th><th>Marka</th><th>Sorumlular</th><th>Tamamlanma Tarihi</th></tr></thead>
                 <tbody>
-        `;
-
-        items.forEach(i => {
-          const names = i.assignees ? i.assignees.join(', ') : i.assignee || 'Belirtilmedi';
-          tableHTML += `
-            <tr>
-              <td>${i.title} ${i.isIndependent ? '(Bağımsız)' : ''}</td>
-              <td>${i.company || '-'}</td>
-              <td>${names}</td>
-              <td>${i.creator}</td>
-              <td>${new Date(i.completedDate).toLocaleDateString('tr-TR')}</td>
-            </tr>
-          `;
-        });
-
-        tableHTML += `
+                  ${items.map(i => `<tr><td>${i.title}</td><td>${i.company || '-'}</td><td>${(i.assignees || []).join(', ')}</td><td>${new Date(i.completedDate).toLocaleDateString('tr-TR')}</td></tr>`).join('')}
                 </tbody>
               </table>
             </div>
           </div>
         `;
-        monthDiv.innerHTML = tableHTML;
-        archiveContainer.appendChild(monthDiv);
       }
     }
 
     function renderAdminPanel() {
       const tbody = document.getElementById('user-table-body');
-      tbody.innerHTML = '';
-
-      Object.entries(users).forEach(([username, password]) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><b>${username}</b> ${username.toLowerCase() === 'zorbay' ? '(Admin)' : ''}</td>
-          <td><input type="password" value="${password}" id="pass-input-${username}" style="width: 140px; padding: 4px;"></td>
+      tbody.innerHTML = Object.entries(users).map(([u, p]) => `
+        <tr>
+          <td><b>${u}</b> ${u.toLowerCase() === 'zorbay' ? '(Admin)' : ''}</td>
+          <td><input type="password" value="${p}" id="pass-input-${u}" style="width: 140px; padding: 4px;"></td>
           <td>
-            <button onclick="updateUserPassword('${username}')" style="width: auto; padding: 4px 8px; font-size: 12px;">Güncelle</button>
-            ${username.toLowerCase() !== 'zorbay' ? `<button onclick="deleteUser('${username}')" style="width: auto; padding: 4px 8px; font-size: 12px; background: #ef4444;">Sil</button>` : ''}
+            <button onclick="updateUserPassword('${u}')" style="width: auto; padding: 4px 8px; font-size: 12px;">Güncelle</button>
+            ${u.toLowerCase() !== 'zorbay' ? `<button onclick="deleteUser('${u}')" style="width: auto; padding: 4px 8px; font-size: 12px; background: #ef4444;">Sil</button>` : ''}
           </td>
-        `;
-        tbody.appendChild(tr);
-      });
+        </tr>
+      `).join('');
     }
 
     function addUser() {
       const username = document.getElementById('new-user-name').value.trim();
       const password = document.getElementById('new-user-pass').value.trim();
-
-      if (!username || !password) {
-        alert('Kullanıcı adı ve şifre boş bırakılamaz!');
-        return;
-      }
-
+      if (!username || !password) return;
       users[username] = password;
       saveUsers();
       document.getElementById('new-user-name').value = '';
       document.getElementById('new-user-pass').value = '';
-      alert(`${username} kullanıcısı kaydedildi/güncellendi.`);
     }
 
     function updateUserPassword(username) {
-      const newPass = document.getElementById(`pass-input-${username}`).value.trim();
-      if (!newPass) {
-        alert('Şifre boş bırakılamaz!');
-        return;
-      }
-      users[username] = newPass;
+      users[username] = document.getElementById(`pass-input-${username}`).value.trim();
       saveUsers();
-      alert(`${username} kullanıcısının şifresi güncellendi.`);
+      alert('Şifre güncellendi.');
     }
 
     function deleteUser(username) {
@@ -1550,51 +1414,45 @@
 
     function exportPDF(elementId, monthName) {
       const element = document.getElementById(elementId);
-      const btn = element.querySelector('button');
-      if (btn) btn.style.display = 'none';
-
-      const opt = {
-        margin:       10,
-        filename:     `${monthName}_Tamamlanmis_Gorev_Listesi.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2 },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
-
-      html2pdf().set(opt).from(element).save().then(() => {
-        if (btn) btn.style.display = 'inline-block';
-      });
+      html2pdf().set({ margin: 10, filename: `${monthName}_Rapor.pdf`, html2canvas: { scale: 2 }, jsPDF: { format: 'a4' } }).from(element).save();
     }
 
-    function saveData() {
-      db.ref('tasks').set(tasks);
-      db.ref('archive').set(archive);
+    function openProfileModal() {
+      if (!currentUser) return;
+      document.getElementById('profile-username-input').value = currentUser;
+      document.getElementById('profile-password-input').value = users[currentUser] || '';
+      selectedProfileColor = getUserColor(currentUser);
+      renderColorPicker();
+      document.getElementById('profile-modal').style.display = 'flex';
     }
 
-    function saveUsers() {
-      db.ref('users').set(users);
+    function closeProfileModal() { document.getElementById('profile-modal').style.display = 'none'; }
+
+    function renderColorPicker() {
+      const container = document.getElementById('profile-color-picker');
+      container.innerHTML = availableColors.map(c => `
+        <div class="color-picker-option ${c === selectedProfileColor ? 'selected' : ''}" style="background:${c}" onclick="selectedProfileColor='${c}'; renderColorPicker();"></div>
+      `).join('');
     }
 
-    function saveUserColors() {
-      db.ref('userColors').set(userColors);
+    function saveProfileChanges() {
+      const newUsername = document.getElementById('profile-username-input').value.trim();
+      const newPassword = document.getElementById('profile-password-input').value.trim();
+      if (!newUsername || !newPassword) return;
+
+      const oldUsername = currentUser;
+      delete users[oldUsername]; users[newUsername] = newPassword;
+      delete userColors[oldUsername]; userColors[newUsername] = selectedProfileColor;
+
+      currentUser = newUsername;
+      saveUsers(); saveUserColors(); saveData();
+      closeProfileModal();
     }
 
-    function saveClients() {
-      db.ref('clients').set(clients);
-    }
-
-    function sendNotification(title, body) {
-      if (Notification.permission === 'granted') {
-        new Notification(title, { body });
-      }
-    }
-
-    function showModal(title, desc) {
-      document.getElementById('modal-title').innerText = title;
-      document.getElementById('modal-desc').innerHTML = desc;
-      document.getElementById('modal-actions').innerHTML = `<button onclick="closeModal()">Kapat</button>`;
-      document.getElementById('modal').style.display = 'flex';
-    }
+    function saveData() { db.ref('tasks').set(tasks); db.ref('archive').set(archive); }
+    function saveUsers() { db.ref('users').set(users); }
+    function saveUserColors() { db.ref('userColors').set(userColors); }
+    function saveClients() { db.ref('clients').set(clients); }
 
     function closeModal() {
       document.getElementById('modal').style.display = 'none';
