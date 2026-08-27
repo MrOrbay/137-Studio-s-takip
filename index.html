@@ -38,7 +38,8 @@
       height: 42px; 
       width: auto; 
       object-fit: contain;
-      filter: brightness(0) invert(1);
+      filter: brightness(0) invert(1) !important;
+      -webkit-filter: brightness(0) invert(1) !important;
     }
 
     #login-screen {
@@ -64,6 +65,11 @@
     }
     .remember-me input { width: 18px; height: 18px; margin: 0; cursor: pointer; }
 
+    .checkbox-inline {
+      display: flex; align-items: center; gap: 8px; margin: 8px 0; font-size: 13px; color: var(--text); cursor: pointer; font-weight: bold;
+    }
+    .checkbox-inline input { width: 18px; height: 18px; margin: 0; cursor: pointer; }
+
     input, select, textarea, button {
       width: 100%; padding: 12px; margin: 6px 0; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; outline: none;
     }
@@ -80,6 +86,12 @@
     nav::-webkit-scrollbar { display: none; }
     nav button { background: transparent; border: 1px solid rgba(255,255,255,0.3); width: auto; padding: 8px 14px; white-space: nowrap; font-size: 13px; border-radius: 20px; }
     nav button.active, nav button:hover { background: var(--white); color: var(--navy); border-color: var(--white); }
+
+    @media (min-width: 768px) {
+      header { flex-wrap: nowrap; }
+      nav { width: auto; overflow-x: visible; }
+      .header-user-info { width: auto !important; margin-top: 0 !important; }
+    }
 
     .header-user-info { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 4px; font-size: 14px; gap: 8px; }
 
@@ -124,6 +136,7 @@
     .task-card h4 { margin-bottom: 4px; font-size: 15px; word-break: break-word; }
     .task-card p { font-size: 12px; color: #64748b; margin-bottom: 6px; }
     .task-card .company-tag { display: inline-block; background: #dbeafe; color: #1e40af; font-size: 11px; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-bottom: 4px; }
+    .task-card .independent-tag { display: inline-block; background: #fef3c7; color: #b45309; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-bottom: 4px; }
     .task-card .tag { display: inline-block; background: #e2e8f0; font-size: 11px; padding: 2px 6px; border-radius: 4px; }
     
     .user-badge { display: inline-block; padding: 2px 6px; border-radius: 10px; color: white; font-size: 10px; font-weight: bold; margin-right: 4px; margin-bottom: 2px; }
@@ -195,7 +208,7 @@
     <div class="login-card">
       <div class="brand-container">
         <img src="https://pngup.com/ec43/logo1.png" alt="137 Studio Logo" class="app-logo">
-        <h2>137 Studio</h2>
+        <h2 style="color:var(--navy);">137 Studio</h2>
       </div>
 
       <div class="login-tabs">
@@ -218,7 +231,7 @@
     <header>
       <div class="brand-container">
         <img src="https://pngup.com/ec43/logo1.png" alt="137 Studio Logo" class="app-logo">
-        <h2 style="font-size: 1.1rem;">137 Studio</h2>
+        <h2 style="font-size: 1.1rem; color:var(--white);">137 Studio</h2>
       </div>
       
       <div class="header-user-info">
@@ -259,6 +272,11 @@
 
             <input type="datetime-local" id="task-datetime">
           </div>
+          
+          <label class="checkbox-inline">
+            <input type="checkbox" id="task-is-independent"> 📌 Bağımsız Proje (Takvimlere düşmesin)
+          </label>
+
           <textarea id="task-desc" placeholder="Görev Açıklaması (İsteğe bağlı)"></textarea>
           <button onclick="createTask()" style="margin-top: 6px;">Görev Ekle</button>
         </div>
@@ -374,8 +392,19 @@
   <div id="modal" class="modal">
     <div class="modal-content">
       <h3 id="modal-title" style="color: var(--navy); margin-bottom: 12px; font-size: 17px;"></h3>
-      <div id="modal-desc" style="margin-bottom: 20px; font-size: 14px; line-height: 1.6; color: var(--text);"></div>
-      <div id="modal-actions" style="display:flex; gap:10px;">
+      <div id="modal-desc" style="margin-bottom: 15px; font-size: 14px; line-height: 1.6; color: var(--text);"></div>
+      
+      <div style="margin-bottom: 15px;">
+        <label style="font-size: 13px; font-weight: bold; color: var(--navy);">Görev Durumu / Statü:</label>
+        <select id="modal-status-select" onchange="changeTaskStatusFromModal()" style="margin-top:4px;">
+          <option value="todo">Yapılacaklar</option>
+          <option value="inprogress">Yapımdakiler</option>
+          <option value="revision">Revizeler</option>
+          <option value="done">Onaylananlar (Tamamla)</option>
+        </select>
+      </div>
+
+      <div id="modal-actions" style="display:flex; gap:8px; flex-wrap:wrap;">
         <button onclick="closeModal()">Kapat</button>
       </div>
     </div>
@@ -409,6 +438,19 @@
       <select id="edit-task-company-select">
         <option value="">Marka Seçiniz (İsteğe bağlı)</option>
       </select>
+      
+      <label style="font-size: 13px; font-weight: bold; color: var(--navy); margin-top:6px; display:block;">Statü / Durum</label>
+      <select id="edit-task-status-select">
+        <option value="todo">Yapılacaklar</option>
+        <option value="inprogress">Yapımdakiler</option>
+        <option value="revision">Revizeler</option>
+        <option value="done">Onaylananlar (Tamamla)</option>
+      </select>
+
+      <label class="checkbox-inline">
+        <input type="checkbox" id="edit-task-is-independent"> 📌 Bağımsız Proje (Takvimlere düşmesin)
+      </label>
+
       <div class="dropdown-checkbox-container">
         <div class="dropdown-btn" onclick="toggleEditAssigneeDropdown()">
           <span id="edit-dropdown-btn-text">Kişileri Etiketle</span>
@@ -485,6 +527,7 @@
     let calendarInstance = null;
     let clientCalendarInstance = null;
     let activeClientId = null;
+    let activeModalTaskId = null;
     let deferredPrompt = null;
     let selectedProfileColor = '#2563eb';
 
@@ -910,6 +953,7 @@
       const assignees = getSelectedAssignees('#assignee-checkbox-list');
       const datetime = document.getElementById('task-datetime').value;
       const description = document.getElementById('task-desc').value;
+      const isIndependent = document.getElementById('task-is-independent').checked;
 
       if (!title.trim()) {
         alert('Çalışma adı zorunludur!');
@@ -925,6 +969,7 @@
         creator: currentUser,
         datetime: datetime || null,
         status: 'todo',
+        isIndependent: isIndependent,
         isSocialPost: false
       };
 
@@ -939,6 +984,7 @@
       document.getElementById('task-company-select').value = '';
       document.getElementById('task-desc').value = '';
       document.getElementById('task-datetime').value = '';
+      document.getElementById('task-is-independent').checked = false;
       document.querySelectorAll('#assignee-checkbox-list input[type="checkbox"]').forEach(cb => cb.checked = false);
       updateDropdownText();
     }
@@ -970,6 +1016,7 @@
         
         card.innerHTML = `
           ${task.company ? `<span class="company-tag">🏷️ ${task.company}</span>` : ''}
+          ${task.isIndependent ? `<span class="independent-tag">📌 Bağımsız Proje</span>` : ''}
           <h4>${task.title}</h4>
           <div style="margin:4px 0;">${badgesHTML}</div>
           ${task.datetime ? `<p style="color:var(--accent);">📅 ${new Date(task.datetime).toLocaleString('tr-TR')}</p>` : ''}
@@ -1005,7 +1052,8 @@
       const calendarEl = document.getElementById('calendar');
       if (calendarInstance) calendarInstance.destroy();
 
-      const userTasks = tasks.filter(t => t.datetime);
+      // Bağımsız projeler takvimde gösterilmez
+      const userTasks = tasks.filter(t => t.datetime && !t.isIndependent);
 
       const taskEvents = userTasks.map(t => {
         const primaryAssignee = t.assignees && t.assignees.length > 0 ? t.assignees[0] : t.creator;
@@ -1055,6 +1103,8 @@
       const task = tasks.find(t => t.id === taskId);
       if (!task) return;
 
+      activeModalTaskId = taskId;
+
       let badgesHTML = '';
       if (task.assignees) {
         task.assignees.forEach(u => {
@@ -1064,6 +1114,7 @@
 
       const descHTML = `
         ${task.company ? `<b>Marka:</b> ${task.company}<br>` : ''}
+        ${task.isIndependent ? `<b>Tür:</b> 📌 Bağımsız Proje (Takvim dışı)<br>` : ''}
         <b>Etiketlenen Kişiler:</b> ${badgesHTML || 'Belirtilmedi'}<br>
         <b>Oluşturan:</b> ${task.creator}<br>
         <b>Tarih:</b> ${task.datetime ? new Date(task.datetime).toLocaleString('tr-TR') : 'Belirtilmedi'}<br>
@@ -1073,6 +1124,7 @@
 
       document.getElementById('modal-title').innerText = task.title;
       document.getElementById('modal-desc').innerHTML = descHTML;
+      document.getElementById('modal-status-select').value = task.status || 'todo';
 
       const actionsDiv = document.getElementById('modal-actions');
       actionsDiv.innerHTML = `
@@ -1084,6 +1136,25 @@
       document.getElementById('modal').style.display = 'flex';
     }
 
+    function changeTaskStatusFromModal() {
+      if (!activeModalTaskId) return;
+      const newStatus = document.getElementById('modal-status-select').value;
+      const taskIndex = tasks.findIndex(t => t.id === activeModalTaskId);
+
+      if (taskIndex !== -1) {
+        if (newStatus === 'done') {
+          const completedTask = tasks.splice(taskIndex, 1)[0];
+          completedTask.completedDate = new Date().toISOString();
+          archive.push(completedTask);
+          alert('Görev onaylandı ve Arşiv bölümüne aktarıldı.');
+          closeModal();
+        } else {
+          tasks[taskIndex].status = newStatus;
+        }
+        saveData();
+      }
+    }
+
     function openEditModal(taskId) {
       closeModal();
       const task = tasks.find(t => t.id === taskId);
@@ -1092,6 +1163,8 @@
       document.getElementById('edit-task-id').value = task.id;
       document.getElementById('edit-task-title').value = task.title;
       document.getElementById('edit-task-company-select').value = task.company || '';
+      document.getElementById('edit-task-status-select').value = task.status || 'todo';
+      document.getElementById('edit-task-is-independent').checked = !!task.isIndependent;
       document.getElementById('edit-task-datetime').value = task.datetime || '';
       document.getElementById('edit-task-desc').value = task.description || '';
 
@@ -1109,8 +1182,8 @@
 
     function saveTaskEdit() {
       const id = document.getElementById('edit-task-id').value;
-      const task = tasks.find(t => t.id === id);
-      if (!task) return;
+      const taskIndex = tasks.findIndex(t => t.id === id);
+      if (taskIndex === -1) return;
 
       const title = document.getElementById('edit-task-title').value;
       if (!title.trim()) {
@@ -1118,11 +1191,30 @@
         return;
       }
 
-      task.title = title;
-      task.company = document.getElementById('edit-task-company-select').value;
-      task.assignees = getSelectedAssignees('#edit-assignee-checkbox-list');
-      task.datetime = document.getElementById('edit-task-datetime').value || null;
-      task.description = document.getElementById('edit-task-desc').value;
+      const newStatus = document.getElementById('edit-task-status-select').value;
+      const isIndependent = document.getElementById('edit-task-is-independent').checked;
+
+      if (newStatus === 'done') {
+        const completedTask = tasks.splice(taskIndex, 1)[0];
+        completedTask.title = title;
+        completedTask.company = document.getElementById('edit-task-company-select').value;
+        completedTask.assignees = getSelectedAssignees('#edit-assignee-checkbox-list');
+        completedTask.datetime = document.getElementById('edit-task-datetime').value || null;
+        completedTask.description = document.getElementById('edit-task-desc').value;
+        completedTask.isIndependent = isIndependent;
+        completedTask.completedDate = new Date().toISOString();
+        archive.push(completedTask);
+        alert('Görev onaylandı ve Arşiv bölümüne aktarıldı.');
+      } else {
+        const task = tasks[taskIndex];
+        task.title = title;
+        task.company = document.getElementById('edit-task-company-select').value;
+        task.status = newStatus;
+        task.assignees = getSelectedAssignees('#edit-assignee-checkbox-list');
+        task.datetime = document.getElementById('edit-task-datetime').value || null;
+        task.description = document.getElementById('edit-task-desc').value;
+        task.isIndependent = isIndependent;
+      }
 
       saveData();
       closeEditModal();
@@ -1236,6 +1328,7 @@
         creator: currentUser,
         datetime: datetime,
         status: 'todo',
+        isIndependent: false,
         isSocialPost: true
       };
 
@@ -1259,7 +1352,8 @@
       const calendarEl = document.getElementById('client-calendar');
       if (clientCalendarInstance) clientCalendarInstance.destroy();
 
-      const clientTasks = tasks.filter(t => t.clientId === clientId && t.datetime);
+      // Bağımsız olanlar marka takviminde de gösterilmez
+      const clientTasks = tasks.filter(t => t.clientId === clientId && t.datetime && !t.isIndependent);
       const events = clientTasks.map(t => ({
         id: t.id,
         title: `${t.title} (${t.assignees ? t.assignees.join(', ') : ''})`,
@@ -1382,7 +1476,7 @@
           const names = i.assignees ? i.assignees.join(', ') : i.assignee || 'Belirtilmedi';
           tableHTML += `
             <tr>
-              <td>${i.title}</td>
+              <td>${i.title} ${i.isIndependent ? '(Bağımsız)' : ''}</td>
               <td>${i.company || '-'}</td>
               <td>${names}</td>
               <td>${i.creator}</td>
@@ -1504,6 +1598,7 @@
 
     function closeModal() {
       document.getElementById('modal').style.display = 'none';
+      activeModalTaskId = null;
     }
   </script>
 </body>
