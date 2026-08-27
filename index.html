@@ -93,15 +93,26 @@
       .header-user-info { width: auto !important; margin-top: 0 !important; }
     }
 
-    .header-user-info { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 4px; font-size: 14px; gap: 8px; }
+    .header-user-info { display: flex; align-items: center; justify-content: flex-end; width: 100%; margin-top: 4px; font-size: 14px; gap: 10px; }
+
+    .header-user-profile-btn {
+      display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.1); padding: 4px 10px 4px 4px; border-radius: 20px; cursor: pointer; transition: 0.2s; border: 1px solid rgba(255,255,255,0.2);
+    }
+    .header-user-profile-btn:hover {
+      background: rgba(255,255,255,0.25);
+    }
+
+    .bottom-widget-bar {
+      position: fixed; bottom: 0; right: 15px; z-index: 9000; display: flex; align-items: flex-end; gap: 8px;
+    }
 
     .notif-badge-btn {
-      position: relative; background: rgba(255,255,255,0.15); border: none; width: 34px; height: 34px;
-      border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      position: relative; background: var(--navy); color: white; border: 1px solid var(--border); width: 40px; height: 40px;
+      border-radius: 12px 12px 0 0; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 -4px 12px rgba(0,0,0,0.15);
     }
     .notif-badge-count {
-      position: absolute; top: -2px; right: -2px; background: #ef4444; color: white;
-      font-size: 10px; font-weight: bold; padding: 2px 5px; border-radius: 10px; min-width: 16px; text-align: center;
+      position: absolute; top: 4px; right: 4px; background: #ef4444; color: white;
+      font-size: 10px; font-weight: bold; padding: 1px 5px; border-radius: 10px; min-width: 15px; text-align: center;
     }
 
     .container { padding: 1rem; max-width: 1400px; margin: 0 auto; }
@@ -133,7 +144,13 @@
     .task-card .independent-tag { display: inline-block; background: #fef3c7; color: #b45309; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-bottom: 4px; }
     .task-card .tag { display: inline-block; background: #e2e8f0; font-size: 11px; padding: 2px 6px; border-radius: 4px; }
     
-    .user-badge { display: inline-block; padding: 2px 6px; border-radius: 10px; color: white; font-size: 10px; font-weight: bold; margin-right: 4px; margin-bottom: 2px; }
+    .user-avatar-badge {
+      display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px 2px 2px;
+      border-radius: 14px; color: white; font-size: 10px; font-weight: bold; margin-right: 4px; margin-bottom: 2px;
+    }
+    .user-avatar-img {
+      width: 18px; height: 18px; border-radius: 50%; object-fit: cover; background: #ffffff;
+    }
 
     .task-form, .admin-card, .client-card { background: var(--white); padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
     .form-row { display: grid; grid-template-columns: 1fr; gap: 8px; }
@@ -180,11 +197,10 @@
     .comment-item {
       background: white; border: 1px solid #e2e8f0; padding: 8px 12px; border-radius: 6px; margin-bottom: 8px; font-size: 13px;
     }
-    .comment-item .author { font-weight: bold; color: var(--navy); margin-bottom: 2px; display: flex; justify-content: space-between; }
+    .comment-item .author { font-weight: bold; color: var(--navy); margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; }
     .comment-item .time { font-size: 11px; color: #94a3b8; font-weight: normal; }
     .comment-item img.chat-gif-img { max-width: 100%; max-height: 180px; border-radius: 8px; margin-top: 4px; display: block; }
 
-    /* Emoji & GIF Picker Kutusu */
     .media-picker-bar { display: flex; gap: 6px; margin: 4px 0; }
     .media-picker-btn { width: auto; padding: 4px 10px; font-size: 12px; background: #e2e8f0; color: var(--navy); border-radius: 6px; }
     .picker-popover {
@@ -198,11 +214,9 @@
     .giphy-results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; max-height: 150px; overflow-y: auto; margin-top: 6px; }
     .giphy-results-grid img { width: 100%; height: 70px; object-fit: cover; border-radius: 4px; cursor: pointer; }
 
-    /* Canlı Mesajlaşma Widget */
     #chat-widget {
-      position: fixed; bottom: 0; right: 15px; z-index: 9000; width: 330px; max-width: 90vw;
-      background: var(--white); border-radius: 12px 12px 0 0; box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
-      border: 1px solid var(--border); border-bottom: none; overflow: hidden; transition: 0.3s ease;
+      width: 330px; max-width: 80vw; background: var(--white); border-radius: 12px 12px 0 0;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.15); border: 1px solid var(--border); border-bottom: none; overflow: hidden; transition: 0.3s ease;
     }
     #chat-header {
       background: var(--navy); color: white; padding: 10px 14px; font-weight: bold; font-size: 14px;
@@ -220,6 +234,10 @@
     .color-picker-grid { display: flex; gap: 10px; margin: 10px 0; flex-wrap: wrap; }
     .color-picker-option { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
     .color-picker-option.selected { border-color: var(--navy); transform: scale(1.15); }
+    
+    .profile-avatar-preview {
+      width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--navy); margin-bottom: 10px; display: block;
+    }
   </style>
 </head>
 <body>
@@ -255,14 +273,9 @@
       </div>
       
       <div class="header-user-info">
-        <span id="user-display" style="font-weight: bold;"></span>
-        <div style="display:flex; gap:6px; align-items:center;">
-          <button class="notif-badge-btn" onclick="openNotifModal()" title="Bildirimler">
-            🔔
-            <span class="notif-badge-count" id="notif-count" style="display:none;">0</span>
-          </button>
-          <button onclick="openProfileModal()" style="width: auto; background: var(--accent); padding: 6px 12px; font-size: 12px; border-radius: 20px;">👤 Profil</button>
-          <button onclick="logout()" style="width: auto; background: #ef4444; padding: 6px 12px; font-size: 12px; border-radius: 20px;">Çıkış</button>
+        <div class="header-user-profile-btn" onclick="openProfileModal()" title="Profil Ayarları">
+          <img id="header-user-avatar" class="user-avatar-img" style="width:30px; height:30px;" src="">
+          <span id="user-display" style="font-weight: bold; color: white;"></span>
         </div>
       </div>
 
@@ -413,38 +426,43 @@
     </div>
   </div>
 
-  <!-- Canlı Mesajlaşma Widget'ı -->
-  <div id="chat-widget">
-    <div id="chat-header" onclick="toggleChatWidget()">
-      <span>💬 Ekip Mesajları</span>
-      <span id="chat-toggle-icon">▲</span>
-    </div>
-    <div id="chat-body">
-      <div style="padding: 8px; border-bottom: 1px solid var(--border);">
-        <select id="chat-target-user" onchange="loadChatMessages()" style="padding: 6px; font-size: 13px; margin:0;">
-          <option value="">Kişi Seçin...</option>
-        </select>
-      </div>
+  <div class="bottom-widget-bar">
+    <button class="notif-badge-btn" onclick="openNotifModal()" title="Bildirimler">
+      🔔
+      <span class="notif-badge-count" id="notif-count" style="display:none;">0</span>
+    </button>
 
-      <div id="chat-messages"></div>
-
-      <!-- Chat Emoji & GIF Kutuları -->
-      <div id="chat-emoji-popover" class="picker-popover">
-        <div class="emoji-grid" id="chat-emoji-grid"></div>
+    <div id="chat-widget">
+      <div id="chat-header" onclick="toggleChatWidget()">
+        <span>💬 Ekip Mesajları</span>
+        <span id="chat-toggle-icon">▲</span>
       </div>
-      <div id="chat-giphy-popover" class="picker-popover">
-        <input type="text" id="chat-giphy-search" placeholder="Giphy'de GIF ara..." style="padding:6px; font-size:12px; margin:0;" oninput="searchGiphy(this.value, 'chat-giphy-results')">
-        <div class="giphy-results-grid" id="chat-giphy-results"></div>
-      </div>
-
-      <div style="padding: 6px; background: white; border-top: 1px solid var(--border);">
-        <div class="media-picker-bar">
-          <button class="media-picker-btn" onclick="togglePicker('chat-emoji-popover')">😀 Emoji</button>
-          <button class="media-picker-btn" onclick="togglePicker('chat-giphy-popover')">👾 GIF</button>
+      <div id="chat-body">
+        <div style="padding: 8px; border-bottom: 1px solid var(--border);">
+          <select id="chat-target-user" onchange="loadChatMessages()" style="padding: 6px; font-size: 13px; margin:0;">
+            <option value="">Kişi Seçin...</option>
+          </select>
         </div>
-        <div style="display: flex; gap: 4px;">
-          <input type="text" id="chat-input" placeholder="Mesaj yazın..." style="margin:0; padding:8px; font-size:13px;" onkeypress="if(event.key==='Enter') sendChatMessage()">
-          <button onclick="sendChatMessage()" style="width: auto; padding: 8px 12px; margin:0; font-size:13px; background:var(--accent);">Gönder</button>
+
+        <div id="chat-messages"></div>
+
+        <div id="chat-emoji-popover" class="picker-popover">
+          <div class="emoji-grid" id="chat-emoji-grid"></div>
+        </div>
+        <div id="chat-giphy-popover" class="picker-popover">
+          <input type="text" id="chat-giphy-search" placeholder="Giphy'de GIF ara..." style="padding:6px; font-size:12px; margin:0;" oninput="searchGiphy(this.value, 'chat-giphy-results')">
+          <div class="giphy-results-grid" id="chat-giphy-results"></div>
+        </div>
+
+        <div style="padding: 6px; background: white; border-top: 1px solid var(--border);">
+          <div class="media-picker-bar">
+            <button class="media-picker-btn" onclick="togglePicker('chat-emoji-popover')">😀 Emoji</button>
+            <button class="media-picker-btn" onclick="togglePicker('chat-giphy-popover')">👾 GIF</button>
+          </div>
+          <div style="display: flex; gap: 4px;">
+            <input type="text" id="chat-input" placeholder="Mesaj yazın..." style="margin:0; padding:8px; font-size:13px;" onkeypress="if(event.key==='Enter') sendChatMessage()">
+            <button onclick="sendChatMessage()" style="width: auto; padding: 8px 12px; margin:0; font-size:13px; background:var(--accent);">Gönder</button>
+          </div>
         </div>
       </div>
     </div>
@@ -477,7 +495,6 @@
         </select>
       </div>
 
-      <!-- Yorum / Revize Ekleme Alanı -->
       <div class="comment-box">
         <h4 style="font-size:13px; color:var(--navy); margin-bottom:6px;">💬 Yorumlar ve Revize Notları</h4>
         <div id="modal-comments-list" style="max-height:180px; overflow-y:auto; margin-bottom:8px;"></div>
@@ -491,7 +508,6 @@
             <div class="dropdown-list" id="comment-assignee-checkbox-list"></div>
           </div>
 
-          <!-- Yorum Emoji & GIF Kutuları -->
           <div id="comment-emoji-popover" class="picker-popover">
             <div class="emoji-grid" id="comment-emoji-grid"></div>
           </div>
@@ -520,6 +536,14 @@
     <div class="modal-content">
       <h3 style="color: var(--navy); margin-bottom: 12px; font-size: 16px;">Profil Düzenle</h3>
       
+      <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:12px;">
+        <img id="profile-avatar-preview" class="profile-avatar-preview" src="">
+        <label style="font-size: 12px; color: var(--accent); cursor: pointer; font-weight:bold;">
+          📷 Profil Fotoğrafı Yükle / Değiştir
+          <input type="file" id="profile-avatar-input" accept="image/*" onchange="handleAvatarUpload(event)" style="display:none;">
+        </label>
+      </div>
+
       <label style="font-size: 13px; font-weight: bold; color: var(--navy);">Kullanıcı Adı</label>
       <input type="text" id="profile-username-input" placeholder="Yeni Kullanıcı Adı">
 
@@ -529,9 +553,10 @@
       <label style="font-size: 13px; font-weight: bold; color: var(--navy); margin-top: 8px; display: block;">Takvim ve Etiket Renginiz</label>
       <div class="color-picker-grid" id="profile-color-picker"></div>
 
-      <div style="display:flex; gap:10px; margin-top:15px;">
+      <div style="display:flex; gap:8px; margin-top:15px; flex-direction:column;">
         <button onclick="saveProfileChanges()" style="background:var(--accent);">Güncelle ve Kaydet</button>
         <button onclick="closeProfileModal()" style="background:#64748b;">İptal</button>
+        <button onclick="logout(); closeProfileModal();" style="background:#ef4444; margin-top:6px;">🚪 Çıkış Yap</button>
       </div>
     </div>
   </div>
@@ -587,10 +612,11 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    const GIPHY_API_KEY = "dc6zaTOxFJmzC"; // Public Giphy Key
+    const GIPHY_API_KEY = "dc6zaTOxFJmzC";
 
     let users = { 'Zorbay': '15241524' };
     let userColors = {};
+    let userAvatars = {};
     let clients = {};
     let currentUser = null;
     let tasks = [];
@@ -602,6 +628,7 @@
     let activeClientId = null;
     let activeModalTaskId = null;
     let selectedProfileColor = '#2563eb';
+    let tempUploadedAvatarBase64 = null;
 
     const popularEmojis = ["😀", "😂", "😍", "👍", "👎", "🎉", "🔥", "🚀", "❤️", "🙌", "✅", "❌", "📌", "🎬", "🎨", "📝"];
 
@@ -613,6 +640,12 @@
 
     function getUserColor(username) {
       return userColors && userColors[username] ? userColors[username] : '#2563eb';
+    }
+
+    function getUserAvatar(username) {
+      if (userAvatars && userAvatars[username]) return userAvatars[username];
+      const initial = username ? username.charAt(0).toUpperCase() : '?';
+      return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%230a1a36"/><text x="50%" y="50%" fill="white" font-size="16" font-weight="bold" font-family="sans-serif" text-anchor="middle" dy=".3em">${initial}</text></svg>`;
     }
 
     const turkishHolidays = [
@@ -644,6 +677,14 @@
       if (currentUser) {
         renderTasks();
         if (document.getElementById('page-calendar').classList.contains('active')) renderCalendar();
+      }
+    });
+
+    db.ref('userAvatars').on('value', (snapshot) => {
+      userAvatars = snapshot.val() || {};
+      if (currentUser) {
+        document.getElementById('header-user-avatar').src = getUserAvatar(currentUser);
+        renderTasks();
       }
     });
 
@@ -690,12 +731,8 @@
       const chatGrid = document.getElementById('chat-emoji-grid');
       const commentGrid = document.getElementById('comment-emoji-grid');
 
-      if (chatGrid) {
-        chatGrid.innerHTML = popularEmojis.map(e => `<span onclick="insertEmoji('${e}', 'chat-input')">${e}</span>`).join('');
-      }
-      if (commentGrid) {
-        commentGrid.innerHTML = popularEmojis.map(e => `<span onclick="insertEmoji('${e}', 'task-comment-input')">${e}</span>`).join('');
-      }
+      if (chatGrid) chatGrid.innerHTML = popularEmojis.map(e => `<span onclick="insertEmoji('${e}', 'chat-input')">${e}</span>`).join('');
+      if (commentGrid) commentGrid.innerHTML = popularEmojis.map(e => `<span onclick="insertEmoji('${e}', 'task-comment-input')">${e}</span>`).join('');
     }
 
     function togglePicker(id) {
@@ -732,6 +769,27 @@
       }
     }
 
+    function handleAvatarUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = 120;
+          canvas.height = 120;
+          ctx.drawImage(img, 0, 0, 120, 120);
+          tempUploadedAvatarBase64 = canvas.toDataURL('image/jpeg', 0.8);
+          document.getElementById('profile-avatar-preview').src = tempUploadedAvatarBase64;
+        };
+        img.src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
     function toggleAuthMode(mode) {
       const loginBtn = document.getElementById('tab-login-btn');
       const regBtn = document.getElementById('tab-register-btn');
@@ -764,7 +822,8 @@
       currentUser = username;
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('app').style.display = 'block';
-      document.getElementById('user-display').innerText = `Kullanıcı: ${currentUser}`;
+      document.getElementById('user-display').innerText = currentUser;
+      document.getElementById('header-user-avatar').src = getUserAvatar(currentUser);
 
       if (currentUser.toLowerCase() === 'zorbay') {
         document.getElementById('btn-admin').style.display = 'inline-block';
@@ -885,7 +944,10 @@
         return `
           <div class="comment-item">
             <div class="author">
-              <span>${c.author}${tagsHTML}</span>
+              <span style="display:flex; align-items:center; gap:6px;">
+                <img src="${getUserAvatar(c.author)}" style="width:16px; height:16px; border-radius:50%; object-fit:cover;">
+                ${c.author}${tagsHTML}
+              </span>
               <span class="time">${new Date(c.date).toLocaleString('tr-TR')}</span>
             </div>
             ${c.text ? `<div>${c.text.replace(/\n/g, '<br>')}</div>` : ''}
@@ -947,7 +1009,7 @@
     function populateChatUsers() {
       const select = document.getElementById('chat-target-user');
       if (!select) return;
-      select.innerHTML = '<option value="">Sohbet Edilecek Kişi...</option>';
+      select.innerHTML = '<option value="">Kişi Seçin...</option>';
       Object.keys(users).forEach(u => {
         if (u !== currentUser) select.appendChild(new Option(u, u));
       });
@@ -1093,7 +1155,12 @@
         card.draggable = true;
         card.ondragstart = (e) => e.dataTransfer.setData('text/plain', task.id);
         
-        let badgesHTML = (task.assignees || []).map(u => `<span class="user-badge" style="background:${getUserColor(u)}">${u}</span>`).join('');
+        let badgesHTML = (task.assignees || []).map(u => `
+          <span class="user-avatar-badge" style="background:${getUserColor(u)}">
+            <img src="${getUserAvatar(u)}" class="user-avatar-img"> ${u}
+          </span>
+        `).join('');
+
         const commentCount = task.comments ? task.comments.length : 0;
 
         card.onclick = () => openTaskModal(task.id);
@@ -1101,7 +1168,7 @@
           ${task.company ? `<span class="company-tag">🏷️ ${task.company}</span>` : ''}
           ${task.isIndependent ? `<span class="independent-tag">📌 Bağımsız Proje</span>` : ''}
           <h4>${task.title}</h4>
-          <div style="margin:4px 0;">${badgesHTML}</div>
+          <div style="margin:6px 0;">${badgesHTML}</div>
           ${task.datetime ? `<p style="color:var(--accent);">📅 ${new Date(task.datetime).toLocaleString('tr-TR')}</p>` : ''}
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
             <span class="tag">${task.status.toUpperCase()}</span>
@@ -1152,7 +1219,11 @@
       if (!task) return;
 
       activeModalTaskId = taskId;
-      let badgesHTML = (task.assignees || []).map(u => `<span class="user-badge" style="background:${getUserColor(u)}">${u}</span>`).join('');
+      let badgesHTML = (task.assignees || []).map(u => `
+        <span class="user-avatar-badge" style="background:${getUserColor(u)}">
+          <img src="${getUserAvatar(u)}" class="user-avatar-img"> ${u}
+        </span>
+      `).join('');
 
       document.getElementById('modal-title').innerText = task.title;
       document.getElementById('modal-desc').innerHTML = `
@@ -1421,7 +1492,9 @@
       if (!currentUser) return;
       document.getElementById('profile-username-input').value = currentUser;
       document.getElementById('profile-password-input').value = users[currentUser] || '';
+      document.getElementById('profile-avatar-preview').src = getUserAvatar(currentUser);
       selectedProfileColor = getUserColor(currentUser);
+      tempUploadedAvatarBase64 = null;
       renderColorPicker();
       document.getElementById('profile-modal').style.display = 'flex';
     }
@@ -1444,9 +1517,20 @@
       delete users[oldUsername]; users[newUsername] = newPassword;
       delete userColors[oldUsername]; userColors[newUsername] = selectedProfileColor;
 
+      if (tempUploadedAvatarBase64) {
+        delete userAvatars[oldUsername];
+        userAvatars[newUsername] = tempUploadedAvatarBase64;
+        db.ref('userAvatars').set(userAvatars);
+      } else if (oldUsername !== newUsername && userAvatars[oldUsername]) {
+        userAvatars[newUsername] = userAvatars[oldUsername];
+        delete userAvatars[oldUsername];
+        db.ref('userAvatars').set(userAvatars);
+      }
+
       currentUser = newUsername;
       saveUsers(); saveUserColors(); saveData();
       closeProfileModal();
+      alert('Profil güncellendi.');
     }
 
     function saveData() { db.ref('tasks').set(tasks); db.ref('archive').set(archive); }
