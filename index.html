@@ -2,13 +2,14 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>137 Studio - İş Takip Sistemi</title>
   
   <link rel="icon" type="image/png" href="https://pngup.com/ec43/logo1.png">
   <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIjEzNyBTdHVkaW8gxZ9zIFNpc3RlbWkiLAogICJzaG9ydF9uYW1lIjogIjEzN1N0dWRpbyIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMGExYTM2IiwKICAidGhlbWVfY29sb3IiOiAiIzBhMWEzNiIKfQ==">
   <meta name="theme-color" content="#0a1a36">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css">
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
@@ -29,136 +30,156 @@
       --border: #e2e8f0;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: var(--bg-color); color: var(--text); min-height: 100vh; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg-color); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
-    .brand-container { display: flex; align-items: center; gap: 12px; }
+    .brand-container { display: flex; align-items: center; gap: 10px; }
     .app-logo { 
-      height: 52px; 
+      height: 42px; 
       width: auto; 
       object-fit: contain;
       filter: brightness(0) invert(1);
     }
 
     #login-screen {
-      display: flex; justify-content: center; align-items: center; height: 100vh; background: var(--navy);
+      display: flex; justify-content: center; align-items: center; min-height: 100vh; background: var(--navy); padding: 15px;
     }
     .login-card {
-      background: var(--white); padding: 2.5rem; border-radius: 12px; width: 100%; max-width: 420px;
+      background: var(--white); padding: 2rem 1.5rem; border-radius: 12px; width: 100%; max-width: 420px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center;
     }
     .login-card .brand-container { 
       justify-content: center; 
       margin-bottom: 1.5rem; 
       background: var(--navy);
-      padding: 12px;
+      padding: 10px;
       border-radius: 8px;
     }
-    .login-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
-    .login-tabs button { background: #e2e8f0; color: var(--navy); border: none; padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    .login-tabs { display: flex; gap: 8px; margin-bottom: 15px; }
+    .login-tabs button { background: #e2e8f0; color: var(--navy); border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; flex: 1; font-size: 14px; }
     .login-tabs button.active { background: var(--navy); color: var(--white); }
 
     .remember-me {
-      display: flex; align-items: center; gap: 8px; margin: 10px 0 15px 0; font-size: 13px; color: #64748b; cursor: pointer;
+      display: flex; align-items: center; gap: 8px; margin: 12px 0 18px 0; font-size: 14px; color: #64748b; cursor: pointer; text-align: left;
     }
-    .remember-me input { width: auto; margin: 0; cursor: pointer; }
+    .remember-me input { width: 18px; height: 18px; margin: 0; cursor: pointer; }
 
     input, select, textarea, button {
-      width: 100%; padding: 12px; margin: 6px 0; border: 1px solid var(--border); border-radius: 6px; font-size: 14px;
+      width: 100%; padding: 12px; margin: 6px 0; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; outline: none;
     }
-    textarea { resize: vertical; min-height: 70px; }
-    button { background: var(--navy); color: var(--white); border: none; font-weight: bold; cursor: pointer; transition: 0.2s; }
-    button:hover { background: var(--navy-light); }
+    textarea { resize: vertical; min-height: 80px; }
+    button { background: var(--navy); color: var(--white); border: none; font-weight: bold; cursor: pointer; transition: 0.2s; -webkit-appearance: none; }
+    button:active { transform: scale(0.98); }
     
     #app { display: none; }
     header {
-      background: var(--navy); color: var(--white); padding: 1rem 2rem;
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
+      background: var(--navy); color: var(--white); padding: 1rem 1.2rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
     }
-    nav { display: flex; gap: 10px; flex-wrap: wrap; }
-    nav button { background: transparent; border: 1px solid var(--white); width: auto; padding: 8px 16px; }
-    nav button.active, nav button:hover { background: var(--white); color: var(--navy); }
+    nav { display: flex; gap: 6px; width: 100%; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+    nav::-webkit-scrollbar { display: none; }
+    nav button { background: transparent; border: 1px solid rgba(255,255,255,0.3); width: auto; padding: 8px 14px; white-space: nowrap; font-size: 13px; border-radius: 20px; }
+    nav button.active, nav button:hover { background: var(--white); color: var(--navy); border-color: var(--white); }
 
-    .container { padding: 2rem; max-width: 1400px; margin: 0 auto; }
+    .header-user-info { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 4px; font-size: 14px; gap: 8px; }
+
+    .container { padding: 1rem; max-width: 1400px; margin: 0 auto; }
     .page { display: none; }
     .page.active { display: block; }
 
     .pwa-fixed-wrapper {
-      position: fixed; bottom: 20px; right: 20px; z-index: 999;
+      position: fixed; bottom: 15px; right: 15px; z-index: 999;
       display: flex; align-items: center; background: var(--accent); color: var(--white);
-      border-radius: 30px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); padding: 4px;
+      border-radius: 30px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); padding: 2px;
     }
     .pwa-fixed-btn {
-      background: transparent; border: none; padding: 8px 14px; font-weight: bold; cursor: pointer; color: white;
-      display: flex; align-items: center; gap: 6px; font-size: 13px;
+      background: transparent; border: none; padding: 8px 12px; font-weight: bold; cursor: pointer; color: white;
+      display: flex; align-items: center; gap: 6px; font-size: 12px; width: auto; margin: 0;
     }
     .pwa-close-btn {
-      background: rgba(255,255,255,0.2); border: none; border-radius: 50%; width: 24px; height: 24px;
+      background: rgba(255,255,255,0.2); border: none; border-radius: 50%; width: 22px; height: 22px;
       color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;
-      margin-right: 4px; font-size: 12px;
+      margin-right: 4px; font-size: 11px; width: auto; padding: 0;
     }
-    .pwa-close-btn:hover { background: rgba(255,255,255,0.4); }
 
-    .kanban-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; align-items: start; }
-    .column { background: #ebedf0; border-radius: 8px; padding: 15px; min-height: 500px; }
-    .column h3 { margin-bottom: 15px; color: var(--navy); border-bottom: 2px solid var(--border); padding-bottom: 8px; }
+    .kanban-board { 
+      display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px; -webkit-overflow-scrolling: touch;
+      snap-type: x mandatory;
+    }
+    .column { 
+      background: #ebedf0; border-radius: 10px; padding: 12px; min-width: 280px; width: 280px; flex-shrink: 0; min-height: 450px;
+      snap-align: start;
+    }
+    @media (min-width: 900px) {
+      .kanban-board { display: grid; grid-template-columns: repeat(4, 1fr); overflow-x: visible; }
+      .column { width: 100%; min-width: auto; }
+    }
+
+    .column h3 { margin-bottom: 12px; color: var(--navy); border-bottom: 2px solid var(--border); padding-bottom: 6px; font-size: 15px; }
     
     .task-card {
-      background: var(--white); padding: 15px; border-radius: 6px; margin-bottom: 12px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: grab; border-left: 4px solid var(--navy);
+      background: var(--white); padding: 12px; border-radius: 8px; margin-bottom: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-left: 4px solid var(--navy); position: relative;
     }
-    .task-card h4 { margin-bottom: 5px; font-size: 16px; }
+    .task-card h4 { margin-bottom: 4px; font-size: 15px; word-break: break-word; }
     .task-card p { font-size: 12px; color: #64748b; margin-bottom: 6px; }
     .task-card .company-tag { display: inline-block; background: #dbeafe; color: #1e40af; font-size: 11px; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-bottom: 4px; }
     .task-card .tag { display: inline-block; background: #e2e8f0; font-size: 11px; padding: 2px 6px; border-radius: 4px; }
+    
+    .user-badge { display: inline-block; padding: 2px 6px; border-radius: 10px; color: white; font-size: 10px; font-weight: bold; margin-right: 4px; margin-bottom: 2px; }
 
-    .task-form, .admin-card, .client-card { background: var(--white); padding: 20px; border-radius: 8px; margin-bottom: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; align-items: start; }
+    .task-form, .admin-card, .client-card { background: var(--white); padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .form-row { display: grid; grid-template-columns: 1fr; gap: 8px; }
+    @media (min-width: 768px) {
+      .form-row { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+    }
 
     .dropdown-checkbox-container { position: relative; width: 100%; margin: 6px 0; }
     .dropdown-btn {
       background: var(--white); color: var(--text); border: 1px solid var(--border);
-      padding: 12px; text-align: left; border-radius: 6px; font-size: 14px; cursor: pointer;
+      padding: 12px; text-align: left; border-radius: 8px; font-size: 14px; cursor: pointer;
       display: flex; justify-content: space-between; align-items: center;
     }
     .dropdown-list {
       display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--white);
-      border: 1px solid var(--border); border-radius: 6px; max-height: 180px; overflow-y: auto;
-      z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 6px;
+      border: 1px solid var(--border); border-radius: 8px; max-height: 200px; overflow-y: auto;
+      z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 6px;
     }
     .dropdown-list label {
-      display: flex; align-items: center; gap: 8px; padding: 8px; cursor: pointer; font-size: 13px;
-      border-radius: 4px; transition: 0.1s;
+      display: flex; align-items: center; gap: 10px; padding: 10px; cursor: pointer; font-size: 14px;
+      border-radius: 6px; transition: 0.1s;
     }
     .dropdown-list label:hover { background: #f1f5f9; }
-    .dropdown-list input[type="checkbox"] { width: auto; margin: 0; cursor: pointer; }
+    .dropdown-list input[type="checkbox"] { width: 20px; height: 20px; margin: 0; cursor: pointer; }
 
-    .archive-month { background: var(--white); padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    .archive-month-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-    .archive-month-header h4 { color: var(--navy); font-size: 18px; }
-    .archive-month-header button { width: auto; font-size: 12px; padding: 8px 14px; }
-    
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; min-width: 500px; }
     th, td { border: 1px solid var(--border); padding: 10px; text-align: left; font-size: 13px; }
     th { background: var(--navy); color: var(--white); }
 
     .modal {
       display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: rgba(10, 26, 54, 0.7); backdrop-filter: blur(2px);
-      justify-content: center; align-items: center; z-index: 9999;
+      justify-content: center; align-items: center; z-index: 9999; padding: 15px;
     }
     .modal-content {
-      background: var(--white); padding: 25px; border-radius: 12px; max-width: 520px; width: 90%;
+      background: var(--white); padding: 20px; border-radius: 12px; max-width: 520px; width: 100%;
       max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); border: 1px solid var(--border);
     }
 
-    .guide-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-bottom: 12px; text-align: left; }
-    .guide-box h4 { color: var(--navy); margin-bottom: 6px; font-size: 14px; }
-    .guide-box ul { padding-left: 20px; font-size: 13px; color: #475569; }
+    .color-picker-grid { display: flex; gap: 10px; margin: 10px 0; flex-wrap: wrap; }
+    .color-picker-option { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
+    .color-picker-option.selected { border-color: var(--navy); transform: scale(1.15); }
 
-    .fc-event { cursor: pointer; padding: 4px 8px; }
+    .guide-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-bottom: 10px; text-align: left; }
+    .guide-box h4 { color: var(--navy); margin-bottom: 4px; font-size: 14px; }
+    .guide-box ul { padding-left: 18px; font-size: 13px; color: #475569; }
+
+    .fc-header-toolbar { flex-wrap: wrap; gap: 6px; }
+    .fc-toolbar-chunk { font-size: 12px; }
+    .fc-button { padding: 4px 8px !important; font-size: 12px !important; }
+    .fc-event { cursor: pointer; padding: 3px 6px; font-size: 12px; }
     .fc-event-holiday { background-color: #ef4444 !important; border-color: #dc2626 !important; color: white !important; }
-    .fc-event-social { background-color: #8b5cf6 !important; border-color: #7c3aed !important; color: white !important; }
   </style>
 </head>
 <body>
@@ -183,8 +204,8 @@
       </div>
 
       <div id="auth-form-container">
-        <input type="text" id="username" placeholder="Kullanıcı Adı">
-        <input type="password" id="password" placeholder="Şifre">
+        <input type="text" id="username" placeholder="Kullanıcı Adı" autocomplete="username">
+        <input type="password" id="password" placeholder="Şifre" autocomplete="current-password">
         <label class="remember-me" id="remember-me-label">
           <input type="checkbox" id="remember-me-check" checked> Oturumu açık tut (Beni Hatırla)
         </label>
@@ -197,28 +218,36 @@
     <header>
       <div class="brand-container">
         <img src="https://pngup.com/ec43/logo1.png" alt="137 Studio Logo" class="app-logo">
-        <h2 style="font-size: 1.3rem;">137 Studio - İş Takip Sistemi</h2>
+        <h2 style="font-size: 1.1rem;">137 Studio</h2>
       </div>
+      
+      <div class="header-user-info">
+        <span id="user-display" style="font-weight: bold;"></span>
+        <div style="display:flex; gap:6px;">
+          <button onclick="openProfileModal()" style="width: auto; background: var(--accent); padding: 6px 12px; font-size: 12px; border-radius: 20px;">👤 Profil</button>
+          <button onclick="logout()" style="width: auto; background: #ef4444; padding: 6px 12px; font-size: 12px; border-radius: 20px;">Çıkış</button>
+        </div>
+      </div>
+
       <nav>
-        <button onclick="switchTab('kanban')" class="active" id="btn-kanban">İş Takip</button>
-        <button onclick="switchTab('calendar')" id="btn-calendar">Takvim</button>
-        <button onclick="switchTab('clients')" id="btn-clients">Müşteriler</button>
-        <button onclick="switchTab('archive')" id="btn-archive">Arşiv</button>
-        <button onclick="switchTab('admin')" id="btn-admin" style="display: none;">Admin Paneli</button>
+        <button onclick="switchTab('kanban')" class="active" id="btn-kanban">📋 İş Takip</button>
+        <button onclick="switchTab('calendar')" id="btn-calendar">📅 Takvim</button>
+        <button onclick="switchTab('clients')" id="btn-clients">🏷️ Markalar</button>
+        <button onclick="switchTab('archive')" id="btn-archive">📂 Arşiv</button>
+        <button onclick="switchTab('admin')" id="btn-admin" style="display: none;">⚙️ Admin</button>
       </nav>
-      <div>
-        <span id="user-display" style="margin-right: 15px; font-weight: bold;"></span>
-        <button onclick="logout()" style="width: auto; background: #ef4444; padding: 6px 12px;">Çıkış</button>
-      </div>
     </header>
 
     <div class="container">
       <div id="page-kanban" class="page active">
         <div class="task-form">
-          <h3 style="margin-bottom: 10px; color: var(--navy);">Yeni İş Oluştur</h3>
+          <h3 style="margin-bottom: 10px; color: var(--navy); font-size: 16px;">Yeni İş Oluştur</h3>
           <div class="form-row">
             <input type="text" id="task-title" placeholder="Çalışma Adı (Zorunlu)">
-            <input type="text" id="task-company" placeholder="Firma İsmi (İsteğe bağlı)">
+            
+            <select id="task-company-select">
+              <option value="">Marka Seçiniz (İsteğe bağlı)</option>
+            </select>
             
             <div class="dropdown-checkbox-container">
               <div class="dropdown-btn" onclick="toggleAssigneeDropdown()">
@@ -255,38 +284,40 @@
       </div>
 
       <div id="page-calendar" class="page">
-        <div id="calendar" style="background: var(--white); padding: 20px; border-radius: 8px;"></div>
+        <div id="calendar" style="background: var(--white); padding: 12px; border-radius: 10px;"></div>
       </div>
 
       <div id="page-clients" class="page">
         <div class="client-card">
-          <h3 style="margin-bottom: 10px; color: var(--navy);">Yeni Müşteri / Firma Ekle</h3>
+          <h3 style="margin-bottom: 10px; color: var(--navy); font-size: 16px;">Yeni Marka Ekle</h3>
           <div class="form-row">
-            <input type="text" id="client-name-input" placeholder="Müşteri / Firma Adı">
+            <input type="text" id="client-name-input" placeholder="Marka Adı">
             <input type="text" id="client-contact-input" placeholder="İletişim Kişisi / Telefon (Opsiyonel)">
-            <button onclick="addClient()">Müşteri Kaydet</button>
+            <button onclick="addClient()">Marka Kaydet</button>
           </div>
         </div>
 
         <div class="client-card">
-          <h4 style="margin-bottom: 15px; color: var(--navy);">Müşteri Listesi</h4>
-          <table>
-            <thead>
-              <tr>
-                <th>Müşteri / Firma Adı</th>
-                <th>İletişim</th>
-                <th>İşlemler</th>
-              </tr>
-            </thead>
-            <tbody id="client-table-body"></tbody>
-          </table>
+          <h4 style="margin-bottom: 12px; color: var(--navy);">Marka Listesi</h4>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Marka Adı</th>
+                  <th>İletişim</th>
+                  <th>İşlemler</th>
+                </tr>
+              </thead>
+              <tbody id="client-table-body"></tbody>
+            </table>
+          </div>
         </div>
 
         <div id="client-social-calendar-section" class="client-card" style="display:none;">
-          <h3 id="selected-client-title" style="color: var(--navy); margin-bottom: 15px;"></h3>
+          <h3 id="selected-client-title" style="color: var(--navy); margin-bottom: 12px; font-size: 16px;"></h3>
           
           <div class="task-form" style="background:#f8fafc; border:1px solid #e2e8f0;">
-            <h4 style="margin-bottom: 10px; color: var(--navy);">Yeni Paylaşım İçeriği Ekle</h4>
+            <h4 style="margin-bottom: 8px; color: var(--navy); font-size: 14px;">Yeni Paylaşım İçeriği Ekle</h4>
             <div class="form-row">
               <input type="text" id="social-post-title" placeholder="Paylaşım Başlığı / Görsel Konusu (Zorunlu)">
               <input type="datetime-local" id="social-post-date" placeholder="Paylaşım Tarihi ve Saati">
@@ -302,7 +333,7 @@
             <button onclick="createSocialPost()" style="margin-top: 6px; background:var(--accent);">Paylaşım Görevi Oluştur</button>
           </div>
 
-          <div id="client-calendar" style="background: var(--white); padding: 15px; border-radius: 8px; margin-top: 15px;"></div>
+          <div id="client-calendar" style="background: var(--white); padding: 10px; border-radius: 8px; margin-top: 12px;"></div>
         </div>
       </div>
 
@@ -313,7 +344,7 @@
 
       <div id="page-admin" class="page">
         <div class="admin-card">
-          <h3 style="margin-bottom: 15px; color: var(--navy);">Kullanıcı Yönetim Paneli</h3>
+          <h3 style="margin-bottom: 12px; color: var(--navy); font-size: 16px;">Kullanıcı Yönetim Paneli</h3>
           <div class="form-row">
             <input type="text" id="new-user-name" placeholder="Yeni Kullanıcı Adı">
             <input type="password" id="new-user-pass" placeholder="Şifre">
@@ -323,16 +354,18 @@
 
         <div class="admin-card">
           <h4 style="margin-bottom: 10px; color: var(--navy);">Mevcut Kullanıcılar</h4>
-          <table>
-            <thead>
-              <tr>
-                <th>Kullanıcı Adı</th>
-                <th>Şifre</th>
-                <th>İşlemler</th>
-              </tr>
-            </thead>
-            <tbody id="user-table-body"></tbody>
-          </table>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Kullanıcı Adı</th>
+                  <th>Şifre</th>
+                  <th>İşlemler</th>
+                </tr>
+              </thead>
+              <tbody id="user-table-body"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -340,25 +373,71 @@
 
   <div id="modal" class="modal">
     <div class="modal-content">
-      <h3 id="modal-title" style="color: var(--navy); margin-bottom: 12px; font-size: 18px;"></h3>
+      <h3 id="modal-title" style="color: var(--navy); margin-bottom: 12px; font-size: 17px;"></h3>
       <div id="modal-desc" style="margin-bottom: 20px; font-size: 14px; line-height: 1.6; color: var(--text);"></div>
-      <button onclick="closeModal()">Kapat</button>
+      <div id="modal-actions" style="display:flex; gap:10px;">
+        <button onclick="closeModal()">Kapat</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="profile-modal" class="modal">
+    <div class="modal-content">
+      <h3 style="color: var(--navy); margin-bottom: 12px; font-size: 16px;">Profil Düzenle</h3>
+      
+      <label style="font-size: 13px; font-weight: bold; color: var(--navy);">Kullanıcı Adı</label>
+      <input type="text" id="profile-username-input" placeholder="Yeni Kullanıcı Adı">
+
+      <label style="font-size: 13px; font-weight: bold; color: var(--navy); margin-top: 8px; display: block;">Yeni Şifre</label>
+      <input type="password" id="profile-password-input" placeholder="Şifrenizi Değiştirin">
+
+      <label style="font-size: 13px; font-weight: bold; color: var(--navy); margin-top: 8px; display: block;">Takvim ve Etiket Renginiz</label>
+      <div class="color-picker-grid" id="profile-color-picker"></div>
+
+      <div style="display:flex; gap:10px; margin-top:15px;">
+        <button onclick="saveProfileChanges()" style="background:var(--accent);">Güncelle ve Kaydet</button>
+        <button onclick="closeProfileModal()" style="background:#64748b;">İptal</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="edit-modal" class="modal">
+    <div class="modal-content">
+      <h3 style="color: var(--navy); margin-bottom: 12px; font-size: 16px;">Görevi Düzenle</h3>
+      <input type="hidden" id="edit-task-id">
+      <input type="text" id="edit-task-title" placeholder="Çalışma Adı">
+      <select id="edit-task-company-select">
+        <option value="">Marka Seçiniz (İsteğe bağlı)</option>
+      </select>
+      <div class="dropdown-checkbox-container">
+        <div class="dropdown-btn" onclick="toggleEditAssigneeDropdown()">
+          <span id="edit-dropdown-btn-text">Kişileri Etiketle</span>
+          <span>▼</span>
+        </div>
+        <div class="dropdown-list" id="edit-assignee-checkbox-list"></div>
+      </div>
+      <input type="datetime-local" id="edit-task-datetime">
+      <textarea id="edit-task-desc" placeholder="Açıklama"></textarea>
+      <div style="display:flex; gap:10px; margin-top:10px;">
+        <button onclick="saveTaskEdit()" style="background:var(--accent);">Kaydet</button>
+        <button onclick="closeEditModal()" style="background:#64748b;">İptal</button>
+      </div>
     </div>
   </div>
 
   <div id="pwa-guide-modal" class="modal">
     <div class="modal-content">
-      <h3 style="color: var(--navy); margin-bottom: 15px;">Masaüstü ve Mobil Uygulama Olarak Ekleme</h3>
-      <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">137 Studio İş Sistemi'ni bilgisayarınıza veya telefonunuza uygulama gibi eklemek için kullandığınız tarayıcıya göre adımları takip edin:</p>
+      <h3 style="color: var(--navy); margin-bottom: 12px; font-size: 16px;">Uygulama Olarak Ekleme Rehberi</h3>
+      <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">Cihazınıza göre aşağıdaki adımları uygulayın:</p>
       
-      <div id="direct-install-btn-container" style="display:none; margin-bottom:15px;">
+      <div id="direct-install-btn-container" style="display:none; margin-bottom:12px;">
         <button onclick="installPWA()" style="background:var(--accent);">Otomatik Uygulama Olarak Yükle</button>
       </div>
 
       <div class="guide-box">
         <h4>📱 iOS (iPhone / iPad - Safari)</h4>
         <ul>
-          <li>Safari alt menüsündeki <b>Paylaş (⎋)</b> butonuna dokunun.</li>
+          <li>Safari alt menüsündeki <b>Paylaş (⎋)</b> ikonuna dokunun.</li>
           <li>Açılan listede <b>"Ana Ekrana Ekle"</b> seçeneğini seçin.</li>
         </ul>
       </div>
@@ -372,10 +451,10 @@
       </div>
 
       <div class="guide-box">
-        <h4>💻 Windows & Mac (Chrome / Edge / Safari)</h4>
+        <h4>💻 Windows & Mac</h4>
         <ul>
-          <li><b>Chrome & Edge:</b> Adres çubuğundaki <b>Yükle (💻↓)</b> simgesine veya Üç Nokta > <b>Diğer Araçlar / Kısayol Oluştur</b> seçeneğine tıklayın.</li>
-          <li><b>Mac Safari:</b> Üst menüden <b>Dosya > Dock'a Ekle</b> seçeneğine tıklayın.</li>
+          <li><b>Chrome/Edge:</b> Adres çubuğundaki <b>Yükle (💻↓)</b> ikonuna tıklayın.</li>
+          <li><b>Mac Safari:</b> Üst menüden <b>Dosya > Dock'a Ekle</b> seçeneğini seçin.</li>
         </ul>
       </div>
 
@@ -398,6 +477,7 @@
     const db = firebase.database();
 
     let users = { 'Zorbay': '15241524' };
+    let userColors = {};
     let clients = {};
     let currentUser = null;
     let tasks = [];
@@ -406,8 +486,21 @@
     let clientCalendarInstance = null;
     let activeClientId = null;
     let deferredPrompt = null;
+    let selectedProfileColor = '#2563eb';
 
-    // Genişletilmiş Özel Günler Listesi (Kadınlar Günü, Anneler Günü, Babalar Günü, Öğretmenler Günü Eklendi)
+    const availableColors = [
+      '#2563eb', '#7c3aed', '#db2777', '#059669', '#d97706', 
+      '#0891b2', '#4f46e5', '#c026d3', '#ea580c', '#16a34a',
+      '#dc2626', '#475569'
+    ];
+
+    function getUserColor(username) {
+      if (userColors && userColors[username]) {
+        return userColors[username];
+      }
+      return '#2563eb';
+    }
+
     const turkishHolidays = [
       { title: "🎉 Yılbaşı", date: "2026-01-01" },
       { title: "👩‍🦰 8 Mart Dünya Kadınlar Günü", date: "2026-03-08" },
@@ -447,8 +540,17 @@
       if (currentUser && document.getElementById('page-admin').classList.contains('active')) renderAdminPanel();
     });
 
+    db.ref('userColors').on('value', (snapshot) => {
+      userColors = snapshot.val() || {};
+      if (currentUser) {
+        renderTasks();
+        if (document.getElementById('page-calendar').classList.contains('active')) renderCalendar();
+      }
+    });
+
     db.ref('clients').on('value', (snapshot) => {
       clients = snapshot.val() || {};
+      populateClientDropdowns();
       if (currentUser && document.getElementById('page-clients').classList.contains('active')) renderClients();
     });
 
@@ -484,13 +586,11 @@
     document.addEventListener('click', (e) => {
       const container1 = document.querySelector('#page-kanban .dropdown-checkbox-container');
       const container2 = document.querySelector('#client-social-calendar-section .dropdown-checkbox-container');
+      const container3 = document.querySelector('#edit-modal .dropdown-checkbox-container');
       
-      if (container1 && !container1.contains(e.target)) {
-        document.getElementById('assignee-checkbox-list').style.display = 'none';
-      }
-      if (container2 && !container2.contains(e.target)) {
-        document.getElementById('social-assignee-checkbox-list').style.display = 'none';
-      }
+      if (container1 && !container1.contains(e.target)) document.getElementById('assignee-checkbox-list').style.display = 'none';
+      if (container2 && !container2.contains(e.target)) document.getElementById('social-assignee-checkbox-list').style.display = 'none';
+      if (container3 && !container3.contains(e.target)) document.getElementById('edit-assignee-checkbox-list').style.display = 'none';
     });
 
     function dismissPwaBar() {
@@ -565,6 +665,7 @@
       }
 
       populateAssignees();
+      populateClientDropdowns();
       renderTasks();
       checkScheduledNotifications();
     }
@@ -606,7 +707,9 @@
       }
 
       users[inputUser] = inputPass;
+      userColors[inputUser] = availableColors[Math.floor(Math.random() * availableColors.length)];
       saveUsers();
+      saveUserColors();
       alert('Kayıt başarılı! Giriş yapabilirsiniz.');
       toggleAuthMode('login');
       document.getElementById('password').value = '';
@@ -636,6 +739,83 @@
       if (tab === 'admin') renderAdminPanel();
     }
 
+    function openProfileModal() {
+      if (!currentUser) return;
+      document.getElementById('profile-username-input').value = currentUser;
+      document.getElementById('profile-password-input').value = users[currentUser] || '';
+      
+      selectedProfileColor = getUserColor(currentUser);
+      renderColorPicker();
+      
+      document.getElementById('profile-modal').style.display = 'flex';
+    }
+
+    function closeProfileModal() {
+      document.getElementById('profile-modal').style.display = 'none';
+    }
+
+    function renderColorPicker() {
+      const container = document.getElementById('profile-color-picker');
+      container.innerHTML = '';
+
+      availableColors.forEach(color => {
+        const div = document.createElement('div');
+        div.className = `color-picker-option ${color === selectedProfileColor ? 'selected' : ''}`;
+        div.style.backgroundColor = color;
+        div.onclick = () => {
+          selectedProfileColor = color;
+          renderColorPicker();
+        };
+        container.appendChild(div);
+      });
+    }
+
+    function saveProfileChanges() {
+      const newUsername = document.getElementById('profile-username-input').value.trim();
+      const newPassword = document.getElementById('profile-password-input').value.trim();
+
+      if (!newUsername || !newPassword) {
+        alert('Kullanıcı adı ve şifre boş bırakılamaz!');
+        return;
+      }
+
+      const oldUsername = currentUser;
+
+      if (newUsername.toLowerCase() !== oldUsername.toLowerCase() && users[newUsername]) {
+        alert('Bu kullanıcı adı başka bir kullanıcı tarafından kullanılıyor!');
+        return;
+      }
+
+      delete users[oldUsername];
+      users[newUsername] = newPassword;
+
+      delete userColors[oldUsername];
+      userColors[newUsername] = selectedProfileColor;
+
+      tasks.forEach(task => {
+        if (task.creator === oldUsername) task.creator = newUsername;
+        if (task.assignees) {
+          task.assignees = task.assignees.map(u => u === oldUsername ? newUsername : u);
+        }
+      });
+
+      if (localStorage.getItem('137_remembered_user')) {
+        localStorage.setItem('137_remembered_user', newUsername);
+        localStorage.setItem('137_remembered_pass', newPassword);
+      }
+
+      currentUser = newUsername;
+      document.getElementById('user-display').innerText = `Kullanıcı: ${currentUser}`;
+
+      saveUsers();
+      saveUserColors();
+      saveData();
+      populateAssignees();
+      closeProfileModal();
+
+      alert('Profil bilgileriniz ve takvim renginiz başarıyla güncellendi.');
+    }
+
     function toggleAssigneeDropdown() {
       const list = document.getElementById('assignee-checkbox-list');
       list.style.display = list.style.display === 'block' ? 'none' : 'block';
@@ -646,12 +826,19 @@
       list.style.display = list.style.display === 'block' ? 'none' : 'block';
     }
 
+    function toggleEditAssigneeDropdown() {
+      const list = document.getElementById('edit-assignee-checkbox-list');
+      list.style.display = list.style.display === 'block' ? 'none' : 'block';
+    }
+
     function populateAssignees() {
       const mainList = document.getElementById('assignee-checkbox-list');
       const socialList = document.getElementById('social-assignee-checkbox-list');
+      const editList = document.getElementById('edit-assignee-checkbox-list');
       
       mainList.innerHTML = '';
       socialList.innerHTML = '';
+      editList.innerHTML = '';
 
       Object.keys(users).forEach(u => {
         const l1 = document.createElement('label');
@@ -661,10 +848,37 @@
         const l2 = document.createElement('label');
         l2.innerHTML = `<input type="checkbox" value="${u}" onchange="updateSocialDropdownText()"> ${u}`;
         socialList.appendChild(l2);
+
+        const l3 = document.createElement('label');
+        l3.innerHTML = `<input type="checkbox" value="${u}" onchange="updateEditDropdownText()"> ${u}`;
+        editList.appendChild(l3);
       });
 
       updateDropdownText();
       updateSocialDropdownText();
+      updateEditDropdownText();
+    }
+
+    function populateClientDropdowns() {
+      const taskCompanySelect = document.getElementById('task-company-select');
+      const editCompanySelect = document.getElementById('edit-task-company-select');
+
+      if (!taskCompanySelect || !editCompanySelect) return;
+
+      taskCompanySelect.innerHTML = '<option value="">Marka Seçiniz (İsteğe bağlı)</option>';
+      editCompanySelect.innerHTML = '<option value="">Marka Seçiniz (İsteğe bağlı)</option>';
+
+      Object.values(clients).forEach(client => {
+        const opt1 = document.createElement('option');
+        opt1.value = client.name;
+        opt1.textContent = client.name;
+        taskCompanySelect.appendChild(opt1);
+
+        const opt2 = document.createElement('option');
+        opt2.value = client.name;
+        opt2.textContent = client.name;
+        editCompanySelect.appendChild(opt2);
+      });
     }
 
     function updateDropdownText() {
@@ -679,6 +893,12 @@
       document.getElementById('social-dropdown-btn-text').innerText = selectedNames.length === 0 ? 'Sorumluları Etiketle' : selectedNames.join(', ');
     }
 
+    function updateEditDropdownText() {
+      const checkedBoxes = document.querySelectorAll('#edit-assignee-checkbox-list input[type="checkbox"]:checked');
+      const selectedNames = Array.from(checkedBoxes).map(cb => cb.value);
+      document.getElementById('edit-dropdown-btn-text').innerText = selectedNames.length === 0 ? 'Kişileri Etiketle' : selectedNames.join(', ');
+    }
+
     function getSelectedAssignees(selector) {
       const checkedBoxes = document.querySelectorAll(`${selector} input[type="checkbox"]:checked`);
       return Array.from(checkedBoxes).map(cb => cb.value);
@@ -686,7 +906,7 @@
 
     function createTask() {
       const title = document.getElementById('task-title').value;
-      const company = document.getElementById('task-company').value.trim();
+      const company = document.getElementById('task-company-select').value;
       const assignees = getSelectedAssignees('#assignee-checkbox-list');
       const datetime = document.getElementById('task-datetime').value;
       const description = document.getElementById('task-desc').value;
@@ -716,7 +936,7 @@
       });
 
       document.getElementById('task-title').value = '';
-      document.getElementById('task-company').value = '';
+      document.getElementById('task-company-select').value = '';
       document.getElementById('task-desc').value = '';
       document.getElementById('task-datetime').value = '';
       document.querySelectorAll('#assignee-checkbox-list input[type="checkbox"]').forEach(cb => cb.checked = false);
@@ -739,22 +959,19 @@
         card.draggable = true;
         card.ondragstart = (e) => e.dataTransfer.setData('text/plain', task.id);
         
-        const assigneeListText = task.assignees ? task.assignees.join(', ') : 'Belirtilmedi';
-        const modalBody = `
-          ${task.company ? `<b>Firma:</b> ${task.company}<br>` : ''}
-          <b>Etiketlenen Kişiler:</b> ${assigneeListText}<br>
-          <b>Oluşturan:</b> ${task.creator}<br>
-          <b>Tarih:</b> ${task.datetime ? new Date(task.datetime).toLocaleString('tr-TR') : 'Belirtilmedi'}<br>
-          <hr style="margin:10px 0; border:0; border-top:1px solid #e2e8f0;">
-          <b>Açıklama:</b><br>${task.description ? task.description.replace(/\n/g, '<br>') : 'Açıklama girilmemiş.'}
-        `;
+        let badgesHTML = '';
+        if (task.assignees) {
+          task.assignees.forEach(u => {
+            badgesHTML += `<span class="user-badge" style="background:${getUserColor(u)}">${u}</span>`;
+          });
+        }
 
-        card.onclick = () => showModal(task.title, modalBody);
+        card.onclick = () => openTaskModal(task.id);
         
         card.innerHTML = `
-          ${task.company ? `<span class="company-tag">🏢 ${task.company}</span>` : ''}
+          ${task.company ? `<span class="company-tag">🏷️ ${task.company}</span>` : ''}
           <h4>${task.title}</h4>
-          <p>Sorumlular: ${assigneeListText}</p>
+          <div style="margin:4px 0;">${badgesHTML}</div>
           ${task.datetime ? `<p style="color:var(--accent);">📅 ${new Date(task.datetime).toLocaleString('tr-TR')}</p>` : ''}
           <span class="tag">${task.status.toUpperCase()}</span>
         `;
@@ -788,17 +1005,21 @@
       const calendarEl = document.getElementById('calendar');
       if (calendarInstance) calendarInstance.destroy();
 
-      const userTasks = tasks.filter(t => 
-        (t.creator === currentUser || (t.assignees && t.assignees.includes(currentUser))) && 
-        t.datetime
-      );
+      const userTasks = tasks.filter(t => t.datetime);
 
-      const taskEvents = userTasks.map(t => ({
-        id: t.id,
-        title: `${t.company ? '['+t.company+'] ' : ''}${t.title} (${t.assignees ? t.assignees.join(', ') : ''})`,
-        start: t.datetime,
-        className: t.isSocialPost ? 'fc-event-social' : ''
-      }));
+      const taskEvents = userTasks.map(t => {
+        const primaryAssignee = t.assignees && t.assignees.length > 0 ? t.assignees[0] : t.creator;
+        const color = getUserColor(primaryAssignee);
+
+        return {
+          id: t.id,
+          title: `${t.company ? '['+t.company+'] ' : ''}${t.title} (${t.assignees ? t.assignees.join(', ') : t.creator})`,
+          start: t.datetime,
+          backgroundColor: color,
+          borderColor: color,
+          textColor: '#ffffff'
+        };
+      });
 
       const holidayEvents = turkishHolidays.map((h, i) => ({
         id: `holiday-${i}`,
@@ -808,13 +1029,15 @@
         className: 'fc-event-holiday'
       }));
 
+      const initialViewMode = window.innerWidth < 768 ? 'listWeek' : 'listMonth';
+
       calendarInstance = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'listMonth',
+        initialView: initialViewMode,
         locale: 'tr',
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
-          right: 'listMonth,dayGridMonth'
+          right: 'listWeek,dayGridMonth'
         },
         events: [...taskEvents, ...holidayEvents],
         eventClick: function(info) {
@@ -822,22 +1045,96 @@
             showModal(info.event.title, `<b>Tür:</b> Resmi / Dini Bayram veya Özel Gün<br><b>Tarih:</b> ${info.event.start.toLocaleDateString('tr-TR')}`);
             return;
           }
-          const t = tasks.find(x => x.id === info.event.id);
-          if (t) {
-            const modalBody = `
-              ${t.company ? `<b>Firma:</b> ${t.company}<br>` : ''}
-              <b>Etiketlenen Kişiler:</b> ${t.assignees ? t.assignees.join(', ') : ''}<br>
-              <b>Oluşturan:</b> ${t.creator}<br>
-              <b>Tarih:</b> ${new Date(t.datetime).toLocaleString('tr-TR')}<br>
-              <b>Durum:</b> ${t.status.toUpperCase()}<br>
-              <hr style="margin:10px 0; border:0; border-top:1px solid #e2e8f0;">
-              <b>Açıklama:</b><br>${t.description ? t.description.replace(/\n/g, '<br>') : 'Açıklama girilmemiş.'}
-            `;
-            showModal(t.title, modalBody);
-          }
+          openTaskModal(info.event.id);
         }
       });
       calendarInstance.render();
+    }
+
+    function openTaskModal(taskId) {
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return;
+
+      let badgesHTML = '';
+      if (task.assignees) {
+        task.assignees.forEach(u => {
+          badgesHTML += `<span class="user-badge" style="background:${getUserColor(u)}">${u}</span>`;
+        });
+      }
+
+      const descHTML = `
+        ${task.company ? `<b>Marka:</b> ${task.company}<br>` : ''}
+        <b>Etiketlenen Kişiler:</b> ${badgesHTML || 'Belirtilmedi'}<br>
+        <b>Oluşturan:</b> ${task.creator}<br>
+        <b>Tarih:</b> ${task.datetime ? new Date(task.datetime).toLocaleString('tr-TR') : 'Belirtilmedi'}<br>
+        <hr style="margin:10px 0; border:0; border-top:1px solid #e2e8f0;">
+        <b>Açıklama:</b><br>${task.description ? task.description.replace(/\n/g, '<br>') : 'Açıklama girilmemiş.'}
+      `;
+
+      document.getElementById('modal-title').innerText = task.title;
+      document.getElementById('modal-desc').innerHTML = descHTML;
+
+      const actionsDiv = document.getElementById('modal-actions');
+      actionsDiv.innerHTML = `
+        <button onclick="openEditModal('${task.id}')" style="background:var(--accent);">Düzenle</button>
+        <button onclick="deleteTask('${task.id}')" style="background:#ef4444;">Sil</button>
+        <button onclick="closeModal()" style="background:#64748b;">Kapat</button>
+      `;
+
+      document.getElementById('modal').style.display = 'flex';
+    }
+
+    function openEditModal(taskId) {
+      closeModal();
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return;
+
+      document.getElementById('edit-task-id').value = task.id;
+      document.getElementById('edit-task-title').value = task.title;
+      document.getElementById('edit-task-company-select').value = task.company || '';
+      document.getElementById('edit-task-datetime').value = task.datetime || '';
+      document.getElementById('edit-task-desc').value = task.description || '';
+
+      document.querySelectorAll('#edit-assignee-checkbox-list input[type="checkbox"]').forEach(cb => {
+        cb.checked = task.assignees && task.assignees.includes(cb.value);
+      });
+      updateEditDropdownText();
+
+      document.getElementById('edit-modal').style.display = 'flex';
+    }
+
+    function closeEditModal() {
+      document.getElementById('edit-modal').style.display = 'none';
+    }
+
+    function saveTaskEdit() {
+      const id = document.getElementById('edit-task-id').value;
+      const task = tasks.find(t => t.id === id);
+      if (!task) return;
+
+      const title = document.getElementById('edit-task-title').value;
+      if (!title.trim()) {
+        alert('Çalışma adı zorunludur!');
+        return;
+      }
+
+      task.title = title;
+      task.company = document.getElementById('edit-task-company-select').value;
+      task.assignees = getSelectedAssignees('#edit-assignee-checkbox-list');
+      task.datetime = document.getElementById('edit-task-datetime').value || null;
+      task.description = document.getElementById('edit-task-desc').value;
+
+      saveData();
+      closeEditModal();
+      alert('Görev başarıyla güncellendi.');
+    }
+
+    function deleteTask(taskId) {
+      if (confirm('Bu görevi silmek istediğinize emin misiniz?')) {
+        tasks = tasks.filter(t => t.id !== taskId);
+        saveData();
+        closeModal();
+      }
     }
 
     function renderClients() {
@@ -845,7 +1142,7 @@
       tbody.innerHTML = '';
 
       if (Object.keys(clients).length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3">Henüz müşteri eklenmemiş.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="3">Henüz marka eklenmemiş.</td></tr>';
         return;
       }
 
@@ -857,7 +1154,7 @@
           <td><b>${client.name}</b></td>
           <td>${client.contact || '-'}</td>
           <td>
-            <button onclick="openClientSocialCalendar('${id}')" style="width: auto; padding: 4px 10px; font-size: 12px; background:var(--accent);">Paylaşım Takvimi</button>
+            <button onclick="openClientSocialCalendar('${id}')" style="width: auto; padding: 4px 10px; font-size: 12px; background:var(--accent);">Takvim</button>
             ${isAdmin ? `<button onclick="deleteClient('${id}')" style="width: auto; padding: 4px 10px; font-size: 12px; background: #ef4444;">Sil</button>` : ''}
           </td>
         `;
@@ -870,7 +1167,7 @@
       const contact = document.getElementById('client-contact-input').value.trim();
 
       if (!name) {
-        alert('Müşteri/Firma adı zorunludur!');
+        alert('Marka adı zorunludur!');
         return;
       }
 
@@ -884,14 +1181,14 @@
 
     function deleteClient(id) {
       if (!currentUser || currentUser.toLowerCase() !== 'zorbay') {
-        alert('Müşteri silme yetkisi yalnızca Admin kullanıcısına aittir!');
+        alert('Marka silme yetkisi yalnızca Admin kullanıcısına aittir!');
         return;
       }
 
       const client = clients[id];
       if (!client) return;
 
-      if (confirm(`"${client.name}" müşterisini ve bağlı tüm paylaşım takvimini silmek istediğinize emin misiniz?`)) {
+      if (confirm(`"${client.name}" markasını ve bağlı tüm paylaşım takvimini silmek istediğinize emin misiniz?`)) {
         tasks = tasks.filter(t => t.clientId !== id);
         delete clients[id];
         saveClients();
@@ -967,7 +1264,8 @@
         id: t.id,
         title: `${t.title} (${t.assignees ? t.assignees.join(', ') : ''})`,
         start: t.datetime,
-        className: 'fc-event-social'
+        backgroundColor: '#8b5cf6',
+        borderColor: '#7c3aed'
       }));
 
       clientCalendarInstance = new FullCalendar.Calendar(calendarEl, {
@@ -980,18 +1278,7 @@
         },
         events: events,
         eventClick: function(info) {
-          const t = tasks.find(x => x.id === info.event.id);
-          if (t) {
-            const modalBody = `
-              <b>Firma:</b> ${t.company}<br>
-              <b>Sorumlular:</b> ${t.assignees ? t.assignees.join(', ') : ''}<br>
-              <b>Paylaşım Tarihi:</b> ${new Date(t.datetime).toLocaleString('tr-TR')}<br>
-              <b>Durum:</b> ${t.status.toUpperCase()}<br>
-              <hr style="margin:10px 0; border:0; border-top:1px solid #e2e8f0;">
-              <b>Metin / Detaylar:</b><br>${t.description ? t.description.replace(/\n/g, '<br>') : 'Detay girilmemiş.'}
-            `;
-            showModal(t.title, modalBody);
-          }
+          openTaskModal(info.event.id);
         }
       });
       clientCalendarInstance.render();
@@ -1077,17 +1364,18 @@
               <h4>${month} Tamamlanmış Görev Listesi</h4>
               <button onclick="exportPDF('${pdfContainerId}', '${month}')">Tamamlanmış Görev Listesi (PDF İndir)</button>
             </div>
-            <table>
-              <thead>
-                <tr>
-                  <th>Çalışma Adı</th>
-                  <th>Firma</th>
-                  <th>Sorumlular</th>
-                  <th>Oluşturan</th>
-                  <th>Tamamlanma Tarihi</th>
-                </tr>
-              </thead>
-              <tbody>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Çalışma Adı</th>
+                    <th>Marka</th>
+                    <th>Sorumlular</th>
+                    <th>Oluşturan</th>
+                    <th>Tamamlanma Tarihi</th>
+                  </tr>
+                </thead>
+                <tbody>
         `;
 
         items.forEach(i => {
@@ -1104,8 +1392,9 @@
         });
 
         tableHTML += `
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
           </div>
         `;
         monthDiv.innerHTML = tableHTML;
@@ -1121,10 +1410,10 @@
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><b>${username}</b> ${username.toLowerCase() === 'zorbay' ? '(Admin)' : ''}</td>
-          <td><input type="password" value="${password}" id="pass-input-${username}" style="width: 150px; padding: 4px;"></td>
+          <td><input type="password" value="${password}" id="pass-input-${username}" style="width: 140px; padding: 4px;"></td>
           <td>
-            <button onclick="updateUserPassword('${username}')" style="width: auto; padding: 4px 10px; font-size: 12px;">Güncelle</button>
-            ${username.toLowerCase() !== 'zorbay' ? `<button onclick="deleteUser('${username}')" style="width: auto; padding: 4px 10px; font-size: 12px; background: #ef4444;">Sil</button>` : ''}
+            <button onclick="updateUserPassword('${username}')" style="width: auto; padding: 4px 8px; font-size: 12px;">Güncelle</button>
+            ${username.toLowerCase() !== 'zorbay' ? `<button onclick="deleteUser('${username}')" style="width: auto; padding: 4px 8px; font-size: 12px; background: #ef4444;">Sil</button>` : ''}
           </td>
         `;
         tbody.appendChild(tr);
@@ -1192,6 +1481,10 @@
       db.ref('users').set(users);
     }
 
+    function saveUserColors() {
+      db.ref('userColors').set(userColors);
+    }
+
     function saveClients() {
       db.ref('clients').set(clients);
     }
@@ -1205,6 +1498,7 @@
     function showModal(title, desc) {
       document.getElementById('modal-title').innerText = title;
       document.getElementById('modal-desc').innerHTML = desc;
+      document.getElementById('modal-actions').innerHTML = `<button onclick="closeModal()">Kapat</button>`;
       document.getElementById('modal').style.display = 'flex';
     }
 
