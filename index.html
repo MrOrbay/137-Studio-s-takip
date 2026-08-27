@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>137 Studio - İş Takip Sistemi</title>
+  
+  <link rel="icon" type="image/png" href="https://pngup.com/ec43/logo1.png">
+  <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIjEzNyBTdHVkaW8gxZ9zIFNpc3RlbWkiLAogICJzaG9ydF9uYW1lIjogIjEzN1N0dWRpbyIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMGExYTM2IiwKICAidGhlbWVfY29sb3IiOiAiIzBhMWEzNiIKfQ==">
+  <meta name="theme-color" content="#0a1a36">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/tr.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+  <style>
+    :root {
+      --bg-color: #f4f7fc;
+      --navy: #0a1a36;
+      --navy-light: #162a4d;
+      --accent: #2563eb;
+      --white: #ffffff;
+      --text: #334155;
+      --border: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--bg-color); color: var(--text); min-height: 100vh; }
+
+    .brand-container { display: flex; align-items: center; gap: 12px; }
+    .app-logo { 
+      height: 52px; 
+      width: auto; 
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
+
+    #login-screen {
+      display: flex; justify-content: center; align-items: center; height: 100vh; background: var(--navy);
+    }
+    .login-card {
+      background: var(--white); padding: 2.5rem; border-radius: 12px; width: 100%; max-width: 420px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center;
+    }
+    .login-card .brand-container { 
+      justify-content: center; 
+      margin-bottom: 1.5rem; 
+      background: var(--navy);
+      padding: 12px;
+      border-radius: 8px;
+    }
+    .login-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
+    .login-tabs button { background: #e2e8f0; color: var(--navy); border: none; padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    .login-tabs button.active { background: var(--navy); color: var(--white); }
+
+    .remember-me {
+      display: flex; align-items: center; gap: 8px; margin: 10px 0 15px 0; font-size: 13px; color: #64748b; cursor: pointer;
+    }
+    .remember-me input { width: auto; margin: 0; cursor: pointer; }
+
+    input, select, textarea, button {
+      width: 100%; padding: 12px; margin: 6px 0; border: 1px solid var(--border); border-radius: 6px; font-size: 14px;
+    }
+    textarea { resize: vertical; min-height: 70px; }
+    button { background: var(--navy); color: var(--white); border: none; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    button:hover { background: var(--navy-light); }
+    
+    #app { display: none; }
+    header {
+      background: var(--navy); color: var(--white); padding: 1rem 2rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
+    }
+    nav { display: flex; gap: 10px; flex-wrap: wrap; }
+    nav button { background: transparent; border: 1px solid var(--white); width: auto; padding: 8px 16px; }
+    nav button.active, nav button:hover { background: var(--white); color: var(--navy); }
+
+    .container { padding: 2rem; max-width: 1400px; margin: 0 auto; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .pwa-fixed-wrapper {
+      position: fixed; bottom: 20px; right: 20px; z-index: 999;
+      display: flex; align-items: center; background: var(--accent); color: var(--white);
+      border-radius: 30px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); padding: 4px;
+    }
+    .pwa-fixed-btn {
+      background: transparent; border: none; padding: 8px 14px; font-weight: bold; cursor: pointer; color: white;
+      display: flex; align-items: center; gap: 6px; font-size: 13px;
+    }
+    .pwa-close-btn {
+      background: rgba(255,255,255,0.2); border: none; border-radius: 50%; width: 24px; height: 24px;
+      color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      margin-right: 4px; font-size: 12px;
+    }
+    .pwa-close-btn:hover { background: rgba(255,255,255,0.4); }
+
+    .kanban-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; align-items: start; }
+    .column { background: #ebedf0; border-radius: 8px; padding: 15px; min-height: 500px; }
+    .column h3 { margin-bottom: 15px; color: var(--navy); border-bottom: 2px solid var(--border); padding-bottom: 8px; }
+    
+    .task-card {
+      background: var(--white); padding: 15px; border-radius: 6px; margin-bottom: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: grab; border-left: 4px solid var(--navy);
+    }
+    .task-card h4 { margin-bottom: 5px; font-size: 16px; }
+    .task-card p { font-size: 12px; color: #64748b; margin-bottom: 6px; }
+    .task-card .company-tag { display: inline-block; background: #dbeafe; color: #1e40af; font-size: 11px; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-bottom: 4px; }
+    .task-card .tag { display: inline-block; background: #e2e8f0; font-size: 11px; padding: 2px 6px; border-radius: 4px; }
+
+    .task-form, .admin-card, .client-card { background: var(--white); padding: 20px; border-radius: 8px; margin-bottom: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; align-items: start; }
+
+    .dropdown-checkbox-container { position: relative; width: 100%; margin: 6px 0; }
+    .dropdown-btn {
+      background: var(--white); color: var(--text); border: 1px solid var(--border);
+      padding: 12px; text-align: left; border-radius: 6px; font-size: 14px; cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .dropdown-list {
+      display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--white);
+      border: 1px solid var(--border); border-radius: 6px; max-height: 180px; overflow-y: auto;
+      z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 6px;
+    }
+    .dropdown-list label {
+      display: flex; align-items: center; gap: 8px; padding: 8px; cursor: pointer; font-size: 13px;
+      border-radius: 4px; transition: 0.1s;
+    }
+    .dropdown-list label:hover { background: #f1f5f9; }
+    .dropdown-list input[type="checkbox"] { width: auto; margin: 0; cursor: pointer; }
+
+    .archive-month { background: var(--white); padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .archive-month-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+    .archive-month-header h4 { color: var(--navy); font-size: 18px; }
+    .archive-month-header button { width: auto; font-size: 12px; padding: 8px 14px; }
+    
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid var(--border); padding: 10px; text-align: left; font-size: 13px; }
+    th { background: var(--navy); color: var(--white); }
+
+    .modal {
+      display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(10, 26, 54, 0.7); backdrop-filter: blur(2px);
+      justify-content: center; align-items: center; z-index: 9999;
+    }
+    .modal-content {
+      background: var(--white); padding: 25px; border-radius: 12px; max-width: 520px; width: 90%;
+      max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); border: 1px solid var(--border);
+    }
+
+    .guide-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-bottom: 12px; text-align: left; }
+    .guide-box h4 { color: var(--navy); margin-bottom: 6px; font-size: 14px; }
+    .guide-box ul { padding-left: 20px; font-size: 13px; color: #475569; }
+
+    .fc-event { cursor: pointer; padding: 4px 8px; }
+    .fc-event-holiday { background-color: #ef4444 !important; border-color: #dc2626 !important; color: white !important; }
+    .fc-event-social { background-color: #8b5cf6 !important; border-color: #7c3aed !important; color: white !important; }
+  </style>
+</head>
+<body>
+
+  <div class="pwa-fixed-wrapper" id="pwa-floating-bar">
+    <button class="pwa-fixed-btn" onclick="openPwaGuide()">
+      <span>📲</span> Uygulama Yükle
+    </button>
+    <button class="pwa-close-btn" onclick="dismissPwaBar()" title="Kapat">✕</button>
+  </div>
+
+  <div id="login-screen">
+    <div class="login-card">
+      <div class="brand-container">
+        <img src="https://pngup.com/ec43/logo1.png" alt="137 Studio Logo" class="app-logo">
+        <h2>137 Studio</h2>
+      </div>
+
+      <div class="login-tabs">
+        <button id="tab-login-btn" class="active" onclick="toggleAuthMode('login')">Giriş Yap</button>
+        <button id="tab-register-btn" onclick="toggleAuthMode('register')">Kayıt Ol</button>
+      </div>
+
+      <div id="auth-form-container">
+        <input type="text" id="username" placeholder="Kullanıcı Adı">
+        <input type="password" id="password" placeholder="Şifre">
+        <label class="remember-me" id="remember-me-label">
+          <input type="checkbox" id="remember-me-check" checked> Oturumu açık tut (Beni Hatırla)
+        </label>
+        <button id="auth-action-btn" onclick="login()">Giriş Yap</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="app">
+    <header>
+      <div class="brand-container">
+        <img src="https://pngup.com/ec43/logo1.png" alt="137 Studio Logo" class="app-logo">
+        <h2 style="font-size: 1.3rem;">137 Studio - İş Takip Sistemi</h2>
+      </div>
+      <nav>
+        <button onclick="switchTab('kanban')" class="active" id="btn-kanban">İş Takip</button>
+        <button onclick="switchTab('calendar')" id="btn-calendar">Takvim</button>
+        <button onclick="switchTab('clients')" id="btn-clients">Müşteriler</button>
+        <button onclick="switchTab('archive')" id="btn-archive">Arşiv</button>
+        <button onclick="switchTab('admin')" id="btn-admin" style="display: none;">Admin Paneli</button>
+      </nav>
+      <div>
+        <span id="user-display" style="margin-right: 15px; font-weight: bold;"></span>
+        <button onclick="logout()" style="width: auto; background: #ef4444; padding: 6px 12px;">Çıkış</button>
+      </div>
+    </header>
+
+    <div class="container">
+      <div id="page-kanban" class="page active">
+        <div class="task-form">
+          <h3 style="margin-bottom: 10px; color: var(--navy);">Yeni İş Oluştur</h3>
+          <div class="form-row">
+            <input type="text" id="task-title" placeholder="Çalışma Adı (Zorunlu)">
+            <input type="text" id="task-company" placeholder="Firma İsmi (İsteğe bağlı)">
+            
+            <div class="dropdown-checkbox-container">
+              <div class="dropdown-btn" onclick="toggleAssigneeDropdown()">
+                <span id="dropdown-btn-text">Kişileri Etiketle (Seçiniz)</span>
+                <span>▼</span>
+              </div>
+              <div class="dropdown-list" id="assignee-checkbox-list"></div>
+            </div>
+
+            <input type="datetime-local" id="task-datetime">
+          </div>
+          <textarea id="task-desc" placeholder="Görev Açıklaması (İsteğe bağlı)"></textarea>
+          <button onclick="createTask()" style="margin-top: 6px;">Görev Ekle</button>
+        </div>
+
+        <div class="kanban-board">
+          <div class="column" ondrop="drop(event, 'todo')" ondragover="allowDrop(event)">
+            <h3>Yapılacaklar</h3>
+            <div id="col-todo"></div>
+          </div>
+          <div class="column" ondrop="drop(event, 'inprogress')" ondragover="allowDrop(event)">
+            <h3>Yapımdakiler</h3>
+            <div id="col-inprogress"></div>
+          </div>
+          <div class="column" ondrop="drop(event, 'revision')" ondragover="allowDrop(event)">
+            <h3>Revizeler</h3>
+            <div id="col-revision"></div>
+          </div>
+          <div class="column" ondrop="drop(event, 'done')" ondragover="allowDrop(event)">
+            <h3>Onaylananlar</h3>
+            <div id="col-done"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="page-calendar" class="page">
+        <div id="calendar" style="background: var(--white); padding: 20px; border-radius: 8px;"></div>
+      </div>
+
+      <div id="page-clients" class="page">
+        <div class="client-card">
+          <h3 style="margin-bottom: 10px; color: var(--navy);">Yeni Müşteri / Firma Ekle</h3>
+          <div class="form-row">
+            <input type="text" id="client-name-input" placeholder="Müşteri / Firma Adı">
+            <input type="text" id="client-contact-input" placeholder="İletişim Kişisi / Telefon (Opsiyonel)">
+            <button onclick="addClient()">Müşteri Kaydet</button>
+          </div>
+        </div>
+
+        <div class="client-card">
+          <h4 style="margin-bottom: 15px; color: var(--navy);">Müşteri Listesi</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>Müşteri / Firma Adı</th>
+                <th>İletişim</th>
+                <th>İşlemler</th>
+              </tr>
+            </thead>
+            <tbody id="client-table-body"></tbody>
+          </table>
+        </div>
+
+        <div id="client-social-calendar-section" class="client-card" style="display:none;">
+          <h3 id="selected-client-title" style="color: var(--navy); margin-bottom: 15px;"></h3>
+          
+          <div class="task-form" style="background:#f8fafc; border:1px solid #e2e8f0;">
+            <h4 style="margin-bottom: 10px; color: var(--navy);">Yeni Paylaşım İçeriği Ekle</h4>
+            <div class="form-row">
+              <input type="text" id="social-post-title" placeholder="Paylaşım Başlığı / Görsel Konusu (Zorunlu)">
+              <input type="datetime-local" id="social-post-date" placeholder="Paylaşım Tarihi ve Saati">
+              <div class="dropdown-checkbox-container">
+                <div class="dropdown-btn" onclick="toggleSocialAssigneeDropdown()">
+                  <span id="social-dropdown-btn-text">Sorumluları Etiketle</span>
+                  <span>▼</span>
+                </div>
+                <div class="dropdown-list" id="social-assignee-checkbox-list"></div>
+              </div>
+            </div>
+            <textarea id="social-post-desc" placeholder="Metin / Tasarım Detayı / Hashtagler"></textarea>
+            <button onclick="createSocialPost()" style="margin-top: 6px; background:var(--accent);">Paylaşım Görevi Oluştur</button>
+          </div>
+
+          <div id="client-calendar" style="background: var(--white); padding: 15px; border-radius: 8px; margin-top: 15px;"></div>
+        </div>
+      </div>
+
+      <div id="page-archive" class="page">
+        <h3 style="margin-bottom: 15px; color: var(--navy);">Tamamlanmış Görev Arşivi</h3>
+        <div id="archive-list"></div>
+      </div>
+
+      <div id="page-admin" class="page">
+        <div class="admin-card">
+          <h3 style="margin-bottom: 15px; color: var(--navy);">Kullanıcı Yönetim Paneli</h3>
+          <div class="form-row">
+            <input type="text" id="new-user-name" placeholder="Yeni Kullanıcı Adı">
+            <input type="password" id="new-user-pass" placeholder="Şifre">
+            <button onclick="addUser()">Kullanıcı Ekle / Güncelle</button>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <h4 style="margin-bottom: 10px; color: var(--navy);">Mevcut Kullanıcılar</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>Kullanıcı Adı</th>
+                <th>Şifre</th>
+                <th>İşlemler</th>
+              </tr>
+            </thead>
+            <tbody id="user-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <h3 id="modal-title" style="color: var(--navy); margin-bottom: 12px; font-size: 18px;"></h3>
+      <div id="modal-desc" style="margin-bottom: 20px; font-size: 14px; line-height: 1.6; color: var(--text);"></div>
+      <button onclick="closeModal()">Kapat</button>
+    </div>
+  </div>
+
+  <div id="pwa-guide-modal" class="modal">
+    <div class="modal-content">
+      <h3 style="color: var(--navy); margin-bottom: 15px;">Masaüstü ve Mobil Uygulama Olarak Ekleme</h3>
+      <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">137 Studio İş Sistemi'ni bilgisayarınıza veya telefonunuza uygulama gibi eklemek için kullandığınız tarayıcıya göre adımları takip edin:</p>
+      
+      <div id="direct-install-btn-container" style="display:none; margin-bottom:15px;">
+        <button onclick="installPWA()" style="background:var(--accent);">Otomatik Uygulama Olarak Yükle</button>
+      </div>
+
+      <div class="guide-box">
+        <h4>📱 iOS (iPhone / iPad - Safari)</h4>
+        <ul>
+          <li>Safari alt menüsündeki <b>Paylaş (⎋)</b> butonuna dokunun.</li>
+          <li>Açılan listede <b>"Ana Ekrana Ekle"</b> seçeneğini seçin.</li>
+        </ul>
+      </div>
+
+      <div class="guide-box">
+        <h4>🤖 Android (Chrome / Edge)</h4>
+        <ul>
+          <li>Sağ üstteki <b>Üç Nokta (⋮)</b> menüsüne dokunun.</li>
+          <li><b>"Uygulamayı Yükle"</b> veya <b>"Ana Ekrana Ekle"</b> seçeneğine tıklayın.</li>
+        </ul>
+      </div>
+
+      <div class="guide-box">
+        <h4>💻 Windows & Mac (Chrome / Edge / Safari)</h4>
+        <ul>
+          <li><b>Chrome & Edge:</b> Adres çubuğundaki <b>Yükle (💻↓)</b> simgesine veya Üç Nokta > <b>Diğer Araçlar / Kısayol Oluştur</b> seçeneğine tıklayın.</li>
+          <li><b>Mac Safari:</b> Üst menüden <b>Dosya > Dock'a Ekle</b> seçeneğine tıklayın.</li>
+        </ul>
+      </div>
+
+      <button onclick="closePwaGuide()">Kapat</button>
+    </div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB-ySCSJxm_4jFOnTRaEiyrmowUOyy1A3E",
+      authDomain: "studio-18bf7.firebaseapp.com",
+      databaseURL: "https://studio-18bf7-default-rtdb.firebaseio.com",
+      projectId: "studio-18bf7",
+      storageBucket: "studio-18bf7.firebasestorage.app",
+      messagingSenderId: "203754549331",
+      appId: "1:203754549331:web:b35fe3209df08bba5d16a6"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let users = { 'Zorbay': '15241524' };
+    let clients = {};
+    let currentUser = null;
+    let tasks = [];
+    let archive = [];
+    let calendarInstance = null;
+    let clientCalendarInstance = null;
+    let activeClientId = null;
+    let deferredPrompt = null;
+
+    // Genişletilmiş Özel Günler Listesi (Kadınlar Günü, Anneler Günü, Babalar Günü, Öğretmenler Günü Eklendi)
+    const turkishHolidays = [
+      { title: "🎉 Yılbaşı", date: "2026-01-01" },
+      { title: "👩‍🦰 8 Mart Dünya Kadınlar Günü", date: "2026-03-08" },
+      { title: "🇹🇷 23 Nisan Ulusal Egemenlik ve Çocuk Bayramı", date: "2026-04-23" },
+      { title: "🇹🇷 1 Mayıs Emek ve Dayanışma Günü", date: "2026-05-01" },
+      { title: "💐 Anneler Günü", date: "2026-05-10" },
+      { title: "🇹🇷 19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı", date: "2026-05-19" },
+      { title: "👔 Babalar Günü", date: "2026-06-21" },
+      { title: "🇹🇷 15 Temmuz Demokrasi ve Milli Birlik Günü", date: "2026-07-15" },
+      { title: "🇹🇷 30 Ağustos Zafer Bayramı", date: "2026-08-30" },
+      { title: "🇹🇷 29 Ekim Cumhuriyet Bayramı", date: "2026-10-29" },
+      { title: "🇹🇷 10 Kasım Atatürk'ü Anma Günü", date: "2026-11-10" },
+      { title: "👩‍🏫 24 Kasım Öğretmenler Günü", date: "2026-11-24" },
+      { title: "🕌 Ramazan Bayramı Arife", date: "2026-03-19" },
+      { title: "🕌 Ramazan Bayramı 1. Gün", date: "2026-03-20" },
+      { title: "🕌 Ramazan Bayramı 2. Gün", date: "2026-03-21" },
+      { title: "🕌 Ramazan Bayramı 3. Gün", date: "2026-03-22" },
+      { title: "🕌 Kurban Bayramı Arife", date: "2026-05-26" },
+      { title: "🕌 Kurban Bayramı 1. Gün", date: "2026-05-27" },
+      { title: "🕌 Kurban Bayramı 2. Gün", date: "2026-05-28" },
+      { title: "🕌 Kurban Bayramı 3. Gün", date: "2026-05-29" },
+      { title: "🕌 Kurban Bayramı 4. Gün", date: "2026-05-30" },
+      { title: "✨ Berat Kandili", date: "2026-02-02" },
+      { title: "✨ Kadir Gecesi", date: "2026-03-15" },
+      { title: "✨ Mevlid Kandili", date: "2026-08-24" }
+    ];
+
+    db.ref('users').on('value', (snapshot) => {
+      const val = snapshot.val();
+      if (val) {
+        users = val;
+      } else {
+        db.ref('users').set(users);
+      }
+      populateAssignees();
+      checkRememberedUser();
+      if (currentUser && document.getElementById('page-admin').classList.contains('active')) renderAdminPanel();
+    });
+
+    db.ref('clients').on('value', (snapshot) => {
+      clients = snapshot.val() || {};
+      if (currentUser && document.getElementById('page-clients').classList.contains('active')) renderClients();
+    });
+
+    db.ref('tasks').on('value', (snapshot) => {
+      const val = snapshot.val();
+      tasks = val ? (Array.isArray(val) ? val : Object.values(val)) : [];
+      if (currentUser) {
+        renderTasks();
+        if (document.getElementById('page-calendar').classList.contains('active')) renderCalendar();
+        if (activeClientId && document.getElementById('client-social-calendar-section').style.display !== 'none') {
+          renderClientCalendar(activeClientId);
+        }
+        checkScheduledNotifications();
+      }
+    });
+
+    db.ref('archive').on('value', (snapshot) => {
+      const val = snapshot.val();
+      archive = val ? (Array.isArray(val) ? val : Object.values(val)) : [];
+      if (currentUser && document.getElementById('page-archive').classList.contains('active')) renderArchive();
+    });
+
+    if ('Notification' in window && Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('direct-install-btn-container').style.display = 'block';
+    });
+
+    document.addEventListener('click', (e) => {
+      const container1 = document.querySelector('#page-kanban .dropdown-checkbox-container');
+      const container2 = document.querySelector('#client-social-calendar-section .dropdown-checkbox-container');
+      
+      if (container1 && !container1.contains(e.target)) {
+        document.getElementById('assignee-checkbox-list').style.display = 'none';
+      }
+      if (container2 && !container2.contains(e.target)) {
+        document.getElementById('social-assignee-checkbox-list').style.display = 'none';
+      }
+    });
+
+    function dismissPwaBar() {
+      document.getElementById('pwa-floating-bar').style.display = 'none';
+    }
+
+    function openPwaGuide() {
+      document.getElementById('pwa-guide-modal').style.display = 'flex';
+    }
+
+    function closePwaGuide() {
+      document.getElementById('pwa-guide-modal').style.display = 'none';
+    }
+
+    function installPWA() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => {
+          deferredPrompt = null;
+          closePwaGuide();
+        });
+      }
+    }
+
+    function toggleAuthMode(mode) {
+      const loginBtn = document.getElementById('tab-login-btn');
+      const regBtn = document.getElementById('tab-register-btn');
+      const actionBtn = document.getElementById('auth-action-btn');
+      const rememberLabel = document.getElementById('remember-me-label');
+
+      if (mode === 'login') {
+        loginBtn.classList.add('active');
+        regBtn.classList.remove('active');
+        actionBtn.innerText = 'Giriş Yap';
+        actionBtn.setAttribute('onclick', 'login()');
+        rememberLabel.style.display = 'flex';
+      } else {
+        regBtn.classList.add('active');
+        loginBtn.classList.remove('active');
+        actionBtn.innerText = 'Kayıt Ol';
+        actionBtn.setAttribute('onclick', 'register()');
+        rememberLabel.style.display = 'none';
+      }
+    }
+
+    function checkRememberedUser() {
+      if (currentUser) return;
+      const savedUser = localStorage.getItem('137_remembered_user');
+      const savedPass = localStorage.getItem('137_remembered_pass');
+
+      if (savedUser && savedPass) {
+        const matchedUser = Object.keys(users).find(u => u.toLowerCase() === savedUser.toLowerCase());
+        if (matchedUser && users[matchedUser] === savedPass) {
+          executeLogin(matchedUser);
+        } else {
+          localStorage.removeItem('137_remembered_user');
+          localStorage.removeItem('137_remembered_pass');
+        }
+      }
+    }
+
+    function executeLogin(username) {
+      currentUser = username;
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      document.getElementById('user-display').innerText = `Kullanıcı: ${currentUser}`;
+
+      if (currentUser.toLowerCase() === 'zorbay') {
+        document.getElementById('btn-admin').style.display = 'inline-block';
+      } else {
+        document.getElementById('btn-admin').style.display = 'none';
+      }
+
+      populateAssignees();
+      renderTasks();
+      checkScheduledNotifications();
+    }
+
+    function login() {
+      const inputUser = document.getElementById('username').value.trim();
+      const inputPass = document.getElementById('password').value.trim();
+      const remember = document.getElementById('remember-me-check').checked;
+      
+      const matchedUser = Object.keys(users).find(u => u.toLowerCase() === inputUser.toLowerCase());
+
+      if (matchedUser && users[matchedUser] === inputPass) {
+        if (remember) {
+          localStorage.setItem('137_remembered_user', matchedUser);
+          localStorage.setItem('137_remembered_pass', inputPass);
+        } else {
+          localStorage.removeItem('137_remembered_user');
+          localStorage.removeItem('137_remembered_pass');
+        }
+        executeLogin(matchedUser);
+      } else {
+        alert('Hatalı kullanıcı adı veya şifre!');
+      }
+    }
+
+    function register() {
+      const inputUser = document.getElementById('username').value.trim();
+      const inputPass = document.getElementById('password').value.trim();
+
+      if (!inputUser || !inputPass) {
+        alert('Kullanıcı adı ve şifre zorunludur!');
+        return;
+      }
+
+      const existingUser = Object.keys(users).find(u => u.toLowerCase() === inputUser.toLowerCase());
+      if (existingUser) {
+        alert('Bu kullanıcı adı zaten alınmış!');
+        return;
+      }
+
+      users[inputUser] = inputPass;
+      saveUsers();
+      alert('Kayıt başarılı! Giriş yapabilirsiniz.');
+      toggleAuthMode('login');
+      document.getElementById('password').value = '';
+    }
+
+    function logout() {
+      currentUser = null;
+      localStorage.removeItem('137_remembered_user');
+      localStorage.removeItem('137_remembered_pass');
+      document.getElementById('app').style.display = 'none';
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+      switchTab('kanban');
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+      
+      document.getElementById(`page-${tab}`).classList.add('active');
+      document.getElementById(`btn-${tab}`).classList.add('active');
+
+      if (tab === 'calendar') renderCalendar();
+      if (tab === 'clients') renderClients();
+      if (tab === 'archive') renderArchive();
+      if (tab === 'admin') renderAdminPanel();
+    }
+
+    function toggleAssigneeDropdown() {
+      const list = document.getElementById('assignee-checkbox-list');
+      list.style.display = list.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function toggleSocialAssigneeDropdown() {
+      const list = document.getElementById('social-assignee-checkbox-list');
+      list.style.display = list.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function populateAssignees() {
+      const mainList = document.getElementById('assignee-checkbox-list');
+      const socialList = document.getElementById('social-assignee-checkbox-list');
+      
+      mainList.innerHTML = '';
+      socialList.innerHTML = '';
+
+      Object.keys(users).forEach(u => {
+        const l1 = document.createElement('label');
+        l1.innerHTML = `<input type="checkbox" value="${u}" onchange="updateDropdownText()"> ${u}`;
+        mainList.appendChild(l1);
+
+        const l2 = document.createElement('label');
+        l2.innerHTML = `<input type="checkbox" value="${u}" onchange="updateSocialDropdownText()"> ${u}`;
+        socialList.appendChild(l2);
+      });
+
+      updateDropdownText();
+      updateSocialDropdownText();
+    }
+
+    function updateDropdownText() {
+      const checkedBoxes = document.querySelectorAll('#assignee-checkbox-list input[type="checkbox"]:checked');
+      const selectedNames = Array.from(checkedBoxes).map(cb => cb.value);
+      document.getElementById('dropdown-btn-text').innerText = selectedNames.length === 0 ? 'Kişileri Etiketle (Seçiniz)' : selectedNames.join(', ');
+    }
+
+    function updateSocialDropdownText() {
+      const checkedBoxes = document.querySelectorAll('#social-assignee-checkbox-list input[type="checkbox"]:checked');
+      const selectedNames = Array.from(checkedBoxes).map(cb => cb.value);
+      document.getElementById('social-dropdown-btn-text').innerText = selectedNames.length === 0 ? 'Sorumluları Etiketle' : selectedNames.join(', ');
+    }
+
+    function getSelectedAssignees(selector) {
+      const checkedBoxes = document.querySelectorAll(`${selector} input[type="checkbox"]:checked`);
+      return Array.from(checkedBoxes).map(cb => cb.value);
+    }
+
+    function createTask() {
+      const title = document.getElementById('task-title').value;
+      const company = document.getElementById('task-company').value.trim();
+      const assignees = getSelectedAssignees('#assignee-checkbox-list');
+      const datetime = document.getElementById('task-datetime').value;
+      const description = document.getElementById('task-desc').value;
+
+      if (!title.trim()) {
+        alert('Çalışma adı zorunludur!');
+        return;
+      }
+
+      const newTask = {
+        id: Date.now().toString(),
+        title,
+        company: company || '',
+        assignees: assignees.length > 0 ? assignees : [currentUser],
+        description: description || '',
+        creator: currentUser,
+        datetime: datetime || null,
+        status: 'todo',
+        isSocialPost: false
+      };
+
+      tasks.push(newTask);
+      saveData();
+
+      assignees.forEach(u => {
+        if (u !== currentUser) sendNotification(`Yeni Görev Etiketlendi!`, `${currentUser} sizi "${title}" görevine etiketledi.`);
+      });
+
+      document.getElementById('task-title').value = '';
+      document.getElementById('task-company').value = '';
+      document.getElementById('task-desc').value = '';
+      document.getElementById('task-datetime').value = '';
+      document.querySelectorAll('#assignee-checkbox-list input[type="checkbox"]').forEach(cb => cb.checked = false);
+      updateDropdownText();
+    }
+
+    function renderTasks() {
+      ['todo', 'inprogress', 'revision', 'done'].forEach(col => {
+        document.getElementById(`col-${col}`).innerHTML = '';
+      });
+
+      const userTasks = tasks.filter(t => 
+        t.creator === currentUser || 
+        (t.assignees && t.assignees.includes(currentUser))
+      );
+
+      userTasks.forEach(task => {
+        const card = document.createElement('div');
+        card.className = 'task-card';
+        card.draggable = true;
+        card.ondragstart = (e) => e.dataTransfer.setData('text/plain', task.id);
+        
+        const assigneeListText = task.assignees ? task.assignees.join(', ') : 'Belirtilmedi';
+        const modalBody = `
+          ${task.company ? `<b>Firma:</b> ${task.company}<br>` : ''}
+          <b>Etiketlenen Kişiler:</b> ${assigneeListText}<br>
+          <b>Oluşturan:</b> ${task.creator}<br>
+          <b>Tarih:</b> ${task.datetime ? new Date(task.datetime).toLocaleString('tr-TR') : 'Belirtilmedi'}<br>
+          <hr style="margin:10px 0; border:0; border-top:1px solid #e2e8f0;">
+          <b>Açıklama:</b><br>${task.description ? task.description.replace(/\n/g, '<br>') : 'Açıklama girilmemiş.'}
+        `;
+
+        card.onclick = () => showModal(task.title, modalBody);
+        
+        card.innerHTML = `
+          ${task.company ? `<span class="company-tag">🏢 ${task.company}</span>` : ''}
+          <h4>${task.title}</h4>
+          <p>Sorumlular: ${assigneeListText}</p>
+          ${task.datetime ? `<p style="color:var(--accent);">📅 ${new Date(task.datetime).toLocaleString('tr-TR')}</p>` : ''}
+          <span class="tag">${task.status.toUpperCase()}</span>
+        `;
+
+        const targetCol = document.getElementById(`col-${task.status}`);
+        if (targetCol) targetCol.appendChild(card);
+      });
+    }
+
+    function allowDrop(ev) { ev.preventDefault(); }
+
+    function drop(ev, targetStatus) {
+      ev.preventDefault();
+      const taskId = ev.dataTransfer.getData('text/plain');
+      const taskIndex = tasks.findIndex(t => t.id === taskId);
+
+      if (taskIndex !== -1) {
+        if (targetStatus === 'done') {
+          const completedTask = tasks.splice(taskIndex, 1)[0];
+          completedTask.completedDate = new Date().toISOString();
+          archive.push(completedTask);
+          alert('Görev onaylandı ve Arşiv bölümüne aktarıldı.');
+        } else {
+          tasks[taskIndex].status = targetStatus;
+        }
+        saveData();
+      }
+    }
+
+    function renderCalendar() {
+      const calendarEl = document.getElementById('calendar');
+      if (calendarInstance) calendarInstance.destroy();
+
+      const userTasks = tasks.filter(t => 
+        (t.creator === currentUser || (t.assignees && t.assignees.includes(currentUser))) && 
+        t.datetime
+      );
+
+      const taskEvents = userTasks.map(t => ({
+        id: t.id,
+        title: `${t.company ? '['+t.company+'] ' : ''}${t.title} (${t.assignees ? t.assignees.join(', ') : ''})`,
+        start: t.datetime,
+        className: t.isSocialPost ? 'fc-event-social' : ''
+      }));
+
+      const holidayEvents = turkishHolidays.map((h, i) => ({
+        id: `holiday-${i}`,
+        title: h.title,
+        start: h.date,
+        allDay: true,
+        className: 'fc-event-holiday'
+      }));
+
+      calendarInstance = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'listMonth',
+        locale: 'tr',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'listMonth,dayGridMonth'
+        },
+        events: [...taskEvents, ...holidayEvents],
+        eventClick: function(info) {
+          if (info.event.id.startsWith('holiday-')) {
+            showModal(info.event.title, `<b>Tür:</b> Resmi / Dini Bayram veya Özel Gün<br><b>Tarih:</b> ${info.event.start.toLocaleDateString('tr-TR')}`);
+            return;
+          }
+          const t = tasks.find(x => x.id === info.event.id);
+          if (t) {
+            const modalBody = `
+              ${t.company ? `<b>Firma:</b> ${t.company}<br>` : ''}
+              <b>Etiketlenen Kişiler:</b> ${t.assignees ? t.assignees.join(', ') : ''}<br>
+              <b>Oluşturan:</b> ${t.creator}<br>
+              <b>Tarih:</b> ${new Date(t.datetime).toLocaleString('tr-TR')}<br>
+              <b>Durum:</b> ${t.status.toUpperCase()}<br>
+              <hr style="margin:10px 0; border:0; border-top:1px solid #e2e8f0;">
+              <b>Açıklama:</b><br>${t.description ? t.description.replace(/\n/g, '<br>') : 'Açıklama girilmemiş.'}
+            `;
+            showModal(t.title, modalBody);
+          }
+        }
+      });
+      calendarInstance.render();
+    }
+
+    function renderClients() {
+      const tbody = document.getElementById('client-table-body');
+      tbody.innerHTML = '';
+
+      if (Object.keys(clients).length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3">Henüz müşteri eklenmemiş.</td></tr>';
+        return;
+      }
+
+      const isAdmin = currentUser && currentUser.toLowerCase() === 'zorbay';
+
+      Object.entries(clients).forEach(([id, client]) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><b>${client.name}</b></td>
+          <td>${client.contact || '-'}</td>
+          <td>
+            <button onclick="openClientSocialCalendar('${id}')" style="width: auto; padding: 4px 10px; font-size: 12px; background:var(--accent);">Paylaşım Takvimi</button>
+            ${isAdmin ? `<button onclick="deleteClient('${id}')" style="width: auto; padding: 4px 10px; font-size: 12px; background: #ef4444;">Sil</button>` : ''}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function addClient() {
+      const name = document.getElementById('client-name-input').value.trim();
+      const contact = document.getElementById('client-contact-input').value.trim();
+
+      if (!name) {
+        alert('Müşteri/Firma adı zorunludur!');
+        return;
+      }
+
+      const id = 'client_' + Date.now();
+      clients[id] = { id, name, contact };
+      saveClients();
+      document.getElementById('client-name-input').value = '';
+      document.getElementById('client-contact-input').value = '';
+      renderClients();
+    }
+
+    function deleteClient(id) {
+      if (!currentUser || currentUser.toLowerCase() !== 'zorbay') {
+        alert('Müşteri silme yetkisi yalnızca Admin kullanıcısına aittir!');
+        return;
+      }
+
+      const client = clients[id];
+      if (!client) return;
+
+      if (confirm(`"${client.name}" müşterisini ve bağlı tüm paylaşım takvimini silmek istediğinize emin misiniz?`)) {
+        tasks = tasks.filter(t => t.clientId !== id);
+        delete clients[id];
+        saveClients();
+        saveData();
+        renderClients();
+        if (activeClientId === id) {
+          document.getElementById('client-social-calendar-section').style.display = 'none';
+          activeClientId = null;
+        }
+      }
+    }
+
+    function openClientSocialCalendar(id) {
+      const client = clients[id];
+      if (!client) return;
+      activeClientId = id;
+
+      document.getElementById('selected-client-title').innerText = `📢 ${client.name} - Sosyal Medya Paylaşım Takvimi`;
+      document.getElementById('client-social-calendar-section').style.display = 'block';
+
+      renderClientCalendar(id);
+    }
+
+    function createSocialPost() {
+      if (!activeClientId) return;
+      const client = clients[activeClientId];
+
+      const title = document.getElementById('social-post-title').value;
+      const datetime = document.getElementById('social-post-date').value;
+      const assignees = getSelectedAssignees('#social-assignee-checkbox-list');
+      const description = document.getElementById('social-post-desc').value;
+
+      if (!title.trim() || !datetime) {
+        alert('Paylaşım başlığı ve tarihi zorunludur!');
+        return;
+      }
+
+      const newTask = {
+        id: Date.now().toString(),
+        title: `[Paylaşım] ${title}`,
+        company: client.name,
+        clientId: activeClientId,
+        assignees: assignees.length > 0 ? assignees : [currentUser],
+        description: description || '',
+        creator: currentUser,
+        datetime: datetime,
+        status: 'todo',
+        isSocialPost: true
+      };
+
+      tasks.push(newTask);
+      saveData();
+
+      assignees.forEach(u => {
+        if (u !== currentUser) sendNotification(`Paylaşım Görevi Etiketlendi!`, `${client.name} için "${title}" paylaşım görevine etiketlendiniz.`);
+      });
+
+      document.getElementById('social-post-title').value = '';
+      document.getElementById('social-post-date').value = '';
+      document.getElementById('social-post-desc').value = '';
+      document.querySelectorAll('#social-assignee-checkbox-list input[type="checkbox"]').forEach(cb => cb.checked = false);
+      updateSocialDropdownText();
+
+      renderClientCalendar(activeClientId);
+    }
+
+    function renderClientCalendar(clientId) {
+      const calendarEl = document.getElementById('client-calendar');
+      if (clientCalendarInstance) clientCalendarInstance.destroy();
+
+      const clientTasks = tasks.filter(t => t.clientId === clientId && t.datetime);
+      const events = clientTasks.map(t => ({
+        id: t.id,
+        title: `${t.title} (${t.assignees ? t.assignees.join(', ') : ''})`,
+        start: t.datetime,
+        className: 'fc-event-social'
+      }));
+
+      clientCalendarInstance = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'tr',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,listMonth'
+        },
+        events: events,
+        eventClick: function(info) {
+          const t = tasks.find(x => x.id === info.event.id);
+          if (t) {
+            const modalBody = `
+              <b>Firma:</b> ${t.company}<br>
+              <b>Sorumlular:</b> ${t.assignees ? t.assignees.join(', ') : ''}<br>
+              <b>Paylaşım Tarihi:</b> ${new Date(t.datetime).toLocaleString('tr-TR')}<br>
+              <b>Durum:</b> ${t.status.toUpperCase()}<br>
+              <hr style="margin:10px 0; border:0; border-top:1px solid #e2e8f0;">
+              <b>Metin / Detaylar:</b><br>${t.description ? t.description.replace(/\n/g, '<br>') : 'Detay girilmemiş.'}
+            `;
+            showModal(t.title, modalBody);
+          }
+        }
+      });
+      clientCalendarInstance.render();
+    }
+
+    function checkScheduledNotifications() {
+      if (!currentUser || Notification.permission !== 'granted') return;
+
+      const now = new Date();
+      const todayStr = now.toISOString().split('T')[0];
+
+      tasks.forEach(t => {
+        if (t.isSocialPost && t.datetime && t.assignees && t.assignees.includes(currentUser)) {
+          const postDateStr = t.datetime.split('T')[0];
+          const notifKey = `notif_post_${t.id}_${todayStr}`;
+          if (postDateStr === todayStr && !localStorage.getItem(notifKey)) {
+            sendNotification('📢 Bugünkü Sosyal Medya Paylaşımı!', `${t.company} için bugün paylaşılacak içerik: "${t.title}"`);
+            localStorage.setItem(notifKey, 'sent');
+          }
+        }
+      });
+
+      const dateIn2Days = new Date();
+      dateIn2Days.setDate(now.getDate() + 2);
+      const str2Days = dateIn2Days.toISOString().split('T')[0];
+
+      const dateIn7Days = new Date();
+      dateIn7Days.setDate(now.getDate() + 7);
+      const str7Days = dateIn7Days.toISOString().split('T')[0];
+
+      turkishHolidays.forEach(h => {
+        if (h.date === todayStr) {
+          const keyToday = `notif_holiday_today_${h.date}`;
+          if (!localStorage.getItem(keyToday)) {
+            sendNotification('🇹🇷 Bugün Özel Gün!', `${h.title}`);
+            localStorage.setItem(keyToday, 'sent');
+          }
+        }
+        if (h.date === str2Days) {
+          const key2 = `notif_holiday_2days_${h.date}`;
+          if (!localStorage.getItem(key2)) {
+            sendNotification('🗓️ Yaklaşan Özel Gün Hatırlatması!', `2 gün sonra: ${h.title}`);
+            localStorage.setItem(key2, 'sent');
+          }
+        }
+        if (h.date === str7Days) {
+          const key7 = `notif_holiday_7days_${h.date}`;
+          if (!localStorage.getItem(key7)) {
+            sendNotification('🗓️ 1 Hafta Kaldı!', `1 hafta sonra: ${h.title}`);
+            localStorage.setItem(key7, 'sent');
+          }
+        }
+      });
+    }
+
+    setInterval(checkScheduledNotifications, 600000);
+
+    function renderArchive() {
+      const archiveContainer = document.getElementById('archive-list');
+      archiveContainer.innerHTML = '';
+
+      if (archive.length === 0) {
+        archiveContainer.innerHTML = '<p>Henüz tamamlanmış görev yok.</p>';
+        return;
+      }
+
+      const groups = {};
+      archive.forEach(item => {
+        const date = new Date(item.completedDate);
+        const monthYear = date.toLocaleString('tr-TR', { month: 'long', year: 'numeric' });
+        if (!groups[monthYear]) groups[monthYear] = [];
+        groups[monthYear].push(item);
+      });
+
+      for (const [month, items] of Object.entries(groups)) {
+        const monthDiv = document.createElement('div');
+        monthDiv.className = 'archive-month';
+        const pdfContainerId = `pdf-content-${month.replace(/\s+/g, '-')}`;
+        
+        let tableHTML = `
+          <div id="${pdfContainerId}">
+            <div class="archive-month-header">
+              <h4>${month} Tamamlanmış Görev Listesi</h4>
+              <button onclick="exportPDF('${pdfContainerId}', '${month}')">Tamamlanmış Görev Listesi (PDF İndir)</button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Çalışma Adı</th>
+                  <th>Firma</th>
+                  <th>Sorumlular</th>
+                  <th>Oluşturan</th>
+                  <th>Tamamlanma Tarihi</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+
+        items.forEach(i => {
+          const names = i.assignees ? i.assignees.join(', ') : i.assignee || 'Belirtilmedi';
+          tableHTML += `
+            <tr>
+              <td>${i.title}</td>
+              <td>${i.company || '-'}</td>
+              <td>${names}</td>
+              <td>${i.creator}</td>
+              <td>${new Date(i.completedDate).toLocaleDateString('tr-TR')}</td>
+            </tr>
+          `;
+        });
+
+        tableHTML += `
+              </tbody>
+            </table>
+          </div>
+        `;
+        monthDiv.innerHTML = tableHTML;
+        archiveContainer.appendChild(monthDiv);
+      }
+    }
+
+    function renderAdminPanel() {
+      const tbody = document.getElementById('user-table-body');
+      tbody.innerHTML = '';
+
+      Object.entries(users).forEach(([username, password]) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><b>${username}</b> ${username.toLowerCase() === 'zorbay' ? '(Admin)' : ''}</td>
+          <td><input type="password" value="${password}" id="pass-input-${username}" style="width: 150px; padding: 4px;"></td>
+          <td>
+            <button onclick="updateUserPassword('${username}')" style="width: auto; padding: 4px 10px; font-size: 12px;">Güncelle</button>
+            ${username.toLowerCase() !== 'zorbay' ? `<button onclick="deleteUser('${username}')" style="width: auto; padding: 4px 10px; font-size: 12px; background: #ef4444;">Sil</button>` : ''}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function addUser() {
+      const username = document.getElementById('new-user-name').value.trim();
+      const password = document.getElementById('new-user-pass').value.trim();
+
+      if (!username || !password) {
+        alert('Kullanıcı adı ve şifre boş bırakılamaz!');
+        return;
+      }
+
+      users[username] = password;
+      saveUsers();
+      document.getElementById('new-user-name').value = '';
+      document.getElementById('new-user-pass').value = '';
+      alert(`${username} kullanıcısı kaydedildi/güncellendi.`);
+    }
+
+    function updateUserPassword(username) {
+      const newPass = document.getElementById(`pass-input-${username}`).value.trim();
+      if (!newPass) {
+        alert('Şifre boş bırakılamaz!');
+        return;
+      }
+      users[username] = newPass;
+      saveUsers();
+      alert(`${username} kullanıcısının şifresi güncellendi.`);
+    }
+
+    function deleteUser(username) {
+      if (confirm(`${username} kullanıcısını silmek istediğinize emin misiniz?`)) {
+        delete users[username];
+        saveUsers();
+      }
+    }
+
+    function exportPDF(elementId, monthName) {
+      const element = document.getElementById(elementId);
+      const btn = element.querySelector('button');
+      if (btn) btn.style.display = 'none';
+
+      const opt = {
+        margin:       10,
+        filename:     `${monthName}_Tamamlanmis_Gorev_Listesi.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(element).save().then(() => {
+        if (btn) btn.style.display = 'inline-block';
+      });
+    }
+
+    function saveData() {
+      db.ref('tasks').set(tasks);
+      db.ref('archive').set(archive);
+    }
+
+    function saveUsers() {
+      db.ref('users').set(users);
+    }
+
+    function saveClients() {
+      db.ref('clients').set(clients);
+    }
+
+    function sendNotification(title, body) {
+      if (Notification.permission === 'granted') {
+        new Notification(title, { body });
+      }
+    }
+
+    function showModal(title, desc) {
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal-desc').innerHTML = desc;
+      document.getElementById('modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
