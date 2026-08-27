@@ -257,6 +257,15 @@
       <div id="auth-form-container">
         <input type="text" id="username" placeholder="Kullanıcı Adı" autocomplete="username">
         <input type="password" id="password" placeholder="Şifre" autocomplete="current-password">
+
+        <div id="register-avatar-container" style="display:none; margin: 8px 0; text-align:left;">
+          <label style="font-size: 12px; color: var(--accent); cursor: pointer; font-weight:bold; display:block;">
+            📷 Profil Fotoğrafı Yükle (İsteğe Bağlı)
+            <input type="file" id="register-avatar-input" accept="image/*" onchange="handleRegisterAvatarUpload(event)" style="display:none;">
+          </label>
+          <img id="register-avatar-preview" style="width:40px; height:40px; border-radius:50%; object-fit:cover; margin-top:6px; display:none;">
+        </div>
+
         <label class="remember-me" id="remember-me-label">
           <input type="checkbox" id="remember-me-check" checked> Oturumu açık tut (Beni Hatırla)
         </label>
@@ -629,6 +638,7 @@
     let activeModalTaskId = null;
     let selectedProfileColor = '#2563eb';
     let tempUploadedAvatarBase64 = null;
+    let tempRegisterAvatarBase64 = null;
 
     const popularEmojis = ["😀", "😂", "😍", "👍", "👎", "🎉", "🔥", "🚀", "❤️", "🙌", "✅", "❌", "📌", "🎬", "🎨", "📝"];
 
@@ -648,7 +658,9 @@
       return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%230a1a36"/><text x="50%" y="50%" fill="white" font-size="16" font-weight="bold" font-family="sans-serif" text-anchor="middle" dy=".3em">${initial}</text></svg>`;
     }
 
+    // 2026, 2027 ve 2028 Türkiye Resmi ve Özel Günler Listesi
     const turkishHolidays = [
+      // 2026
       { title: "🎉 Yılbaşı", date: "2026-01-01" },
       { title: "👩‍🦰 8 Mart Dünya Kadınlar Günü", date: "2026-03-08" },
       { title: "🇹🇷 23 Nisan Ulusal Egemenlik ve Çocuk Bayramı", date: "2026-04-23" },
@@ -660,7 +672,35 @@
       { title: "🇹🇷 30 Ağustos Zafer Bayramı", date: "2026-08-30" },
       { title: "🇹🇷 29 Ekim Cumhuriyet Bayramı", date: "2026-10-29" },
       { title: "🇹🇷 10 Kasım Atatürk'ü Anma Günü", date: "2026-11-10" },
-      { title: "👩‍🏫 24 Kasım Öğretmenler Günü", date: "2026-11-24" }
+      { title: "👩‍🏫 24 Kasım Öğretmenler Günü", date: "2026-11-24" },
+
+      // 2027
+      { title: "🎉 Yılbaşı", date: "2027-01-01" },
+      { title: "👩‍🦰 8 Mart Dünya Kadınlar Günü", date: "2027-03-08" },
+      { title: "🇹🇷 23 Nisan Ulusal Egemenlik ve Çocuk Bayramı", date: "2027-04-23" },
+      { title: "🇹🇷 1 Mayıs Emek ve Dayanışma Günü", date: "2027-05-01" },
+      { title: "💐 Anneler Günü", date: "2027-05-09" },
+      { title: "🇹🇷 19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı", date: "2027-05-19" },
+      { title: "👔 Babalar Günü", date: "2027-06-20" },
+      { title: "🇹🇷 15 Temmuz Demokrasi ve Milli Birlik Günü", date: "2027-07-15" },
+      { title: "🇹🇷 30 Ağustos Zafer Bayramı", date: "2027-08-30" },
+      { title: "🇹🇷 29 Ekim Cumhuriyet Bayramı", date: "2027-10-29" },
+      { title: "🇹🇷 10 Kasım Atatürk'ü Anma Günü", date: "2027-11-10" },
+      { title: "👩‍🏫 24 Kasım Öğretmenler Günü", date: "2027-11-24" },
+
+      // 2028
+      { title: "🎉 Yılbaşı", date: "2028-01-01" },
+      { title: "👩‍🦰 8 Mart Dünya Kadınlar Günü", date: "2028-03-08" },
+      { title: "🇹🇷 23 Nisan Ulusal Egemenlik ve Çocuk Bayramı", date: "2028-04-23" },
+      { title: "🇹🇷 1 Mayıs Emek ve Dayanışma Günü", date: "2028-05-01" },
+      { title: "💐 Anneler Günü", date: "2028-05-14" },
+      { title: "🇹🇷 19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı", date: "2028-05-19" },
+      { title: "👔 Babalar Günü", date: "2028-06-18" },
+      { title: "🇹🇷 15 Temmuz Demokrasi ve Milli Birlik Günü", date: "2028-07-15" },
+      { title: "🇹🇷 30 Ağustos Zafer Bayramı", date: "2028-08-30" },
+      { title: "🇹🇷 29 Ekim Cumhuriyet Bayramı", date: "2028-10-29" },
+      { title: "🇹🇷 10 Kasım Atatürk'ü Anma Günü", date: "2028-11-10" },
+      { title: "👩‍🏫 24 Kasım Öğretmenler Günü", date: "2028-11-24" }
     ];
 
     // Firebase Listeners
@@ -790,21 +830,73 @@
       reader.readAsDataURL(file);
     }
 
+    function handleRegisterAvatarUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = 120;
+          canvas.height = 120;
+          ctx.drawImage(img, 0, 0, 120, 120);
+          tempRegisterAvatarBase64 = canvas.toDataURL('image/jpeg', 0.8);
+          const preview = document.getElementById('register-avatar-preview');
+          preview.src = tempRegisterAvatarBase64;
+          preview.style.display = 'block';
+        };
+        img.src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
     function toggleAuthMode(mode) {
       const loginBtn = document.getElementById('tab-login-btn');
       const regBtn = document.getElementById('tab-register-btn');
       const actionBtn = document.getElementById('auth-action-btn');
       const rememberLabel = document.getElementById('remember-me-label');
+      const registerAvatarBox = document.getElementById('register-avatar-container');
 
       if (mode === 'login') {
         loginBtn.classList.add('active'); regBtn.classList.remove('active');
         actionBtn.innerText = 'Giriş Yap'; actionBtn.setAttribute('onclick', 'login()');
         rememberLabel.style.display = 'flex';
+        registerAvatarBox.style.display = 'none';
       } else {
         regBtn.classList.add('active'); loginBtn.classList.remove('active');
         actionBtn.innerText = 'Kayıt Ol'; actionBtn.setAttribute('onclick', 'register()');
         rememberLabel.style.display = 'none';
+        registerAvatarBox.style.display = 'block';
       }
+    }
+
+    function register() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (!username || !password) {
+        alert('Kullanıcı adı ve şifre zorunludur!');
+        return;
+      }
+
+      if (users[username]) {
+        alert('Bu kullanıcı adı zaten alınmış!');
+        return;
+      }
+
+      users[username] = password;
+      saveUsers();
+
+      if (tempRegisterAvatarBase64) {
+        userAvatars[username] = tempRegisterAvatarBase64;
+        db.ref('userAvatars').set(userAvatars);
+      }
+
+      executeLogin(username);
+      alert('Kayıt başarılı! Hoş geldiniz.');
     }
 
     function checkRememberedUser() {
@@ -1418,6 +1510,8 @@
       container.innerHTML = archive.length === 0 ? '<p>Henüz tamamlanmış görev yok.</p>' : '';
       if (archive.length === 0) return;
 
+      const isAdmin = currentUser && currentUser.toLowerCase() === 'zorbay';
+
       const groups = {};
       archive.forEach(item => {
         const monthYear = new Date(item.completedDate).toLocaleString('tr-TR', { month: 'long', year: 'numeric' });
@@ -1429,20 +1523,45 @@
         const pdfContainerId = `pdf-content-${month.replace(/\s+/g, '-')}`;
         container.innerHTML += `
           <div id="${pdfContainerId}">
-            <div class="archive-month-header" style="margin-top:15px;">
+            <div class="archive-month-header" style="margin-top:15px; display:flex; justify-content:space-between; align-items:center;">
               <h4>${month} Tamamlanmış Görevler</h4>
               <button onclick="exportPDF('${pdfContainerId}', '${month}')" style="width:auto; padding:4px 10px;">PDF İndir</button>
             </div>
             <div class="table-responsive">
               <table>
-                <thead><tr><th>Çalışma Adı</th><th>Marka</th><th>Sorumlular</th><th>Tamamlanma Tarihi</th></tr></thead>
+                <thead>
+                  <tr>
+                    <th>Çalışma Adı</th>
+                    <th>Marka</th>
+                    <th>Sorumlular</th>
+                    <th>Tamamlanma Tarihi</th>
+                    ${isAdmin ? '<th>İşlem</th>' : ''}
+                  </tr>
+                </thead>
                 <tbody>
-                  ${items.map(i => `<tr><td>${i.title}</td><td>${i.company || '-'}</td><td>${(i.assignees || []).join(', ')}</td><td>${new Date(i.completedDate).toLocaleDateString('tr-TR')}</td></tr>`).join('')}
+                  ${items.map(i => `
+                    <tr>
+                      <td>${i.title}</td>
+                      <td>${i.company || '-'}</td>
+                      <td>${(i.assignees || []).join(', ')}</td>
+                      <td>${new Date(i.completedDate).toLocaleDateString('tr-TR')}</td>
+                      ${isAdmin ? `<td><button onclick="deleteArchiveTask('${i.id}')" style="background:#ef4444; width:auto; padding:3px 8px; font-size:11px;">Sil</button></td>` : ''}
+                    </tr>
+                  `).join('')}
                 </tbody>
               </table>
             </div>
           </div>
         `;
+      }
+    }
+
+    function deleteArchiveTask(taskId) {
+      if (!currentUser || currentUser.toLowerCase() !== 'zorbay') return;
+      if (confirm('Arşivdeki bu görevi tamamen silmek istediğinize emin misiniz?')) {
+        archive = archive.filter(a => a.id !== taskId);
+        saveData();
+        renderArchive();
       }
     }
 
