@@ -67,11 +67,16 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-tap-highlight-color: transparent; }
     
+    html, body {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
     body {
       background: var(--bg-gradient);
       color: var(--text-main);
       min-height: 100vh;
-      overflow-x: hidden;
       background-attachment: fixed;
       transition: background 0.3s ease, color 0.3s ease;
     }
@@ -87,7 +92,7 @@
 
     .brand-container { display: flex; align-items: center; gap: 10px; }
     .app-logo { 
-      height: 34px; 
+      height: 32px; 
       width: auto; 
       object-fit: contain;
       filter: brightness(0) invert(1) !important;
@@ -104,12 +109,12 @@
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
       border: 1px solid var(--glass-border);
-      padding: 2.5rem 2rem; border-radius: 24px; width: 100%; max-width: 420px;
+      padding: 2rem 1.5rem; border-radius: 24px; width: 100%; max-width: 420px;
       box-shadow: 0 15px 40px rgba(0,0,0,0.3); text-align: center;
     }
     .login-card .brand-container { 
       justify-content: center; 
-      margin-bottom: 1.8rem; 
+      margin-bottom: 1.5rem; 
       background: rgba(0, 0, 0, 0.15);
       padding: 12px;
       border-radius: 14px;
@@ -155,11 +160,12 @@
     button:hover { filter: brightness(1.1); transform: translateY(-1px); }
     button:active { transform: scale(0.98); }
 
-    #app { display: none; }
+    #app { display: none; width: 100%; }
     
     .app-layout {
       display: flex;
       min-height: 100vh;
+      width: 100%;
     }
 
     aside.sidebar {
@@ -197,59 +203,32 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    .sidebar-user-card:hover {
-      background: var(--glass-hover);
-    }
+    .sidebar-user-card:hover { background: var(--glass-hover); }
 
     nav.sidebar-nav {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      flex: 1;
+      display: flex; flex-direction: column; gap: 8px; flex: 1;
     }
 
     nav.sidebar-nav button {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      width: 100%;
-      text-align: left;
-      background: transparent;
-      border: 1px solid transparent;
-      color: var(--text-main);
-      padding: 12px 16px;
-      font-size: 14px;
-      border-radius: 12px;
-      box-shadow: none;
-      font-weight: 600;
-      transition: 0.2s;
+      display: flex; align-items: center; justify-content: flex-start;
+      width: 100%; text-align: left; background: transparent; border: 1px solid transparent;
+      color: var(--text-main); padding: 12px 16px; font-size: 14px; border-radius: 12px;
+      box-shadow: none; font-weight: 600; transition: 0.2s;
     }
 
-    nav.sidebar-nav button:hover {
-      background: var(--glass-hover);
-      border-color: var(--glass-border);
-    }
-
+    nav.sidebar-nav button:hover { background: var(--glass-hover); border-color: var(--glass-border); }
     nav.sidebar-nav button.active {
-      background: var(--accent-gradient);
-      color: white;
-      border-color: rgba(255, 255, 255, 0.4);
+      background: var(--accent-gradient); color: white; border-color: rgba(255, 255, 255, 0.4);
       box-shadow: 0 6px 20px var(--accent-glow);
     }
 
     .theme-toggle-btn {
-      background: var(--glass-card-bg) !important;
-      border: 1px solid var(--glass-border) !important;
-      color: var(--text-main) !important;
-      box-shadow: none !important;
-      justify-content: center !important;
+      background: var(--glass-card-bg) !important; border: 1px solid var(--glass-border) !important;
+      color: var(--text-main) !important; box-shadow: none !important; justify-content: center !important;
     }
 
     main.main-content {
-      flex: 1;
-      margin-left: 260px;
-      padding: 2rem;
-      transition: 0.3s;
+      flex: 1; margin-left: 260px; padding: 1.5rem; transition: 0.3s; width: calc(100% - 260px); max-width: 100%;
     }
 
     .bottom-widget-bar {
@@ -267,21 +246,17 @@
       font-size: 10px; font-weight: bold; padding: 1px 5px; border-radius: 10px; min-width: 15px; text-align: center;
     }
 
-    .container { max-width: 1400px; margin: 0 auto; }
+    .container { max-width: 100%; margin: 0 auto; }
     .page { display: none; }
     .page.active { display: block; }
 
+    /* KANBAN BOARD MASAÜSTÜ */
     .kanban-board { 
-      display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px; -webkit-overflow-scrolling: touch;
-      snap-type: x mandatory;
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; width: 100%;
     }
     .column { 
       background: var(--glass-card-bg); backdrop-filter: blur(16px); border: 1px solid var(--glass-border);
-      border-radius: 18px; padding: 14px; min-width: 270px; width: 270px; flex-shrink: 0; min-height: 450px; snap-align: start;
-    }
-    @media (min-width: 1200px) {
-      .kanban-board { display: grid; grid-template-columns: repeat(5, 1fr); overflow-x: visible; }
-      .column { width: 100%; min-width: auto; }
+      border-radius: 18px; padding: 14px; width: 100%; min-height: 450px;
     }
 
     .column h3 { margin-bottom: 12px; color: var(--text-main); border-bottom: 1px solid var(--glass-border); padding-bottom: 8px; font-size: 14px; font-weight: 700; }
@@ -295,22 +270,10 @@
     .task-card p { font-size: 12px; color: var(--text-sub); margin-bottom: 6px; }
     
     .task-card .company-tag { 
-      display: inline-block; 
-      background: rgba(96, 165, 250, 0.15); 
-      border: 1px solid rgba(96, 165, 250, 0.4); 
-      color: var(--brand-accent); 
-      font-size: 11px; 
-      padding: 3px 8px; 
-      border-radius: 6px; 
-      font-weight: 600; 
-      margin-bottom: 6px; 
+      display: inline-block; background: rgba(96, 165, 250, 0.15); border: 1px solid rgba(96, 165, 250, 0.4); 
+      color: var(--brand-accent); font-size: 11px; padding: 3px 8px; border-radius: 6px; font-weight: 600; margin-bottom: 6px; 
     }
-    .task-card .datetime-text {
-      color: var(--brand-accent) !important;
-      font-weight: 600;
-      font-size: 12px;
-    }
-
+    .task-card .datetime-text { color: var(--brand-accent) !important; font-weight: 600; font-size: 12px; }
     .task-card .independent-tag { display: inline-block; background: rgba(217, 119, 6, 0.15); border: 1px solid rgba(217, 119, 6, 0.3); color: #fbbf24; font-size: 10px; padding: 2px 8px; border-radius: 6px; font-weight: bold; margin-bottom: 6px; }
     .task-card .tag { display: inline-block; background: var(--glass-bg); font-size: 10px; padding: 2px 6px; border-radius: 4px; color: var(--text-sub); font-weight: 600; }
     
@@ -318,18 +281,13 @@
       display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px 2px 3px;
       border-radius: 14px; color: white; font-size: 10px; font-weight: bold; margin-right: 4px; margin-bottom: 2px;
     }
-    .user-avatar-img {
-      width: 20px; height: 20px; border-radius: 50%; object-fit: cover; background: #ffffff;
-    }
+    .user-avatar-img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; background: #ffffff; }
 
     .task-form, .admin-card, .client-card {
       background: var(--glass-card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--glass-border); padding: 20px; border-radius: 20px; margin-bottom: 20px;
+      border: 1px solid var(--glass-border); padding: 20px; border-radius: 20px; margin-bottom: 20px; width: 100%;
     }
-    .form-row { display: grid; grid-template-columns: 1fr; gap: 10px; }
-    @media (min-width: 768px) {
-      .form-row { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-    }
+    .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
 
     .dropdown-checkbox-container { position: relative; width: 100%; margin: 6px 0; }
     .dropdown-btn {
@@ -342,20 +300,17 @@
       backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 12px; max-height: 200px; overflow-y: auto;
       z-index: 1000; box-shadow: 0 8px 25px rgba(0,0,0,0.3); padding: 6px;
     }
-    .dropdown-list label {
-      display: flex; align-items: center; gap: 10px; padding: 10px; cursor: pointer; font-size: 14px;
-      border-radius: 8px; transition: 0.1s; color: var(--text-main);
-    }
+    .dropdown-list label { display: flex; align-items: center; gap: 10px; padding: 10px; cursor: pointer; font-size: 14px; border-radius: 8px; transition: 0.1s; color: var(--text-main); }
     .dropdown-list label:hover { background: var(--glass-hover); }
     .dropdown-list input[type="checkbox"] { width: 18px; height: 18px; margin: 0; cursor: pointer; }
 
     .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; min-width: 500px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
     th, td { border: 1px solid var(--glass-border); padding: 12px; text-align: left; font-size: 13px; color: var(--text-main); }
     th { background: rgba(0, 0, 0, 0.15); color: var(--text-main); font-weight: bold; }
     tr:nth-child(even) { background: var(--glass-bg); }
 
-    /* Modal (Açılır Pencere) Stilleri - Light ve Dark Temaya Uyumlu */
+    /* Modal (Açılır Pencere) Stilleri */
     .modal {
       display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: var(--modal-bg); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
@@ -363,26 +318,18 @@
     }
     .modal-content {
       background: var(--modal-card-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-      border: 1px solid var(--glass-border);
-      padding: 24px; border-radius: 24px; max-width: 550px; width: 100%;
+      border: 1px solid var(--glass-border); padding: 24px; border-radius: 24px; max-width: 550px; width: 100%;
       max-height: 85vh; overflow-y: auto; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25); color: var(--text-main);
     }
 
-    .comment-box {
-      background: var(--comment-box-bg); border: 1px solid var(--glass-border); border-radius: 14px; padding: 12px; margin-top: 12px;
-    }
-    .comment-item {
-      background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 10px 14px; border-radius: 10px; margin-bottom: 8px; font-size: 13px;
-    }
+    .comment-box { background: var(--comment-box-bg); border: 1px solid var(--glass-border); border-radius: 14px; padding: 12px; margin-top: 12px; }
+    .comment-item { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 10px 14px; border-radius: 10px; margin-bottom: 8px; font-size: 13px; }
     .comment-item .author { font-weight: bold; color: var(--brand-accent); margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; }
     .comment-item .time { font-size: 11px; color: var(--text-sub); font-weight: normal; }
 
     .media-picker-bar { display: flex; gap: 6px; margin: 4px 0; }
     .media-picker-btn { width: auto; padding: 4px 10px; font-size: 12px; background: var(--glass-bg); color: var(--text-main); border-radius: 8px; box-shadow: none; }
-    .picker-popover {
-      display: none; background: var(--glass-card-bg); border: 1px solid var(--glass-border); border-radius: 12px;
-      padding: 8px; margin-bottom: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
+    .picker-popover { display: none; background: var(--glass-card-bg); border: 1px solid var(--glass-border); border-radius: 12px; padding: 8px; margin-bottom: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
     .emoji-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; font-size: 18px; text-align: center; }
     .emoji-grid span { cursor: pointer; border-radius: 6px; padding: 2px; }
     .emoji-grid span:hover { background: var(--glass-hover); }
@@ -391,10 +338,7 @@
       width: 330px; max-width: 85vw; background: var(--glass-card-bg); backdrop-filter: blur(24px);
       border-radius: 20px 20px 0 0; box-shadow: 0 -4px 25px rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-bottom: none; overflow: hidden; transition: 0.3s ease;
     }
-    #chat-header {
-      background: var(--glass-hover); color: var(--text-main); padding: 12px 16px; font-weight: bold; font-size: 14px;
-      display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-bottom: 1px solid var(--glass-border);
-    }
+    #chat-header { background: var(--glass-hover); color: var(--text-main); padding: 12px 16px; font-weight: bold; font-size: 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-bottom: 1px solid var(--glass-border); }
     #chat-body { display: none; height: 380px; flex-direction: column; background: rgba(0, 0, 0, 0.1); }
     #chat-body.active { display: flex; }
     #chat-messages { flex: 1; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
@@ -406,10 +350,7 @@
     .color-picker-grid { display: flex; gap: 10px; margin: 10px 0; flex-wrap: wrap; }
     .color-picker-option { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
     .color-picker-option.selected { border-color: var(--text-main); transform: scale(1.15); }
-    
-    .profile-avatar-preview {
-      width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid var(--glass-border); margin-bottom: 10px; display: block;
-    }
+    .profile-avatar-preview { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid var(--glass-border); margin-bottom: 10px; display: block; }
 
     /* FullCalendar Custom Styling */
     .fc { color: var(--text-main) !important; font-family: 'Montserrat', sans-serif !important; }
@@ -417,42 +358,22 @@
     .fc-toolbar-title { font-size: 1.1rem !important; font-weight: bold; color: var(--text-main); }
     .fc-button-primary { background: var(--glass-bg) !important; border-color: var(--glass-border) !important; color: var(--text-main) !important; font-size: 12px !important; padding: 4px 8px !important; }
     .fc-button-active { background: var(--accent-gradient) !important; color: white !important; }
-    
-    .fc-col-header-cell, .fc-day-header {
-      background: rgba(15, 23, 42, 0.6) !important;
-      color: var(--text-main) !important;
-      font-weight: 600;
-      padding: 6px 0 !important;
-    }
-    body.light-mode .fc-col-header-cell {
-      background: rgba(255, 255, 255, 0.4) !important;
-    }
-    .fc-col-header-cell-cushion, .fc-daygrid-day-number, .fc-list-day-text, .fc-list-day-side-text {
-      color: var(--text-main) !important;
-      text-decoration: none !important;
-    }
-    .fc-daygrid-day:hover, .fc-timegrid-slot:hover {
-      background: rgba(255, 255, 255, 0.15) !important;
-      cursor: pointer;
-    }
-    .fc-list-day-cushion {
-      background: rgba(15, 23, 42, 0.7) !important;
-      color: var(--text-main) !important;
-    }
-    body.light-mode .fc-list-day-cushion {
-      background: rgba(255, 255, 255, 0.5) !important;
-    }
-    .fc-list-event:hover td {
-      background: rgba(255, 255, 255, 0.1) !important;
-    }
+    .fc-col-header-cell, .fc-day-header { background: rgba(15, 23, 42, 0.6) !important; color: var(--text-main) !important; font-weight: 600; padding: 6px 0 !important; }
+    body.light-mode .fc-col-header-cell { background: rgba(255, 255, 255, 0.4) !important; }
+    .fc-col-header-cell-cushion, .fc-daygrid-day-number, .fc-list-day-text, .fc-list-day-side-text { color: var(--text-main) !important; text-decoration: none !important; }
+    .fc-daygrid-day:hover, .fc-timegrid-slot:hover { background: rgba(255, 255, 255, 0.15) !important; cursor: pointer; }
+    .fc-list-day-cushion { background: rgba(15, 23, 42, 0.7) !important; color: var(--text-main) !important; }
+    body.light-mode .fc-list-day-cushion { background: rgba(255, 255, 255, 0.5) !important; }
+    .fc-list-event:hover td { background: rgba(255, 255, 255, 0.1) !important; }
 
-    /* MOBİL VE DİKEY TELEFON ÖZEL DUZELTMELERI */
-    @media (max-width: 899px) {
+    /* MOBİL DÜZELTMELERİ (1024px VE ALTI TÜM EKRANLAR) */
+    @media (max-width: 1024px) {
       aside.sidebar { display: none !important; }
 
       main.main-content {
         margin-left: 0 !important;
-        padding: 0.8rem !important;
+        width: 100% !important;
+        padding: 0.75rem !important;
         padding-bottom: 85px !important;
       }
 
@@ -504,21 +425,41 @@
 
       .bottom-widget-bar { bottom: 70px; right: 12px; }
 
+      .form-row {
+        grid-template-columns: 1fr !important;
+      }
+
+      .kanban-board {
+        display: flex !important;
+        flex-direction: row;
+        overflow-x: auto;
+        gap: 12px;
+        padding-bottom: 10px;
+        -webkit-overflow-scrolling: touch;
+        snap-type: x mandatory;
+      }
+
+      .column {
+        min-width: 82vw !important;
+        max-width: 85vw !important;
+        width: 85vw !important;
+        flex-shrink: 0;
+        snap-align: center;
+        min-height: 380px;
+      }
+
       .task-form, .admin-card, .client-card { padding: 14px; border-radius: 16px; }
       
       .modal-content {
         padding: 16px;
         max-height: 90vh;
         border-radius: 18px;
+        width: 95%;
       }
 
       #modal-actions button, #edit-modal button {
         width: 100%;
         margin: 3px 0;
-      }
-
-      .kanban-board {
-        padding-bottom: 10px;
       }
 
       .fc-toolbar {
@@ -527,7 +468,7 @@
       }
     }
 
-    @media (min-width: 900px) {
+    @media (min-width: 1025px) {
       .mobile-header, .mobile-bottom-nav { display: none !important; }
     }
   </style>
@@ -1631,7 +1572,7 @@
       const allCalendarTasks = tasks.filter(t => t.datetime && !t.isIndependent);
 
       calendarInstance = new FullCalendar.Calendar(calendarEl, {
-        initialView: window.innerWidth < 768 ? 'listWeek' : 'dayGridMonth', 
+        initialView: window.innerWidth <= 1024 ? 'listWeek' : 'dayGridMonth', 
         locale: 'tr',
         selectable: true,
         headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,listWeek' },
