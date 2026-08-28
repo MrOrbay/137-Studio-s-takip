@@ -252,74 +252,8 @@
       transition: 0.3s;
     }
 
-    @media (max-width: 899px) {
-      aside.sidebar {
-        display: none;
-      }
-
-      main.main-content {
-        margin-left: 0;
-        padding: 1rem;
-        padding-bottom: 90px;
-      }
-
-      .mobile-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 16px;
-        background: var(--glass-bg);
-        backdrop-filter: blur(20px);
-        border-bottom: 1px solid var(--glass-border);
-        margin-bottom: 15px;
-        border-radius: 16px;
-      }
-
-      nav.mobile-bottom-nav {
-        position: fixed;
-        bottom: 0; left: 0; right: 0;
-        background: var(--glass-bg);
-        backdrop-filter: blur(24px);
-        -webkit-backdrop-filter: blur(24px);
-        border-top: 1px solid var(--glass-border);
-        display: flex;
-        justify-content: space-around;
-        padding: 8px 4px;
-        z-index: 999;
-      }
-
-      nav.mobile-bottom-nav button {
-        background: transparent;
-        border: none;
-        box-shadow: none;
-        color: var(--text-sub);
-        font-size: 12px;
-        font-weight: 600;
-        padding: 10px 6px;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        flex: 1;
-      }
-
-      nav.mobile-bottom-nav button.active {
-        color: var(--brand-accent);
-        font-weight: bold;
-      }
-    }
-
-    @media (min-width: 900px) {
-      .mobile-header, .mobile-bottom-nav { display: none !important; }
-    }
-
     .bottom-widget-bar {
       position: fixed; bottom: 20px; right: 20px; z-index: 9000; display: flex; align-items: center; gap: 10px;
-    }
-
-    @media (max-width: 899px) {
-      .bottom-widget-bar { bottom: 75px; right: 15px; }
     }
 
     .notif-badge-btn {
@@ -343,7 +277,7 @@
     }
     .column { 
       background: var(--glass-card-bg); backdrop-filter: blur(16px); border: 1px solid var(--glass-border);
-      border-radius: 18px; padding: 14px; min-width: 250px; width: 250px; flex-shrink: 0; min-height: 450px; snap-align: start;
+      border-radius: 18px; padding: 14px; min-width: 270px; width: 270px; flex-shrink: 0; min-height: 450px; snap-align: start;
     }
     @media (min-width: 1200px) {
       .kanban-board { display: grid; grid-template-columns: repeat(5, 1fr); overflow-x: visible; }
@@ -480,15 +414,15 @@
     /* FullCalendar Custom Styling */
     .fc { color: var(--text-main) !important; font-family: 'Montserrat', sans-serif !important; }
     .fc-theme-standard td, .fc-theme-standard th { border-color: var(--glass-border) !important; }
-    .fc-toolbar-title { font-size: 1.2rem !important; font-weight: bold; color: var(--text-main); }
-    .fc-button-primary { background: var(--glass-bg) !important; border-color: var(--glass-border) !important; color: var(--text-main) !important; }
+    .fc-toolbar-title { font-size: 1.1rem !important; font-weight: bold; color: var(--text-main); }
+    .fc-button-primary { background: var(--glass-bg) !important; border-color: var(--glass-border) !important; color: var(--text-main) !important; font-size: 12px !important; padding: 4px 8px !important; }
     .fc-button-active { background: var(--accent-gradient) !important; color: white !important; }
     
     .fc-col-header-cell, .fc-day-header {
       background: rgba(15, 23, 42, 0.6) !important;
       color: var(--text-main) !important;
       font-weight: 600;
-      padding: 8px 0 !important;
+      padding: 6px 0 !important;
     }
     body.light-mode .fc-col-header-cell {
       background: rgba(255, 255, 255, 0.4) !important;
@@ -510,6 +444,91 @@
     }
     .fc-list-event:hover td {
       background: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    /* MOBİL VE DİKEY TELEFON ÖZEL DUZELTMELERI */
+    @media (max-width: 899px) {
+      aside.sidebar { display: none !important; }
+
+      main.main-content {
+        margin-left: 0 !important;
+        padding: 0.8rem !important;
+        padding-bottom: 85px !important;
+      }
+
+      .mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 14px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--glass-border);
+        margin-bottom: 12px;
+        border-radius: 16px;
+      }
+
+      nav.mobile-bottom-nav {
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        background: var(--glass-bg);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border-top: 1px solid var(--glass-border);
+        display: flex;
+        justify-content: space-around;
+        padding: 6px 2px;
+        z-index: 999;
+      }
+
+      nav.mobile-bottom-nav button {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        color: var(--text-sub);
+        font-size: 11px;
+        font-weight: 600;
+        padding: 8px 4px;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+      }
+
+      nav.mobile-bottom-nav button.active {
+        color: var(--brand-accent);
+        font-weight: bold;
+      }
+
+      .bottom-widget-bar { bottom: 70px; right: 12px; }
+
+      .task-form, .admin-card, .client-card { padding: 14px; border-radius: 16px; }
+      
+      .modal-content {
+        padding: 16px;
+        max-height: 90vh;
+        border-radius: 18px;
+      }
+
+      #modal-actions button, #edit-modal button {
+        width: 100%;
+        margin: 3px 0;
+      }
+
+      .kanban-board {
+        padding-bottom: 10px;
+      }
+
+      .fc-toolbar {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+
+    @media (min-width: 900px) {
+      .mobile-header, .mobile-bottom-nav { display: none !important; }
     }
   </style>
 </head>
@@ -651,7 +670,7 @@
           </div>
 
           <div id="page-calendar" class="page">
-            <div id="calendar" class="glass-card" style="padding: 18px;"></div>
+            <div id="calendar" class="glass-card" style="padding: 12px;"></div>
           </div>
 
           <div id="page-clients" class="page">
@@ -710,7 +729,7 @@
           </div>
 
           <div id="page-archive" class="page">
-            <div class="glass-card" style="padding:20px;">
+            <div class="glass-card" style="padding:15px;">
               <h3 style="margin-bottom: 15px; color: var(--text-main);">Tamamlanmış Görev Arşivi</h3>
               <div id="archive-list"></div>
             </div>
@@ -1606,7 +1625,6 @@
       }
     }
 
-    // GENEL TAKVİM (TÜM İŞLER GÖRÜNÜR & BOŞ YERE TIKLAYINCA İŞ OLUŞTURUYOR)
     function renderCalendar() {
       const calendarEl = document.getElementById('calendar');
       if (calendarInstance) calendarInstance.destroy();
