@@ -6,10 +6,14 @@
   <title>137 Studio - İş Takip Sistemi</title>
   
   <link rel="icon" type="image/png" href="https://pngup.com/ec43/logo1.png">
-  <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIjEzNyBTdHVkaW8gxZ9zIFNpc3RlbWkiLAogICJzaG9ydF9uYW1lIjogIjEzN1N0dWRpbyIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMGExYTM2IiwKICAidGhlbWVfY29sb3IiOiAiIzBhMWEzNiIKfQ==">
-  <meta name="theme-color" content="#0a1a36">
+  <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIjEzNyBTdHVkaW8gxZ9zIFNpc3RlbWkiLAogICJzaG9ydF9uYW1lIjogIjEzN1N0dWRpbyIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMDA4OGZZiIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDQ1YzQiCn0=">
+  <meta name="theme-color" content="#0045c4">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css">
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
@@ -21,101 +25,315 @@
 
   <style>
     :root {
-      --bg-color: #f4f7fc;
-      --navy: #0a1a36;
-      --navy-light: #162a4d;
-      --accent: #2563eb;
-      --white: #ffffff;
-      --text: #334155;
-      --border: #e2e8f0;
+      /* Dark Theme (Default) */
+      --bg-gradient: radial-gradient(circle at 50% -20%, #162b59 0%, #060e20 60%, #03060d 100%);
+      --glass-bg: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.18);
+      --glass-card-bg: rgba(255, 255, 255, 0.07);
+      --glass-hover: rgba(255, 255, 255, 0.15);
+      --brand-blue: #0045c4;
+      --brand-accent: #60a5fa;
+      --accent-gradient: linear-gradient(135deg, #0056f6 0%, #00369a 100%);
+      --accent-glow: rgba(0, 69, 196, 0.5);
+      --danger-gradient: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+      --text-main: #ffffff;
+      --text-sub: #94a3b8;
+      --input-bg: rgba(255, 255, 255, 0.08);
+      --input-border: rgba(255, 255, 255, 0.2);
+      --modal-bg: rgba(15, 23, 42, 0.75);
+      --modal-card-bg: rgba(20, 30, 55, 0.85);
+      --comment-box-bg: rgba(0, 0, 0, 0.2);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background-color: var(--bg-color); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+    body.light-mode {
+      /* Light Theme */
+      --bg-gradient: linear-gradient(135deg, #a5c7f7 0%, #689ee8 50%, #3b7bd6 100%);
+      --glass-bg: rgba(255, 255, 255, 0.35);
+      --glass-border: rgba(255, 255, 255, 0.6);
+      --glass-card-bg: rgba(255, 255, 255, 0.45);
+      --glass-hover: rgba(255, 255, 255, 0.55);
+      --brand-blue: #0045c4;
+      --brand-accent: #0045c4;
+      --accent-gradient: linear-gradient(135deg, #0045c4 0%, #002e85 100%);
+      --accent-glow: rgba(0, 69, 196, 0.35);
+      --text-main: #0f172a;
+      --text-sub: #334155;
+      --input-bg: rgba(255, 255, 255, 0.65);
+      --input-border: rgba(255, 255, 255, 0.85);
+      --modal-bg: rgba(100, 140, 200, 0.45);
+      --modal-card-bg: rgba(240, 246, 255, 0.88);
+      --comment-box-bg: rgba(255, 255, 255, 0.45);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-tap-highlight-color: transparent; }
+    
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-attachment: fixed;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .glass-card {
+      background: var(--glass-card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      box-shadow: 0 10px 35px 0 rgba(0, 0, 0, 0.2);
+    }
 
     .brand-container { display: flex; align-items: center; gap: 10px; }
     .app-logo { 
-      height: 42px; 
+      height: 34px; 
       width: auto; 
       object-fit: contain;
       filter: brightness(0) invert(1) !important;
-      -webkit-filter: brightness(0) invert(1) !important;
+    }
+    body.light-mode .app-logo {
+      filter: brightness(0) invert(0) !important;
     }
 
     #login-screen {
-      display: flex; justify-content: center; align-items: center; min-height: 100vh; background: var(--navy); padding: 15px;
+      display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px;
     }
     .login-card {
-      background: var(--white); padding: 2rem 1.5rem; border-radius: 12px; width: 100%; max-width: 420px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center;
+      background: var(--glass-card-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--glass-border);
+      padding: 2.5rem 2rem; border-radius: 24px; width: 100%; max-width: 420px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3); text-align: center;
     }
     .login-card .brand-container { 
       justify-content: center; 
-      margin-bottom: 1.5rem; 
-      background: var(--navy);
-      padding: 10px;
-      border-radius: 8px;
+      margin-bottom: 1.8rem; 
+      background: rgba(0, 0, 0, 0.15);
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid var(--glass-border);
     }
-    .login-tabs { display: flex; gap: 8px; margin-bottom: 15px; }
-    .login-tabs button { background: #e2e8f0; color: var(--navy); border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; flex: 1; font-size: 14px; }
-    .login-tabs button.active { background: var(--navy); color: var(--white); }
+    body.light-mode .login-card .brand-container { background: rgba(255,255,255,0.4); }
+
+    .login-tabs { display: flex; gap: 6px; margin-bottom: 20px; background: rgba(0,0,0,0.15); padding: 4px; border-radius: 12px; }
+    body.light-mode .login-tabs { background: rgba(255,255,255,0.3); }
+
+    .login-tabs button { background: transparent; color: var(--text-sub); border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 1; font-size: 14px; transition: 0.2s; box-shadow: none; }
+    .login-tabs button.active { background: var(--glass-hover); color: var(--text-main); border: 1px solid var(--glass-border); }
 
     .remember-me {
-      display: flex; align-items: center; gap: 8px; margin: 12px 0 18px 0; font-size: 14px; color: #64748b; cursor: pointer; text-align: left;
+      display: flex; align-items: center; gap: 8px; margin: 14px 0 20px 0; font-size: 14px; color: var(--text-sub); cursor: pointer; text-align: left;
     }
     .remember-me input { width: 18px; height: 18px; margin: 0; cursor: pointer; }
 
     .checkbox-inline {
-      display: flex; align-items: center; gap: 8px; margin: 8px 0; font-size: 13px; color: var(--text); cursor: pointer; font-weight: bold;
+      display: flex; align-items: center; gap: 8px; margin: 10px 0; font-size: 13px; color: var(--text-main); cursor: pointer; font-weight: bold;
     }
     .checkbox-inline input { width: 18px; height: 18px; margin: 0; cursor: pointer; }
 
-    input, select, textarea, button {
-      width: 100%; padding: 12px; margin: 6px 0; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; outline: none;
+    input, select, textarea {
+      width: 100%; padding: 12px 14px; margin: 6px 0;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 12px; font-size: 14px; outline: none; color: var(--text-main);
+      transition: 0.2s;
     }
+    input::placeholder, textarea::placeholder { color: var(--text-sub); opacity: 0.7; }
+    input:focus, select:focus, textarea:focus { border-color: var(--brand-blue); background: var(--glass-hover); }
+    select option { background: #060e20; color: white; }
+    body.light-mode select option { background: #ffffff; color: #0f172a; }
     textarea { resize: vertical; min-height: 80px; }
-    button { background: var(--navy); color: var(--white); border: none; font-weight: bold; cursor: pointer; transition: 0.2s; -webkit-appearance: none; }
+
+    button {
+      background: var(--accent-gradient); color: white; border: 1px solid rgba(255,255,255,0.3);
+      font-weight: bold; cursor: pointer; transition: 0.2s; -webkit-appearance: none;
+      padding: 12px; margin: 6px 0; border-radius: 12px; font-size: 14px;
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+    button:hover { filter: brightness(1.1); transform: translateY(-1px); }
     button:active { transform: scale(0.98); }
-    
+
     #app { display: none; }
-    header {
-      background: var(--navy); color: var(--white); padding: 1rem 1.2rem;
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
-    }
-    nav { display: flex; gap: 6px; width: 100%; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
-    nav::-webkit-scrollbar { display: none; }
-    nav button { background: transparent; border: 1px solid rgba(255,255,255,0.3); width: auto; padding: 8px 14px; white-space: nowrap; font-size: 13px; border-radius: 20px; }
-    nav button.active, nav button:hover { background: var(--white); color: var(--navy); border-color: var(--white); }
-
-    @media (min-width: 768px) {
-      header { flex-wrap: nowrap; }
-      nav { width: auto; overflow-x: visible; }
-      .header-user-info { width: auto !important; margin-top: 0 !important; }
+    
+    .app-layout {
+      display: flex;
+      min-height: 100vh;
     }
 
-    .header-user-info { display: flex; align-items: center; justify-content: flex-end; width: 100%; margin-top: 4px; font-size: 14px; gap: 10px; }
-
-    .header-user-profile-btn {
-      display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.1); padding: 4px 10px 4px 4px; border-radius: 20px; cursor: pointer; transition: 0.2s; border: 1px solid rgba(255,255,255,0.2);
+    aside.sidebar {
+      width: 260px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-right: 1px solid var(--glass-border);
+      padding: 24px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: fixed;
+      top: 0; bottom: 0; left: 0;
+      z-index: 100;
+      transition: 0.3s;
     }
-    .header-user-profile-btn:hover {
-      background: rgba(255,255,255,0.25);
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .sidebar-user-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background: var(--glass-card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .sidebar-user-card:hover {
+      background: var(--glass-hover);
+    }
+
+    nav.sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    nav.sidebar-nav button {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-main);
+      padding: 12px 16px;
+      font-size: 14px;
+      border-radius: 12px;
+      box-shadow: none;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    nav.sidebar-nav button:hover {
+      background: var(--glass-hover);
+      border-color: var(--glass-border);
+    }
+
+    nav.sidebar-nav button.active {
+      background: var(--accent-gradient);
+      color: white;
+      border-color: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
+
+    .theme-toggle-btn {
+      background: var(--glass-card-bg) !important;
+      border: 1px solid var(--glass-border) !important;
+      color: var(--text-main) !important;
+      box-shadow: none !important;
+      justify-content: center !important;
+    }
+
+    main.main-content {
+      flex: 1;
+      margin-left: 260px;
+      padding: 2rem;
+      transition: 0.3s;
+    }
+
+    @media (max-width: 899px) {
+      aside.sidebar {
+        display: none;
+      }
+
+      main.main-content {
+        margin-left: 0;
+        padding: 1rem;
+        padding-bottom: 90px;
+      }
+
+      .mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--glass-border);
+        margin-bottom: 15px;
+        border-radius: 16px;
+      }
+
+      nav.mobile-bottom-nav {
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        background: var(--glass-bg);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border-top: 1px solid var(--glass-border);
+        display: flex;
+        justify-content: space-around;
+        padding: 8px 4px;
+        z-index: 999;
+      }
+
+      nav.mobile-bottom-nav button {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        color: var(--text-sub);
+        font-size: 12px;
+        font-weight: 600;
+        padding: 10px 6px;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+      }
+
+      nav.mobile-bottom-nav button.active {
+        color: var(--brand-accent);
+        font-weight: bold;
+      }
+    }
+
+    @media (min-width: 900px) {
+      .mobile-header, .mobile-bottom-nav { display: none !important; }
     }
 
     .bottom-widget-bar {
-      position: fixed; bottom: 0; right: 15px; z-index: 9000; display: flex; align-items: flex-end; gap: 8px;
+      position: fixed; bottom: 20px; right: 20px; z-index: 9000; display: flex; align-items: center; gap: 10px;
+    }
+
+    @media (max-width: 899px) {
+      .bottom-widget-bar { bottom: 75px; right: 15px; }
     }
 
     .notif-badge-btn {
-      position: relative; background: var(--navy); color: white; border: 1px solid var(--border); width: 40px; height: 40px;
-      border-radius: 12px 12px 0 0; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 -4px 12px rgba(0,0,0,0.15);
+      position: relative; background: var(--glass-bg); color: var(--text-main);
+      border: 1px solid var(--glass-border); backdrop-filter: blur(16px); width: 44px; height: 44px;
+      border-radius: 14px; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2); margin:0;
     }
     .notif-badge-count {
-      position: absolute; top: 4px; right: 4px; background: #ef4444; color: white;
+      position: absolute; top: 2px; right: 2px; background: #ef4444; color: white;
       font-size: 10px; font-weight: bold; padding: 1px 5px; border-radius: 10px; min-width: 15px; text-align: center;
     }
 
-    .container { padding: 1rem; max-width: 1400px; margin: 0 auto; }
+    .container { max-width: 1400px; margin: 0 auto; }
     .page { display: none; }
     .page.active { display: block; }
 
@@ -124,114 +342,174 @@
       snap-type: x mandatory;
     }
     .column { 
-      background: #ebedf0; border-radius: 10px; padding: 12px; min-width: 280px; width: 280px; flex-shrink: 0; min-height: 450px;
-      snap-align: start;
+      background: var(--glass-card-bg); backdrop-filter: blur(16px); border: 1px solid var(--glass-border);
+      border-radius: 18px; padding: 14px; min-width: 250px; width: 250px; flex-shrink: 0; min-height: 450px; snap-align: start;
     }
-    @media (min-width: 900px) {
-      .kanban-board { display: grid; grid-template-columns: repeat(4, 1fr); overflow-x: visible; }
+    @media (min-width: 1200px) {
+      .kanban-board { display: grid; grid-template-columns: repeat(5, 1fr); overflow-x: visible; }
       .column { width: 100%; min-width: auto; }
     }
 
-    .column h3 { margin-bottom: 12px; color: var(--navy); border-bottom: 2px solid var(--border); padding-bottom: 6px; font-size: 15px; }
+    .column h3 { margin-bottom: 12px; color: var(--text-main); border-bottom: 1px solid var(--glass-border); padding-bottom: 8px; font-size: 14px; font-weight: 700; }
     
     .task-card {
-      background: var(--white); padding: 12px; border-radius: 8px; margin-bottom: 10px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-left: 4px solid var(--navy); position: relative; cursor: pointer;
+      background: var(--glass-bg); backdrop-filter: blur(10px); padding: 14px; border-radius: 14px; margin-bottom: 12px;
+      border: 1px solid var(--glass-border); border-left: 4px solid var(--brand-blue); position: relative; cursor: pointer; transition: 0.2s;
     }
-    .task-card h4 { margin-bottom: 4px; font-size: 15px; word-break: break-word; }
-    .task-card p { font-size: 12px; color: #64748b; margin-bottom: 6px; }
-    .task-card .company-tag { display: inline-block; background: #dbeafe; color: #1e40af; font-size: 11px; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-bottom: 4px; }
-    .task-card .independent-tag { display: inline-block; background: #fef3c7; color: #b45309; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-bottom: 4px; }
-    .task-card .tag { display: inline-block; background: #e2e8f0; font-size: 11px; padding: 2px 6px; border-radius: 4px; }
+    .task-card:hover { transform: translateY(-2px); background: var(--glass-hover); }
+    .task-card h4 { margin-bottom: 6px; font-size: 14px; word-break: break-word; color: var(--text-main); font-weight: 600; }
+    .task-card p { font-size: 12px; color: var(--text-sub); margin-bottom: 6px; }
+    
+    .task-card .company-tag { 
+      display: inline-block; 
+      background: rgba(96, 165, 250, 0.15); 
+      border: 1px solid rgba(96, 165, 250, 0.4); 
+      color: var(--brand-accent); 
+      font-size: 11px; 
+      padding: 3px 8px; 
+      border-radius: 6px; 
+      font-weight: 600; 
+      margin-bottom: 6px; 
+    }
+    .task-card .datetime-text {
+      color: var(--brand-accent) !important;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .task-card .independent-tag { display: inline-block; background: rgba(217, 119, 6, 0.15); border: 1px solid rgba(217, 119, 6, 0.3); color: #fbbf24; font-size: 10px; padding: 2px 8px; border-radius: 6px; font-weight: bold; margin-bottom: 6px; }
+    .task-card .tag { display: inline-block; background: var(--glass-bg); font-size: 10px; padding: 2px 6px; border-radius: 4px; color: var(--text-sub); font-weight: 600; }
     
     .user-avatar-badge {
-      display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px 2px 2px;
+      display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px 2px 3px;
       border-radius: 14px; color: white; font-size: 10px; font-weight: bold; margin-right: 4px; margin-bottom: 2px;
     }
     .user-avatar-img {
-      width: 18px; height: 18px; border-radius: 50%; object-fit: cover; background: #ffffff;
+      width: 20px; height: 20px; border-radius: 50%; object-fit: cover; background: #ffffff;
     }
 
-    .task-form, .admin-card, .client-card { background: var(--white); padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    .form-row { display: grid; grid-template-columns: 1fr; gap: 8px; }
+    .task-form, .admin-card, .client-card {
+      background: var(--glass-card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border); padding: 20px; border-radius: 20px; margin-bottom: 20px;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr; gap: 10px; }
     @media (min-width: 768px) {
       .form-row { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
     }
 
     .dropdown-checkbox-container { position: relative; width: 100%; margin: 6px 0; }
     .dropdown-btn {
-      background: var(--white); color: var(--text); border: 1px solid var(--border);
-      padding: 12px; text-align: left; border-radius: 8px; font-size: 14px; cursor: pointer;
+      background: var(--input-bg); color: var(--text-main); border: 1px solid var(--input-border);
+      padding: 12px; text-align: left; border-radius: 12px; font-size: 14px; cursor: pointer;
       display: flex; justify-content: space-between; align-items: center;
     }
     .dropdown-list {
-      display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--white);
-      border: 1px solid var(--border); border-radius: 8px; max-height: 200px; overflow-y: auto;
-      z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 6px;
+      display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--glass-card-bg);
+      backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 12px; max-height: 200px; overflow-y: auto;
+      z-index: 1000; box-shadow: 0 8px 25px rgba(0,0,0,0.3); padding: 6px;
     }
     .dropdown-list label {
       display: flex; align-items: center; gap: 10px; padding: 10px; cursor: pointer; font-size: 14px;
-      border-radius: 6px; transition: 0.1s;
+      border-radius: 8px; transition: 0.1s; color: var(--text-main);
     }
-    .dropdown-list label:hover { background: #f1f5f9; }
-    .dropdown-list input[type="checkbox"] { width: 20px; height: 20px; margin: 0; cursor: pointer; }
+    .dropdown-list label:hover { background: var(--glass-hover); }
+    .dropdown-list input[type="checkbox"] { width: 18px; height: 18px; margin: 0; cursor: pointer; }
 
     .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
     table { width: 100%; border-collapse: collapse; margin-top: 10px; min-width: 500px; }
-    th, td { border: 1px solid var(--border); padding: 10px; text-align: left; font-size: 13px; }
-    th { background: var(--navy); color: var(--white); }
+    th, td { border: 1px solid var(--glass-border); padding: 12px; text-align: left; font-size: 13px; color: var(--text-main); }
+    th { background: rgba(0, 0, 0, 0.15); color: var(--text-main); font-weight: bold; }
+    tr:nth-child(even) { background: var(--glass-bg); }
 
+    /* Modal (Açılır Pencere) Stilleri - Light ve Dark Temaya Uyumlu */
     .modal {
       display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(10, 26, 54, 0.7); backdrop-filter: blur(2px);
+      background: var(--modal-bg); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
       justify-content: center; align-items: center; z-index: 9999; padding: 15px;
     }
     .modal-content {
-      background: var(--white); padding: 20px; border-radius: 12px; max-width: 550px; width: 100%;
-      max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); border: 1px solid var(--border);
+      background: var(--modal-card-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--glass-border);
+      padding: 24px; border-radius: 24px; max-width: 550px; width: 100%;
+      max-height: 85vh; overflow-y: auto; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25); color: var(--text-main);
     }
 
     .comment-box {
-      background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; margin-top: 10px;
+      background: var(--comment-box-bg); border: 1px solid var(--glass-border); border-radius: 14px; padding: 12px; margin-top: 12px;
     }
     .comment-item {
-      background: white; border: 1px solid #e2e8f0; padding: 8px 12px; border-radius: 6px; margin-bottom: 8px; font-size: 13px;
+      background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 10px 14px; border-radius: 10px; margin-bottom: 8px; font-size: 13px;
     }
-    .comment-item .author { font-weight: bold; color: var(--navy); margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; }
-    .comment-item .time { font-size: 11px; color: #94a3b8; font-weight: normal; }
+    .comment-item .author { font-weight: bold; color: var(--brand-accent); margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; }
+    .comment-item .time { font-size: 11px; color: var(--text-sub); font-weight: normal; }
 
     .media-picker-bar { display: flex; gap: 6px; margin: 4px 0; }
-    .media-picker-btn { width: auto; padding: 4px 10px; font-size: 12px; background: #e2e8f0; color: var(--navy); border-radius: 6px; }
+    .media-picker-btn { width: auto; padding: 4px 10px; font-size: 12px; background: var(--glass-bg); color: var(--text-main); border-radius: 8px; box-shadow: none; }
     .picker-popover {
-      display: none; background: white; border: 1px solid var(--border); border-radius: 8px;
-      padding: 8px; margin-bottom: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: none; background: var(--glass-card-bg); border: 1px solid var(--glass-border); border-radius: 12px;
+      padding: 8px; margin-bottom: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
     .emoji-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; font-size: 18px; text-align: center; }
-    .emoji-grid span { cursor: pointer; border-radius: 4px; padding: 2px; }
-    .emoji-grid span:hover { background: #f1f5f9; }
+    .emoji-grid span { cursor: pointer; border-radius: 6px; padding: 2px; }
+    .emoji-grid span:hover { background: var(--glass-hover); }
 
     #chat-widget {
-      width: 330px; max-width: 80vw; background: var(--white); border-radius: 12px 12px 0 0;
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.15); border: 1px solid var(--border); border-bottom: none; overflow: hidden; transition: 0.3s ease;
+      width: 330px; max-width: 85vw; background: var(--glass-card-bg); backdrop-filter: blur(24px);
+      border-radius: 20px 20px 0 0; box-shadow: 0 -4px 25px rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-bottom: none; overflow: hidden; transition: 0.3s ease;
     }
     #chat-header {
-      background: var(--navy); color: white; padding: 10px 14px; font-weight: bold; font-size: 14px;
-      display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+      background: var(--glass-hover); color: var(--text-main); padding: 12px 16px; font-weight: bold; font-size: 14px;
+      display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-bottom: 1px solid var(--glass-border);
     }
-    #chat-body { display: none; height: 380px; flex-direction: column; background: #f8fafc; }
+    #chat-body { display: none; height: 380px; flex-direction: column; background: rgba(0, 0, 0, 0.1); }
     #chat-body.active { display: flex; }
     #chat-messages { flex: 1; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
     .chat-msg { max-width: 80%; padding: 8px 12px; border-radius: 12px; font-size: 13px; line-height: 1.4; word-break: break-word; }
-    .chat-msg.me { align-self: flex-end; background: var(--navy); color: white; border-bottom-right-radius: 2px; }
-    .chat-msg.other { align-self: flex-start; background: #e2e8f0; color: var(--text); border-bottom-left-radius: 2px; }
+    .chat-msg.me { align-self: flex-end; background: var(--accent-gradient); color: white; border-bottom-right-radius: 2px; }
+    .chat-msg.other { align-self: flex-start; background: var(--glass-bg); color: var(--text-main); border-bottom-left-radius: 2px; }
     .chat-msg .sender-name { font-size: 10px; opacity: 0.8; margin-bottom: 2px; font-weight: bold; }
 
     .color-picker-grid { display: flex; gap: 10px; margin: 10px 0; flex-wrap: wrap; }
     .color-picker-option { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
-    .color-picker-option.selected { border-color: var(--navy); transform: scale(1.15); }
+    .color-picker-option.selected { border-color: var(--text-main); transform: scale(1.15); }
     
     .profile-avatar-preview {
-      width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--navy); margin-bottom: 10px; display: block;
+      width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid var(--glass-border); margin-bottom: 10px; display: block;
+    }
+
+    /* FullCalendar Custom Styling */
+    .fc { color: var(--text-main) !important; font-family: 'Montserrat', sans-serif !important; }
+    .fc-theme-standard td, .fc-theme-standard th { border-color: var(--glass-border) !important; }
+    .fc-toolbar-title { font-size: 1.2rem !important; font-weight: bold; color: var(--text-main); }
+    .fc-button-primary { background: var(--glass-bg) !important; border-color: var(--glass-border) !important; color: var(--text-main) !important; }
+    .fc-button-active { background: var(--accent-gradient) !important; color: white !important; }
+    
+    .fc-col-header-cell, .fc-day-header {
+      background: rgba(15, 23, 42, 0.6) !important;
+      color: var(--text-main) !important;
+      font-weight: 600;
+      padding: 8px 0 !important;
+    }
+    body.light-mode .fc-col-header-cell {
+      background: rgba(255, 255, 255, 0.4) !important;
+    }
+    .fc-col-header-cell-cushion, .fc-daygrid-day-number, .fc-list-day-text, .fc-list-day-side-text {
+      color: var(--text-main) !important;
+      text-decoration: none !important;
+    }
+    .fc-daygrid-day:hover, .fc-timegrid-slot:hover {
+      background: rgba(255, 255, 255, 0.15) !important;
+      cursor: pointer;
+    }
+    .fc-list-day-cushion {
+      background: rgba(15, 23, 42, 0.7) !important;
+      color: var(--text-main) !important;
+    }
+    body.light-mode .fc-list-day-cushion {
+      background: rgba(255, 255, 255, 0.5) !important;
+    }
+    .fc-list-event:hover td {
+      background: rgba(255, 255, 255, 0.1) !important;
     }
   </style>
 </head>
@@ -241,7 +519,7 @@
     <div class="login-card">
       <div class="brand-container">
         <img src="https://pngup.com/ec43/logo1.png" alt="137 Studio Logo" class="app-logo">
-        <h2 style="color:var(--navy);">137 Studio</h2>
+        <h2 style="color:var(--text-main); font-size: 1.3rem;">137 studio</h2>
       </div>
 
       <div class="login-tabs">
@@ -254,7 +532,7 @@
         <input type="password" id="password" placeholder="Şifre" autocomplete="current-password">
 
         <div id="register-avatar-container" style="display:none; margin: 8px 0; text-align:left;">
-          <label style="font-size: 12px; color: var(--accent); cursor: pointer; font-weight:bold; display:block;">
+          <label style="font-size: 12px; color: var(--brand-accent); cursor: pointer; font-weight:bold; display:block;">
             📷 Profil Fotoğrafı Yükle (İsteğe Bağlı)
             <input type="file" id="register-avatar-input" accept="image/*" onchange="handleRegisterAvatarUpload(event)" style="display:none;">
           </label>
@@ -270,163 +548,210 @@
   </div>
 
   <div id="app">
-    <header>
-      <div class="brand-container">
-        <img src="https://pngup.com/ec43/logo1.png" alt="137 Studio Logo" class="app-logo">
-        <h2 style="font-size: 1.1rem; color:var(--white);">137 Studio</h2>
-      </div>
+    <div class="app-layout">
       
-      <div class="header-user-info">
-        <div class="header-user-profile-btn" onclick="openProfileModal()" title="Profil Ayarları">
-          <img id="header-user-avatar" class="user-avatar-img" style="width:30px; height:30px;" src="">
-          <span id="user-display" style="font-weight: bold; color: white;"></span>
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <img src="https://pngup.com/ec43/logo1.png" alt="137 Studio Logo" class="app-logo">
+          <h2 style="font-size: 1.1rem; color:var(--text-main);">137 studio</h2>
         </div>
-      </div>
 
-      <nav>
-        <button onclick="switchTab('kanban')" class="active" id="btn-kanban">📋 İş Takip</button>
-        <button onclick="switchTab('calendar')" id="btn-calendar">📅 Takvim</button>
-        <button onclick="switchTab('clients')" id="btn-clients">🏷️ Markalar</button>
-        <button onclick="switchTab('archive')" id="btn-archive">📂 Arşiv</button>
-        <button onclick="switchTab('admin')" id="btn-admin" style="display: none;">⚙️ Admin</button>
-      </nav>
-    </header>
+        <div class="sidebar-user-card" onclick="openProfileModal()" title="Profil Ayarları">
+          <img id="header-user-avatar" class="user-avatar-img" style="width:32px; height:32px;" src="">
+          <div style="display:flex; flex-direction:column; flex:1;">
+            <span id="user-display" style="font-weight: bold; color: var(--text-main); font-size:14px;"></span>
+            <span style="font-size:11px; color:var(--text-sub);">Profil Ayarları</span>
+          </div>
+          <span style="font-size:12px; opacity:0.6;">▼</span>
+        </div>
 
-    <div class="container">
-      <div id="page-kanban" class="page active">
-        <div class="task-form">
-          <h3 style="margin-bottom: 10px; color: var(--navy); font-size: 16px;">Yeni İş Oluştur</h3>
-          <div class="form-row">
-            <input type="text" id="task-title" placeholder="Çalışma Adı (Zorunlu)">
-            
-            <select id="task-company-select">
-              <option value="">Marka Seçiniz (İsteğe bağlı)</option>
-            </select>
-            
-            <div class="dropdown-checkbox-container">
-              <div class="dropdown-btn" onclick="toggleAssigneeDropdown()">
-                <span id="dropdown-btn-text">Kişileri Etiketle (Seçiniz)</span>
-                <span>▼</span>
-              </div>
-              <div class="dropdown-list" id="assignee-checkbox-list"></div>
+        <nav class="sidebar-nav">
+          <button onclick="switchTab('kanban')" class="active" id="btn-kanban">İş Takip</button>
+          <button onclick="switchTab('calendar')" id="btn-calendar">Takvim</button>
+          <button onclick="switchTab('clients')" id="btn-clients">Markalar</button>
+          <button onclick="switchTab('archive')" id="btn-archive">Arşiv</button>
+          <button onclick="switchTab('admin')" id="btn-admin" style="display: none;">Admin</button>
+        </nav>
+
+        <button class="theme-toggle-btn" onclick="toggleThemeMode()">
+          <span id="theme-btn-icon">☀️ Light Mode</span>
+        </button>
+      </aside>
+
+      <main class="main-content">
+        
+        <div class="mobile-header">
+          <div class="brand-container">
+            <img src="https://pngup.com/ec43/logo1.png" alt="137 Studio Logo" class="app-logo">
+            <h2 style="font-size: 1.1rem; color:var(--text-main);">137 studio</h2>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <button onclick="toggleThemeMode()" style="padding:6px 10px; font-size:12px; margin:0;" class="theme-toggle-btn">☀️/🌙</button>
+            <div class="sidebar-user-card" onclick="openProfileModal()" style="padding:4px 8px;">
+              <img id="header-user-avatar-mobile" class="user-avatar-img" style="width:24px; height:24px;" src="">
             </div>
-
-            <input type="datetime-local" id="task-datetime">
-          </div>
-          
-          <label class="checkbox-inline">
-            <input type="checkbox" id="task-is-independent"> 📌 Bağımsız Proje (Takvimlere düşmesin)
-          </label>
-
-          <textarea id="task-desc" placeholder="Görev Açıklaması (İsteğe bağlı)"></textarea>
-          <button onclick="createTask()" style="margin-top: 6px;">Görev Ekle</button>
-        </div>
-
-        <div class="kanban-board">
-          <div class="column" ondrop="drop(event, 'todo')" ondragover="allowDrop(event)">
-            <h3>Yapılacaklar</h3>
-            <div id="col-todo"></div>
-          </div>
-          <div class="column" ondrop="drop(event, 'inprogress')" ondragover="allowDrop(event)">
-            <h3>Yapımdakiler</h3>
-            <div id="col-inprogress"></div>
-          </div>
-          <div class="column" ondrop="drop(event, 'revision')" ondragover="allowDrop(event)">
-            <h3>Revizeler</h3>
-            <div id="col-revision"></div>
-          </div>
-          <div class="column" ondrop="drop(event, 'done')" ondragover="allowDrop(event)">
-            <h3>Onaylananlar</h3>
-            <div id="col-done"></div>
-          </div>
-        </div>
-      </div>
-
-      <div id="page-calendar" class="page">
-        <div id="calendar" style="background: var(--white); padding: 12px; border-radius: 10px;"></div>
-      </div>
-
-      <div id="page-clients" class="page">
-        <div class="client-card">
-          <h3 style="margin-bottom: 10px; color: var(--navy); font-size: 16px;">Yeni Marka Ekle</h3>
-          <div class="form-row">
-            <input type="text" id="client-name-input" placeholder="Marka Adı">
-            <input type="text" id="client-contact-input" placeholder="İletişim Kişisi / Telefon (Opsiyonel)">
-            <button onclick="addClient()">Marka Kaydet</button>
           </div>
         </div>
 
-        <div class="client-card">
-          <h4 style="margin-bottom: 12px; color: var(--navy);">Marka Listesi</h4>
-          <div class="table-responsive">
-            <table>
-              <thead>
-                <tr>
-                  <th>Marka Adı</th>
-                  <th>İletişim</th>
-                  <th>İşlemler</th>
-                </tr>
-              </thead>
-              <tbody id="client-table-body"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div id="client-social-calendar-section" class="client-card" style="display:none;">
-          <h3 id="selected-client-title" style="color: var(--navy); margin-bottom: 12px; font-size: 16px;"></h3>
-          
-          <div class="task-form" style="background:#f8fafc; border:1px solid #e2e8f0;">
-            <h4 style="margin-bottom: 8px; color: var(--navy); font-size: 14px;">Yeni Paylaşım İçeriği Ekle</h4>
-            <div class="form-row">
-              <input type="text" id="social-post-title" placeholder="Paylaşım Başlığı / Görsel Konusu (Zorunlu)">
-              <input type="datetime-local" id="social-post-date" placeholder="Paylaşım Tarihi ve Saati">
-              <div class="dropdown-checkbox-container">
-                <div class="dropdown-btn" onclick="toggleSocialAssigneeDropdown()">
-                  <span id="social-dropdown-btn-text">Sorumluları Etiketle</span>
-                  <span>▼</span>
+        <div class="container">
+          <div id="page-kanban" class="page active">
+            <div class="task-form">
+              <h3 style="margin-bottom: 12px; color: var(--text-main); font-size: 16px;">Yeni İş Oluştur</h3>
+              <div class="form-row">
+                <input type="text" id="task-title" placeholder="Çalışma Adı (Zorunlu)">
+                
+                <select id="task-company-select">
+                  <option value="">Marka Seçiniz (İsteğe bağlı)</option>
+                </select>
+                
+                <div class="dropdown-checkbox-container">
+                  <div class="dropdown-btn" onclick="toggleAssigneeDropdown()">
+                    <span id="dropdown-btn-text">Kişileri Etiketle (Seçiniz)</span>
+                    <span>▼</span>
+                  </div>
+                  <div class="dropdown-list" id="assignee-checkbox-list"></div>
                 </div>
-                <div class="dropdown-list" id="social-assignee-checkbox-list"></div>
+
+                <div style="display:flex; gap:6px;">
+                  <input type="date" id="task-date" title="Tarih" style="flex:2;">
+                  <input type="time" id="task-time" title="Saat (Opsiyonel)" style="flex:1;">
+                </div>
+              </div>
+              
+              <label class="checkbox-inline">
+                <input type="checkbox" id="task-is-independent"> 📌 Bağımsız Proje (Takvimlere düşmesin)
+              </label>
+
+              <textarea id="task-desc" placeholder="Görev Açıklaması (İsteğe bağlı)"></textarea>
+              <button onclick="createTask()" style="margin-top: 8px;">Görev Ekle</button>
+            </div>
+
+            <div class="kanban-board">
+              <div class="column" ondrop="drop(event, 'todo')" ondragover="allowDrop(event)">
+                <h3>Yapılacaklar</h3>
+                <div id="col-todo"></div>
+              </div>
+              <div class="column" ondrop="drop(event, 'inprogress')" ondragover="allowDrop(event)">
+                <h3>Yapımdakiler</h3>
+                <div id="col-inprogress"></div>
+              </div>
+              <div class="column" ondrop="drop(event, 'revision')" ondragover="allowDrop(event)">
+                <h3>Revizeler</h3>
+                <div id="col-revision"></div>
+              </div>
+              <div class="column" ondrop="drop(event, 'pending')" ondragover="allowDrop(event)">
+                <h3>Onay Bekliyor</h3>
+                <div id="col-pending"></div>
+              </div>
+              <div class="column" ondrop="drop(event, 'done')" ondragover="allowDrop(event)">
+                <h3>Onaylananlar</h3>
+                <div id="col-done"></div>
               </div>
             </div>
-            <textarea id="social-post-desc" placeholder="Metin / Tasarım Detayı / Hashtagler"></textarea>
-            <button onclick="createSocialPost()" style="margin-top: 6px; background:var(--accent);">Paylaşım Görevi Oluştur</button>
           </div>
 
-          <div id="client-calendar" style="background: var(--white); padding: 10px; border-radius: 8px; margin-top: 12px;"></div>
-        </div>
-      </div>
+          <div id="page-calendar" class="page">
+            <div id="calendar" class="glass-card" style="padding: 18px;"></div>
+          </div>
 
-      <div id="page-archive" class="page">
-        <h3 style="margin-bottom: 15px; color: var(--navy);">Tamamlanmış Görev Arşivi</h3>
-        <div id="archive-list"></div>
-      </div>
+          <div id="page-clients" class="page">
+            <div class="client-card">
+              <h3 style="margin-bottom: 12px; color: var(--text-main); font-size: 16px;">Yeni Marka Ekle</h3>
+              <div class="form-row">
+                <input type="text" id="client-name-input" placeholder="Marka Adı">
+                <input type="text" id="client-contact-input" placeholder="İletişim Kişisi / Telefon (Opsiyonel)">
+                <button onclick="addClient()">Marka Kaydet</button>
+              </div>
+            </div>
 
-      <div id="page-admin" class="page">
-        <div class="admin-card">
-          <h3 style="margin-bottom: 12px; color: var(--navy); font-size: 16px;">Kullanıcı Yönetim Paneli</h3>
-          <div class="form-row">
-            <input type="text" id="new-user-name" placeholder="Yeni Kullanıcı Adı">
-            <input type="password" id="new-user-pass" placeholder="Şifre">
-            <button onclick="addUser()">Kullanıcı Ekle / Güncelle</button>
+            <div class="client-card">
+              <h4 style="margin-bottom: 14px; color: var(--text-main);">Marka Listesi</h4>
+              <div class="table-responsive">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Marka Adı</th>
+                      <th>İletişim</th>
+                      <th>İşlemler</th>
+                    </tr>
+                  </thead>
+                  <tbody id="client-table-body"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div id="client-social-calendar-section" class="client-card" style="display:none;">
+              <h3 id="selected-client-title" style="color: var(--text-main); margin-bottom: 12px; font-size: 16px;"></h3>
+              
+              <div class="task-form" style="background:rgba(0,0,0,0.1);">
+                <h4 style="margin-bottom: 8px; color: var(--text-main); font-size: 14px;">Yeni Paylaşım İçeriği Ekle</h4>
+                <div class="form-row">
+                  <input type="text" id="social-post-title" placeholder="Paylaşım Başlığı / Görsel Konusu (Zorunlu)">
+                  
+                  <div style="display:flex; gap:6px;">
+                    <input type="date" id="social-post-date" title="Tarih" style="flex:2;">
+                    <input type="time" id="social-post-time" title="Saat (Opsiyonel)" style="flex:1;">
+                  </div>
+
+                  <div class="dropdown-checkbox-container">
+                    <div class="dropdown-btn" onclick="toggleSocialAssigneeDropdown()">
+                      <span id="social-dropdown-btn-text">Sorumluları Etiketle</span>
+                      <span>▼</span>
+                    </div>
+                    <div class="dropdown-list" id="social-assignee-checkbox-list"></div>
+                  </div>
+                </div>
+                <textarea id="social-post-desc" placeholder="Metin / Tasarım Detayı / Hashtagler"></textarea>
+                <button onclick="createSocialPost()" style="margin-top: 6px;">Paylaşım Görevi Oluştur</button>
+              </div>
+
+              <div id="client-calendar" style="padding: 10px; margin-top: 12px;"></div>
+            </div>
+          </div>
+
+          <div id="page-archive" class="page">
+            <div class="glass-card" style="padding:20px;">
+              <h3 style="margin-bottom: 15px; color: var(--text-main);">Tamamlanmış Görev Arşivi</h3>
+              <div id="archive-list"></div>
+            </div>
+          </div>
+
+          <div id="page-admin" class="page">
+            <div class="admin-card">
+              <h3 style="margin-bottom: 12px; color: var(--text-main); font-size: 16px;">Kullanıcı Yönetim Paneli</h3>
+              <div class="form-row">
+                <input type="text" id="new-user-name" placeholder="Yeni Kullanıcı Adı">
+                <input type="password" id="new-user-pass" placeholder="Şifre">
+                <button onclick="addUser()">Kullanıcı Ekle / Güncelle</button>
+              </div>
+            </div>
+
+            <div class="admin-card">
+              <h4 style="margin-bottom: 10px; color: var(--text-main);">Mevcut Kullanıcılar</h4>
+              <div class="table-responsive">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Kullanıcı Adı</th>
+                      <th>Şifre</th>
+                      <th>İşlemler</th>
+                    </tr>
+                  </thead>
+                  <tbody id="user-table-body"></tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
+      </main>
 
-        <div class="admin-card">
-          <h4 style="margin-bottom: 10px; color: var(--navy);">Mevcut Kullanıcılar</h4>
-          <div class="table-responsive">
-            <table>
-              <thead>
-                <tr>
-                  <th>Kullanıcı Adı</th>
-                  <th>Şifre</th>
-                  <th>İşlemler</th>
-                </tr>
-              </thead>
-              <tbody id="user-table-body"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      <nav class="mobile-bottom-nav">
+        <button onclick="switchTab('kanban')" class="active" id="m-btn-kanban">İş Takip</button>
+        <button onclick="switchTab('calendar')" id="m-btn-calendar">Takvim</button>
+        <button onclick="switchTab('clients')" id="m-btn-clients">Markalar</button>
+        <button onclick="switchTab('archive')" id="m-btn-archive">Arşiv</button>
+        <button onclick="switchTab('admin')" id="m-btn-admin" style="display: none;">Admin</button>
+      </nav>
     </div>
   </div>
 
@@ -442,7 +767,7 @@
         <span id="chat-toggle-icon">▲</span>
       </div>
       <div id="chat-body">
-        <div style="padding: 8px; border-bottom: 1px solid var(--border);">
+        <div style="padding: 8px; border-bottom: 1px solid var(--glass-border);">
           <select id="chat-target-user" onchange="loadChatMessages()" style="padding: 6px; font-size: 13px; margin:0;">
             <option value="">Kişi Seçin...</option>
           </select>
@@ -454,23 +779,22 @@
           <div class="emoji-grid" id="chat-emoji-grid"></div>
         </div>
 
-        <div style="padding: 6px; background: white; border-top: 1px solid var(--border);">
+        <div style="padding: 6px; border-top: 1px solid var(--glass-border);">
           <div class="media-picker-bar">
             <button class="media-picker-btn" onclick="togglePicker('chat-emoji-popover')">😀 Emoji</button>
           </div>
           <div style="display: flex; gap: 4px;">
             <input type="text" id="chat-input" placeholder="Mesaj yazın..." style="margin:0; padding:8px; font-size:13px;" onkeypress="if(event.key==='Enter') sendChatMessage()">
-            <button onclick="sendChatMessage()" style="width: auto; padding: 8px 12px; margin:0; font-size:13px; background:var(--accent);">Gönder</button>
+            <button onclick="sendChatMessage()" style="width: auto; padding: 8px 14px; margin:0; font-size:13px;">Gönder</button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Bildirim Kutusu Modalı -->
   <div id="notif-modal" class="modal">
     <div class="modal-content">
-      <h3 style="color: var(--navy); margin-bottom: 12px; font-size: 16px;">🔔 Etiketlenme ve Bildirimleriniz</h3>
+      <h3 style="color: var(--text-main); margin-bottom: 12px; font-size: 16px;">🔔 Etiketlenme ve Bildirimleriniz</h3>
       <div id="notif-list-container" style="max-height:350px; overflow-y:auto;"></div>
       <div style="margin-top:15px; display:flex; justify-content:flex-end;">
         <button onclick="closeNotifModal()" style="width:auto; padding:8px 16px;">Kapat</button>
@@ -478,24 +802,24 @@
     </div>
   </div>
 
-  <!-- Görev Detay & Yorum Modalı -->
   <div id="modal" class="modal">
     <div class="modal-content">
-      <h3 id="modal-title" style="color: var(--navy); margin-bottom: 10px; font-size: 17px;"></h3>
-      <div id="modal-desc" style="margin-bottom: 15px; font-size: 14px; line-height: 1.5; color: var(--text);"></div>
+      <h3 id="modal-title" style="color: var(--text-main); margin-bottom: 10px; font-size: 17px;"></h3>
+      <div id="modal-desc" style="margin-bottom: 15px; font-size: 14px; line-height: 1.5; color: var(--text-sub);"></div>
       
       <div style="margin-bottom: 12px;">
-        <label style="font-size: 13px; font-weight: bold; color: var(--navy);">Statü Değiştir:</label>
+        <label style="font-size: 13px; font-weight: bold; color: var(--text-main);">Statü Değiştir:</label>
         <select id="modal-status-select" onchange="changeTaskStatusFromModal()" style="margin-top:4px;">
           <option value="todo">Yapılacaklar</option>
           <option value="inprogress">Yapımdakiler</option>
           <option value="revision">Revizeler</option>
+          <option value="pending">Onay Bekliyor</option>
           <option value="done">Onaylananlar (Tamamla)</option>
         </select>
       </div>
 
       <div class="comment-box">
-        <h4 style="font-size:13px; color:var(--navy); margin-bottom:6px;">💬 Yorumlar ve Revize Notları</h4>
+        <h4 style="font-size:13px; color:var(--text-main); margin-bottom:6px;">💬 Yorumlar ve Revize Notları</h4>
         <div id="modal-comments-list" style="max-height:180px; overflow-y:auto; margin-bottom:8px;"></div>
         
         <div style="display:flex; flex-direction:column; gap:4px;">
@@ -516,7 +840,7 @@
           </div>
 
           <textarea id="task-comment-input" placeholder="Revize detayları veya yorum yazın..." style="min-height:50px; font-size:13px;"></textarea>
-          <button onclick="addTaskComment()" style="background:var(--accent); font-size:12px; padding:8px;">Yorum / Revize Ekle</button>
+          <button onclick="addTaskComment()" style="font-size:12px; padding:8px;">Yorum / Revize Ekle</button>
         </div>
       </div>
 
@@ -528,47 +852,48 @@
 
   <div id="profile-modal" class="modal">
     <div class="modal-content">
-      <h3 style="color: var(--navy); margin-bottom: 12px; font-size: 16px;">Profil Düzenle</h3>
+      <h3 style="color: var(--text-main); margin-bottom: 12px; font-size: 16px;">Profil Düzenle</h3>
       
       <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:12px;">
         <img id="profile-avatar-preview" class="profile-avatar-preview" src="">
-        <label style="font-size: 12px; color: var(--accent); cursor: pointer; font-weight:bold;">
+        <label style="font-size: 12px; color: var(--brand-accent); cursor: pointer; font-weight:bold;">
           📷 Profil Fotoğrafı Yükle / Değiştir
           <input type="file" id="profile-avatar-input" accept="image/*" onchange="handleAvatarUpload(event)" style="display:none;">
         </label>
       </div>
 
-      <label style="font-size: 13px; font-weight: bold; color: var(--navy);">Kullanıcı Adı</label>
+      <label style="font-size: 13px; font-weight: bold; color: var(--text-main);">Kullanıcı Adı</label>
       <input type="text" id="profile-username-input" placeholder="Yeni Kullanıcı Adı">
 
-      <label style="font-size: 13px; font-weight: bold; color: var(--navy); margin-top: 8px; display: block;">Yeni Şifre</label>
+      <label style="font-size: 13px; font-weight: bold; color: var(--text-main); margin-top: 8px; display: block;">Yeni Şifre</label>
       <input type="password" id="profile-password-input" placeholder="Şifrenizi Değiştirin">
 
-      <label style="font-size: 13px; font-weight: bold; color: var(--navy); margin-top: 8px; display: block;">Takvim ve Etiket Renginiz</label>
+      <label style="font-size: 13px; font-weight: bold; color: var(--text-main); margin-top: 8px; display: block;">Takvim ve Etiket Renginiz</label>
       <div class="color-picker-grid" id="profile-color-picker"></div>
 
       <div style="display:flex; gap:8px; margin-top:15px; flex-direction:column;">
-        <button onclick="saveProfileChanges()" style="background:var(--accent);">Güncelle ve Kaydet</button>
-        <button onclick="closeProfileModal()" style="background:#64748b;">İptal</button>
-        <button onclick="logout(); closeProfileModal();" style="background:#ef4444; margin-top:6px;">🚪 Çıkış Yap</button>
+        <button onclick="saveProfileChanges()">Güncelle ve Kaydet</button>
+        <button onclick="closeProfileModal()" style="background:var(--glass-bg); border-color:var(--glass-border); box-shadow:none; color:var(--text-main);">İptal</button>
+        <button onclick="logout(); closeProfileModal();" style="background:var(--danger-gradient); margin-top:6px; box-shadow:0 4px 15px rgba(239, 68, 68, 0.4);">🚪 Çıkış Yap</button>
       </div>
     </div>
   </div>
 
   <div id="edit-modal" class="modal">
     <div class="modal-content">
-      <h3 style="color: var(--navy); margin-bottom: 12px; font-size: 16px;">Görevi Düzenle</h3>
+      <h3 style="color: var(--text-main); margin-bottom: 12px; font-size: 16px;">Görevi Düzenle</h3>
       <input type="hidden" id="edit-task-id">
       <input type="text" id="edit-task-title" placeholder="Çalışma Adı">
       <select id="edit-task-company-select">
         <option value="">Marka Seçiniz (İsteğe bağlı)</option>
       </select>
       
-      <label style="font-size: 13px; font-weight: bold; color: var(--navy); margin-top:6px; display:block;">Statü / Durum</label>
+      <label style="font-size: 13px; font-weight: bold; color: var(--text-main); margin-top:6px; display:block;">Statü / Durum</label>
       <select id="edit-task-status-select">
         <option value="todo">Yapılacaklar</option>
         <option value="inprogress">Yapımdakiler</option>
         <option value="revision">Revizeler</option>
+        <option value="pending">Onay Bekliyor</option>
         <option value="done">Onaylananlar (Tamamla)</option>
       </select>
 
@@ -583,11 +908,16 @@
         </div>
         <div class="dropdown-list" id="edit-assignee-checkbox-list"></div>
       </div>
-      <input type="datetime-local" id="edit-task-datetime">
+      
+      <div style="display:flex; gap:6px;">
+        <input type="date" id="edit-task-date" title="Tarih" style="flex:2;">
+        <input type="time" id="edit-task-time" title="Saat (Opsiyonel)" style="flex:1;">
+      </div>
+
       <textarea id="edit-task-desc" placeholder="Açıklama"></textarea>
       <div style="display:flex; gap:10px; margin-top:10px;">
-        <button onclick="saveTaskEdit()" style="background:var(--accent);">Kaydet</button>
-        <button onclick="closeEditModal()" style="background:#64748b;">İptal</button>
+        <button onclick="saveTaskEdit()">Kaydet</button>
+        <button onclick="closeEditModal()" style="background:var(--glass-bg); border-color:var(--glass-border); box-shadow:none; color:var(--text-main);">İptal</button>
       </div>
     </div>
   </div>
@@ -619,31 +949,33 @@
     let clientCalendarInstance = null;
     let activeClientId = null;
     let activeModalTaskId = null;
-    let selectedProfileColor = '#2563eb';
+    let selectedProfileColor = '#0045c4';
     let tempUploadedAvatarBase64 = null;
     let tempRegisterAvatarBase64 = null;
 
     const popularEmojis = ["😀", "😂", "😍", "👍", "👎", "🎉", "🔥", "🚀", "❤️", "🙌", "✅", "❌", "📌", "🎬", "🎨", "📝"];
 
     const availableColors = [
-      '#2563eb', '#7c3aed', '#db2777', '#059669', '#d97706', 
+      '#0045c4', '#7c3aed', '#db2777', '#059669', '#d97706', 
       '#0891b2', '#4f46e5', '#c026d3', '#ea580c', '#16a34a',
       '#dc2626', '#475569'
     ];
 
     function getUserColor(username) {
-      return userColors && userColors[username] ? userColors[username] : '#2563eb';
+      return userColors && userColors[username] ? userColors[username] : '#0045c4';
     }
 
     function getUserAvatar(username) {
       if (userAvatars && userAvatars[username]) return userAvatars[username];
+      
       const initial = username ? username.charAt(0).toUpperCase() : '?';
-      return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%230a1a36"/><text x="50%" y="50%" fill="white" font-size="16" font-weight="bold" font-family="sans-serif" text-anchor="middle" dy=".3em">${initial}</text></svg>`;
+      const color = getUserColor(username);
+      const encodedColor = encodeURIComponent(color);
+      
+      return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" rx="16" fill="${encodedColor}"/><text x="50%" y="50%" fill="%23ffffff" font-size="16" font-weight="bold" font-family="Montserrat, sans-serif" text-anchor="middle" dy=".35em">${initial}</text></svg>`;
     }
 
-    // 2026, 2027 ve 2028 Türkiye Resmi ve Özel Günler Listesi
     const turkishHolidays = [
-      // 2026
       { title: "🎉 Yılbaşı", date: "2026-01-01" },
       { title: "👩‍🦰 8 Mart Dünya Kadınlar Günü", date: "2026-03-08" },
       { title: "🇹🇷 23 Nisan Ulusal Egemenlik ve Çocuk Bayramı", date: "2026-04-23" },
@@ -655,38 +987,32 @@
       { title: "🇹🇷 30 Ağustos Zafer Bayramı", date: "2026-08-30" },
       { title: "🇹🇷 29 Ekim Cumhuriyet Bayramı", date: "2026-10-29" },
       { title: "🇹🇷 10 Kasım Atatürk'ü Anma Günü", date: "2026-11-10" },
-      { title: "👩‍🏫 24 Kasım Öğretmenler Günü", date: "2026-11-24" },
-
-      // 2027
-      { title: "🎉 Yılbaşı", date: "2027-01-01" },
-      { title: "👩‍🦰 8 Mart Dünya Kadınlar Günü", date: "2027-03-08" },
-      { title: "🇹🇷 23 Nisan Ulusal Egemenlik ve Çocuk Bayramı", date: "2027-04-23" },
-      { title: "🇹🇷 1 Mayıs Emek ve Dayanışma Günü", date: "2027-05-01" },
-      { title: "💐 Anneler Günü", date: "2027-05-09" },
-      { title: "🇹🇷 19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı", date: "2027-05-19" },
-      { title: "👔 Babalar Günü", date: "2027-06-20" },
-      { title: "🇹🇷 15 Temmuz Demokrasi ve Milli Birlik Günü", date: "2027-07-15" },
-      { title: "🇹🇷 30 Ağustos Zafer Bayramı", date: "2027-08-30" },
-      { title: "🇹🇷 29 Ekim Cumhuriyet Bayramı", date: "2027-10-29" },
-      { title: "🇹🇷 10 Kasım Atatürk'ü Anma Günü", date: "2027-11-10" },
-      { title: "👩‍🏫 24 Kasım Öğretmenler Günü", date: "2027-11-24" },
-
-      // 2028
-      { title: "🎉 Yılbaşı", date: "2028-01-01" },
-      { title: "👩‍🦰 8 Mart Dünya Kadınlar Günü", date: "2028-03-08" },
-      { title: "🇹🇷 23 Nisan Ulusal Egemenlik ve Çocuk Bayramı", date: "2028-04-23" },
-      { title: "🇹🇷 1 Mayıs Emek ve Dayanışma Günü", date: "2028-05-01" },
-      { title: "💐 Anneler Günü", date: "2028-05-14" },
-      { title: "🇹🇷 19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı", date: "2028-05-19" },
-      { title: "👔 Babalar Günü", date: "2028-06-18" },
-      { title: "🇹🇷 15 Temmuz Demokrasi ve Milli Birlik Günü", date: "2028-07-15" },
-      { title: "🇹🇷 30 Ağustos Zafer Bayramı", date: "2028-08-30" },
-      { title: "🇹🇷 29 Ekim Cumhuriyet Bayramı", date: "2028-10-29" },
-      { title: "🇹🇷 10 Kasım Atatürk'ü Anma Günü", date: "2028-11-10" },
-      { title: "👩‍🏫 24 Kasım Öğretmenler Günü", date: "2028-11-24" }
+      { title: "👩‍🏫 24 Kasım Öğretmenler Günü", date: "2026-11-24" }
     ];
 
-    // Firebase Listeners
+    function toggleThemeMode() {
+      const isLight = document.body.classList.toggle('light-mode');
+      localStorage.setItem('137_theme_mode', isLight ? 'light' : 'dark');
+      updateThemeButtonText();
+    }
+
+    function loadThemePreference() {
+      const savedTheme = localStorage.getItem('137_theme_mode');
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+      } else {
+        document.body.classList.remove('light-mode');
+      }
+      updateThemeButtonText();
+    }
+
+    function updateThemeButtonText() {
+      const btnIcon = document.getElementById('theme-btn-icon');
+      if (btnIcon) {
+        btnIcon.innerText = document.body.classList.contains('light-mode') ? '🌙 Dark Mode' : '☀️ Light Mode';
+      }
+    }
+
     db.ref('users').on('value', (snapshot) => {
       users = snapshot.val() || { 'Zorbay': '15241524' };
       populateAssignees();
@@ -698,6 +1024,8 @@
     db.ref('userColors').on('value', (snapshot) => {
       userColors = snapshot.val() || {};
       if (currentUser) {
+        document.getElementById('header-user-avatar').src = getUserAvatar(currentUser);
+        if (document.getElementById('header-user-avatar-mobile')) document.getElementById('header-user-avatar-mobile').src = getUserAvatar(currentUser);
         renderTasks();
         if (document.getElementById('page-calendar').classList.contains('active')) renderCalendar();
       }
@@ -707,6 +1035,7 @@
       userAvatars = snapshot.val() || {};
       if (currentUser) {
         document.getElementById('header-user-avatar').src = getUserAvatar(currentUser);
+        if (document.getElementById('header-user-avatar-mobile')) document.getElementById('header-user-avatar-mobile').src = getUserAvatar(currentUser);
         renderTasks();
       }
     });
@@ -747,6 +1076,7 @@
     });
 
     document.addEventListener('DOMContentLoaded', () => {
+      loadThemePreference();
       initEmojiGrids();
     });
 
@@ -876,12 +1206,11 @@
       document.getElementById('app').style.display = 'block';
       document.getElementById('user-display').innerText = currentUser;
       document.getElementById('header-user-avatar').src = getUserAvatar(currentUser);
+      if (document.getElementById('header-user-avatar-mobile')) document.getElementById('header-user-avatar-mobile').src = getUserAvatar(currentUser);
 
-      if (currentUser.toLowerCase() === 'zorbay') {
-        document.getElementById('btn-admin').style.display = 'inline-block';
-      } else {
-        document.getElementById('btn-admin').style.display = 'none';
-      }
+      const isAdmin = currentUser.toLowerCase() === 'zorbay';
+      document.getElementById('btn-admin').style.display = isAdmin ? 'flex' : 'none';
+      if (document.getElementById('m-btn-admin')) document.getElementById('m-btn-admin').style.display = isAdmin ? 'flex' : 'none';
 
       populateAssignees();
       populateClientDropdowns();
@@ -918,9 +1247,11 @@
 
     function switchTab(tab) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('nav.sidebar-nav button, nav.mobile-bottom-nav button').forEach(b => b.classList.remove('active'));
+      
       document.getElementById(`page-${tab}`).classList.add('active');
-      document.getElementById(`btn-${tab}`).classList.add('active');
+      if (document.getElementById(`btn-${tab}`)) document.getElementById(`btn-${tab}`).classList.add('active');
+      if (document.getElementById(`m-btn-${tab}`)) document.getElementById(`m-btn-${tab}`).classList.add('active');
 
       if (tab === 'calendar') renderCalendar();
       if (tab === 'clients') renderClients();
@@ -953,15 +1284,15 @@
 
       const container = document.getElementById('notif-list-container');
       if (userNotifs.length === 0) {
-        container.innerHTML = '<p style="font-size:13px; color:#64748b;">Henüz bildiriminiz yok.</p>';
+        container.innerHTML = '<p style="font-size:13px; color:var(--text-sub);">Henüz bildiriminiz yok.</p>';
         return;
       }
 
       container.innerHTML = userNotifs.map(n => `
-        <div style="padding:10px; border-bottom:1px solid #e2e8f0; background:${n.read ? '#fff' : '#eff6ff'}; font-size:13px; cursor:${n.linkTaskId ? 'pointer' : 'default'};" onclick="clickNotification('${n.id}', '${n.linkTaskId}')">
-          <div style="font-weight:bold; color:var(--navy);">${n.sender} tarafından:</div>
+        <div style="padding:10px; border-bottom:1px solid var(--glass-border); background:${n.read ? 'transparent' : 'rgba(0,69,196,0.15)'}; font-size:13px; cursor:${n.linkTaskId ? 'pointer' : 'default'}; border-radius:10px; margin-bottom:4px;" onclick="clickNotification('${n.id}', '${n.linkTaskId}')">
+          <div style="font-weight:bold; color:var(--brand-accent);">${n.sender} tarafından:</div>
           <div style="margin:2px 0;">${n.message}</div>
-          <div style="font-size:10px; color:#94a3b8;">${new Date(n.date).toLocaleString('tr-TR')}</div>
+          <div style="font-size:10px; color:var(--text-sub);">${new Date(n.date).toLocaleString('tr-TR')}</div>
         </div>
       `).join('');
     }
@@ -986,12 +1317,12 @@
       const task = tasks.find(t => t.id === taskId);
       const container = document.getElementById('modal-comments-list');
       if (!task || !task.comments || task.comments.length === 0) {
-        container.innerHTML = '<p style="font-size:12px; color:#94a3b8;">Henüz yorum veya revize notu eklenmemiş.</p>';
+        container.innerHTML = '<p style="font-size:12px; color:var(--text-sub);">Henüz yorum veya revize notu eklenmemiş.</p>';
         return;
       }
 
       container.innerHTML = task.comments.map(c => {
-        let tagsHTML = c.tagged && c.tagged.length > 0 ? `<span style="font-size:10px; color:var(--accent);"> (@${c.tagged.join(', @')})</span>` : '';
+        let tagsHTML = c.tagged && c.tagged.length > 0 ? `<span style="font-size:10px; color:var(--brand-accent);"> (@${c.tagged.join(', @')})</span>` : '';
         return `
           <div class="comment-item">
             <div class="author">
@@ -1072,7 +1403,7 @@
       const targetUser = document.getElementById('chat-target-user').value;
       const container = document.getElementById('chat-messages');
       if (!targetUser) {
-        container.innerHTML = '<p style="font-size:12px; color:#94a3b8; text-align:center;">Lütfen bir kullanıcı seçin.</p>';
+        container.innerHTML = '<p style="font-size:12px; color:var(--text-sub); text-align:center;">Lütfen bir kullanıcı seçin.</p>';
         return;
       }
 
@@ -1162,17 +1493,23 @@
       const title = document.getElementById('task-title').value;
       const company = document.getElementById('task-company-select').value;
       const assignees = getSelectedAssignees('#assignee-checkbox-list');
-      const datetime = document.getElementById('task-datetime').value;
+      const dateVal = document.getElementById('task-date').value;
+      const timeVal = document.getElementById('task-time').value;
       const description = document.getElementById('task-desc').value;
       const isIndependent = document.getElementById('task-is-independent').checked;
 
       if (!title.trim()) { alert('Çalışma adı zorunludur!'); return; }
 
+      let formattedDatetime = null;
+      if (dateVal) {
+        formattedDatetime = timeVal ? `${dateVal}T${timeVal}` : dateVal;
+      }
+
       const newTask = {
         id: Date.now().toString(), title, company: company || '',
         assignees: assignees.length > 0 ? assignees : [currentUser],
         description: description || '', creator: currentUser,
-        datetime: datetime || null, status: 'todo',
+        datetime: formattedDatetime, status: 'todo',
         isIndependent, isSocialPost: false, comments: []
       };
 
@@ -1186,20 +1523,45 @@
       document.getElementById('task-title').value = '';
       document.getElementById('task-company-select').value = '';
       document.getElementById('task-desc').value = '';
-      document.getElementById('task-datetime').value = '';
+      document.getElementById('task-date').value = '';
+      document.getElementById('task-time').value = '';
       document.getElementById('task-is-independent').checked = false;
       document.querySelectorAll('#assignee-checkbox-list input[type="checkbox"]').forEach(cb => cb.checked = false);
       updateDropdownText();
     }
 
+    function getStatusLabel(status) {
+      switch(status) {
+        case 'todo': return 'YAPILACAKLAR';
+        case 'inprogress': return 'YAPIMDAKİLER';
+        case 'revision': return 'REVİZELER';
+        case 'pending': return 'ONAY BEKLİYOR';
+        case 'done': return 'ONAYLANANLAR';
+        default: return status.toUpperCase();
+      }
+    }
+
+    function formatDisplayDate(dateStr) {
+      if (!dateStr) return '';
+      if (dateStr.includes('T')) {
+        const d = new Date(dateStr);
+        return d.toLocaleDateString('tr-TR') + ' ' + d.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+      }
+      const parts = dateStr.split('-');
+      if (parts.length === 3) return `${parts[2]}.${parts[1]}.${parts[0]}`;
+      return dateStr;
+    }
+
     function renderTasks() {
-      ['todo', 'inprogress', 'revision', 'done'].forEach(col => document.getElementById(`col-${col}`).innerHTML = '');
-      const userTasks = tasks.filter(t => t.creator === currentUser || (t.assignees && t.assignees.includes(currentUser)));
+      ['todo', 'inprogress', 'revision', 'pending', 'done'].forEach(col => document.getElementById(`col-${col}`).innerHTML = '');
+      
+      const userTasks = tasks.filter(t => t.assignees && t.assignees.includes(currentUser));
 
       userTasks.forEach(task => {
         const card = document.createElement('div');
         card.className = 'task-card';
         card.draggable = true;
+        card.style.borderLeftColor = getUserColor(task.assignees?.[0] || task.creator);
         card.ondragstart = (e) => e.dataTransfer.setData('text/plain', task.id);
         
         let badgesHTML = (task.assignees || []).map(u => `
@@ -1216,10 +1578,10 @@
           ${task.isIndependent ? `<span class="independent-tag">📌 Bağımsız Proje</span>` : ''}
           <h4>${task.title}</h4>
           <div style="margin:6px 0;">${badgesHTML}</div>
-          ${task.datetime ? `<p style="color:var(--accent);">📅 ${new Date(task.datetime).toLocaleString('tr-TR')}</p>` : ''}
+          ${task.datetime ? `<p class="datetime-text">📅 ${formatDisplayDate(task.datetime)}</p>` : ''}
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
-            <span class="tag">${task.status.toUpperCase()}</span>
-            ${commentCount > 0 ? `<span style="font-size:11px; color:#64748b;">💬 ${commentCount}</span>` : ''}
+            <span class="tag">${getStatusLabel(task.status)}</span>
+            ${commentCount > 0 ? `<span style="font-size:11px; color:var(--text-sub);">💬 ${commentCount}</span>` : ''}
           </div>
         `;
         const targetCol = document.getElementById(`col-${task.status}`);
@@ -1244,19 +1606,28 @@
       }
     }
 
+    // GENEL TAKVİM (TÜM İŞLER GÖRÜNÜR & BOŞ YERE TIKLAYINCA İŞ OLUŞTURUYOR)
     function renderCalendar() {
       const calendarEl = document.getElementById('calendar');
       if (calendarInstance) calendarInstance.destroy();
-      const userTasks = tasks.filter(t => t.datetime && !t.isIndependent);
+      const allCalendarTasks = tasks.filter(t => t.datetime && !t.isIndependent);
 
       calendarInstance = new FullCalendar.Calendar(calendarEl, {
-        initialView: window.innerWidth < 768 ? 'listWeek' : 'listMonth', locale: 'tr',
-        headerToolbar: { left: 'prev,next today', center: 'title', right: 'listWeek,dayGridMonth' },
-        events: [...userTasks.map(t => ({
+        initialView: window.innerWidth < 768 ? 'listWeek' : 'dayGridMonth', 
+        locale: 'tr',
+        selectable: true,
+        headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,listWeek' },
+        events: [...allCalendarTasks.map(t => ({
           id: t.id, title: `${t.company ? '['+t.company+'] ' : ''}${t.title}`,
           start: t.datetime, backgroundColor: getUserColor(t.assignees?.[0] || t.creator), borderColor: getUserColor(t.assignees?.[0] || t.creator)
-        })), ...turkishHolidays.map((h, i) => ({ id: `holiday-${i}`, title: h.title, start: h.date, allDay: true, className: 'fc-event-holiday' }))],
-        eventClick: (info) => { if (!info.event.id.startsWith('holiday-')) openTaskModal(info.event.id); }
+        })), ...turkishHolidays.map((h, i) => ({ id: `holiday-${i}`, title: h.title, start: h.date, allDay: true }))],
+        eventClick: (info) => { if (!info.event.id.startsWith('holiday-')) openTaskModal(info.event.id); },
+        dateClick: (info) => {
+          switchTab('kanban');
+          document.getElementById('task-date').value = info.dateStr;
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          document.getElementById('task-title').focus();
+        }
       });
       calendarInstance.render();
     }
@@ -1277,15 +1648,16 @@
         ${task.company ? `<b>Marka:</b> ${task.company}<br>` : ''}
         ${task.isIndependent ? `<b>Tür:</b> 📌 Bağımsız Proje<br>` : ''}
         <b>Sorumlular:</b> ${badgesHTML || 'Belirtilmedi'}<br>
+        ${task.datetime ? `<b>Tarih / Saat:</b> ${formatDisplayDate(task.datetime)}<br>` : ''}
         <b>Açıklama:</b><br>${task.description ? task.description.replace(/\n/g, '<br>') : 'Açıklama girilmemiş.'}
       `;
       document.getElementById('modal-status-select').value = task.status || 'todo';
       renderTaskComments(taskId);
 
       document.getElementById('modal-actions').innerHTML = `
-        <button onclick="openEditModal('${task.id}')" style="background:var(--accent);">Düzenle</button>
-        <button onclick="deleteTask('${task.id}')" style="background:#ef4444;">Sil</button>
-        <button onclick="closeModal()" style="background:#64748b;">Kapat</button>
+        <button onclick="openEditModal('${task.id}')">Düzenle</button>
+        <button onclick="deleteTask('${task.id}')" style="background:var(--danger-gradient); box-shadow:0 4px 15px rgba(239, 68, 68, 0.4);">Sil</button>
+        <button onclick="closeModal()" style="background:var(--glass-bg); border-color:var(--glass-border); box-shadow:none; color:var(--text-main);">Kapat</button>
       `;
       document.getElementById('modal').style.display = 'flex';
     }
@@ -1318,7 +1690,21 @@
       document.getElementById('edit-task-company-select').value = task.company || '';
       document.getElementById('edit-task-status-select').value = task.status || 'todo';
       document.getElementById('edit-task-is-independent').checked = !!task.isIndependent;
-      document.getElementById('edit-task-datetime').value = task.datetime || '';
+      
+      if (task.datetime) {
+        if (task.datetime.includes('T')) {
+          const spl = task.datetime.split('T');
+          document.getElementById('edit-task-date').value = spl[0];
+          document.getElementById('edit-task-time').value = spl[1];
+        } else {
+          document.getElementById('edit-task-date').value = task.datetime;
+          document.getElementById('edit-task-time').value = '';
+        }
+      } else {
+        document.getElementById('edit-task-date').value = '';
+        document.getElementById('edit-task-time').value = '';
+      }
+
       document.getElementById('edit-task-desc').value = task.description || '';
 
       document.querySelectorAll('#edit-assignee-checkbox-list input[type="checkbox"]').forEach(cb => {
@@ -1341,12 +1727,20 @@
       const newStatus = document.getElementById('edit-task-status-select').value;
       const isIndependent = document.getElementById('edit-task-is-independent').checked;
 
+      const dateVal = document.getElementById('edit-task-date').value;
+      const timeVal = document.getElementById('edit-task-time').value;
+
+      let formattedDatetime = null;
+      if (dateVal) {
+        formattedDatetime = timeVal ? `${dateVal}T${timeVal}` : dateVal;
+      }
+
       if (newStatus === 'done') {
         const completedTask = tasks.splice(taskIndex, 1)[0];
         completedTask.title = title;
         completedTask.company = document.getElementById('edit-task-company-select').value;
         completedTask.assignees = getSelectedAssignees('#edit-assignee-checkbox-list');
-        completedTask.datetime = document.getElementById('edit-task-datetime').value || null;
+        completedTask.datetime = formattedDatetime;
         completedTask.description = document.getElementById('edit-task-desc').value;
         completedTask.isIndependent = isIndependent;
         completedTask.completedDate = new Date().toISOString();
@@ -1357,7 +1751,7 @@
         task.company = document.getElementById('edit-task-company-select').value;
         task.status = newStatus;
         task.assignees = getSelectedAssignees('#edit-assignee-checkbox-list');
-        task.datetime = document.getElementById('edit-task-datetime').value || null;
+        task.datetime = formattedDatetime;
         task.description = document.getElementById('edit-task-desc').value;
         task.isIndependent = isIndependent;
       }
@@ -1384,9 +1778,9 @@
         tr.innerHTML = `
           <td><b>${client.name}</b></td>
           <td>${client.contact || '-'}</td>
-          <td>
-            <button onclick="openClientSocialCalendar('${id}')" style="width: auto; padding: 4px 10px; font-size: 12px; background:var(--accent);">Takvim</button>
-            ${isAdmin ? `<button onclick="deleteClient('${id}')" style="width: auto; padding: 4px 10px; font-size: 12px; background: #ef4444;">Sil</button>` : ''}
+          <td style="display:flex; gap:6px;">
+            <button onclick="openClientSocialCalendar('${id}')" style="width: auto; padding: 4px 12px; font-size: 12px;">Takvim</button>
+            ${isAdmin ? `<button onclick="deleteClient('${id}')" style="width: auto; padding: 4px 12px; font-size: 12px; background: var(--danger-gradient); box-shadow:0 4px 12px rgba(239, 68, 68, 0.3);">Sil</button>` : ''}
           </td>
         `;
         tbody.appendChild(tr);
@@ -1427,17 +1821,20 @@
       if (!activeClientId) return;
       const client = clients[activeClientId];
       const title = document.getElementById('social-post-title').value;
-      const datetime = document.getElementById('social-post-date').value;
+      const dateVal = document.getElementById('social-post-date').value;
+      const timeVal = document.getElementById('social-post-time').value;
       const assignees = getSelectedAssignees('#social-assignee-checkbox-list');
       const description = document.getElementById('social-post-desc').value;
 
-      if (!title.trim() || !datetime) { alert('Başlık ve tarih zorunludur!'); return; }
+      if (!title.trim() || !dateVal) { alert('Başlık ve tarih zorunludur!'); return; }
+
+      let formattedDatetime = timeVal ? `${dateVal}T${timeVal}` : dateVal;
 
       const newTask = {
         id: Date.now().toString(), title: `[Paylaşım] ${title}`,
         company: client.name, clientId: activeClientId,
         assignees: assignees.length > 0 ? assignees : [currentUser],
-        description: description || '', creator: currentUser, datetime: datetime,
+        description: description || '', creator: currentUser, datetime: formattedDatetime,
         status: 'todo', isIndependent: false, isSocialPost: true, comments: []
       };
 
@@ -1453,16 +1850,21 @@
 
       clientCalendarInstance = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth', locale: 'tr',
+        selectable: true,
         headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,listMonth' },
         events: clientTasks.map(t => ({ id: t.id, title: t.title, start: t.datetime, backgroundColor: '#8b5cf6', borderColor: '#7c3aed' })),
-        eventClick: (info) => openTaskModal(info.event.id)
+        eventClick: (info) => openTaskModal(info.event.id),
+        dateClick: (info) => {
+          document.getElementById('social-post-date').value = info.dateStr;
+          document.getElementById('social-post-title').focus();
+        }
       });
       clientCalendarInstance.render();
     }
 
     function renderArchive() {
       const container = document.getElementById('archive-list');
-      container.innerHTML = archive.length === 0 ? '<p>Henüz tamamlanmış görev yok.</p>' : '';
+      container.innerHTML = archive.length === 0 ? '<p style="color:var(--text-sub);">Henüz tamamlanmış görev yok.</p>' : '';
       if (archive.length === 0) return;
 
       const isAdmin = currentUser && currentUser.toLowerCase() === 'zorbay';
@@ -1479,8 +1881,8 @@
         container.innerHTML += `
           <div id="${pdfContainerId}">
             <div class="archive-month-header" style="margin-top:15px; display:flex; justify-content:space-between; align-items:center;">
-              <h4>${month} Tamamlanmış Görevler</h4>
-              <button onclick="exportPDF('${pdfContainerId}', '${month}')" style="width:auto; padding:4px 10px;">PDF İndir</button>
+              <h4 style="color:var(--text-main);">${month} Tamamlanmış Görevler</h4>
+              <button onclick="exportPDF('${pdfContainerId}', '${month}')" style="width:auto; padding:6px 14px;">PDF İndir</button>
             </div>
             <div class="table-responsive">
               <table>
@@ -1500,7 +1902,7 @@
                       <td>${i.company || '-'}</td>
                       <td>${(i.assignees || []).join(', ')}</td>
                       <td>${new Date(i.completedDate).toLocaleDateString('tr-TR')}</td>
-                      ${isAdmin ? `<td><button onclick="deleteArchiveTask('${i.id}')" style="background:#ef4444; width:auto; padding:3px 8px; font-size:11px;">Sil</button></td>` : ''}
+                      ${isAdmin ? `<td><button onclick="deleteArchiveTask('${i.id}')" style="background:var(--danger-gradient); width:auto; padding:3px 10px; font-size:11px; box-shadow:0 2px 8px rgba(239, 68, 68, 0.4);">Sil</button></td>` : ''}
                     </tr>
                   `).join('')}
                 </tbody>
@@ -1525,10 +1927,10 @@
       tbody.innerHTML = Object.entries(users).map(([u, p]) => `
         <tr>
           <td><b>${u}</b> ${u.toLowerCase() === 'zorbay' ? '(Admin)' : ''}</td>
-          <td><input type="password" value="${p}" id="pass-input-${u}" style="width: 140px; padding: 4px;"></td>
-          <td>
-            <button onclick="updateUserPassword('${u}')" style="width: auto; padding: 4px 8px; font-size: 12px;">Güncelle</button>
-            ${u.toLowerCase() !== 'zorbay' ? `<button onclick="deleteUser('${u}')" style="width: auto; padding: 4px 8px; font-size: 12px; background: #ef4444;">Sil</button>` : ''}
+          <td><input type="password" value="${p}" id="pass-input-${u}" style="width: 140px; padding: 4px 8px; margin:0;"></td>
+          <td style="display:flex; gap:6px;">
+            <button onclick="updateUserPassword('${u}')" style="width: auto; padding: 4px 10px; font-size: 12px;">Güncelle</button>
+            ${u.toLowerCase() !== 'zorbay' ? `<button onclick="deleteUser('${u}')" style="width: auto; padding: 4px 10px; font-size: 12px; background: var(--danger-gradient); box-shadow:0 4px 12px rgba(239, 68, 68, 0.3);">Sil</button>` : ''}
           </td>
         </tr>
       `).join('');
